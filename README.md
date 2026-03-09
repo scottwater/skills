@@ -12,7 +12,26 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 ## Available Skills
 
+
+### Gemini Image Generation
+
+> [!NOTE]
+> This skill is heavily based on the similarly named skill in the excellent
+> [compounding engineering plugin](https://github.com/EveryInc/compound-engineering-plugin/tree/main/plugins/compound-engineering/skills/gemini-imagegen). The only major difference is that this
+> skill uses `uv`, which makes it easier to operate.
+
+`gemini-imagegen` — Generate and edit images using the Gemini API (Nano Banana Pro), supporting text-to-image, image editing, multi-turn refinement, and composition from multiple reference images.
+
+### Nano Banana Pro Prompts
+
+`nano-banana-prompts` — Generate professional prompts for Nano Banana Pro image generation, transforming vague requests into detailed, effective prompts following its "thinking model" best practices.
+
 ### Inertia Docs
+
+> [!IMPORTANT]
+> I do not recommend using these skills. Using skills for non-procedural work has
+> been a misstep, and it is something I am backing away from. I will likely remove
+> the Inertia.js skills in the near future.
 
 A comprehensive set of skills for working with Inertia.js (Rails + React). Covers setup, conventions, and common patterns.
 
@@ -28,19 +47,6 @@ A comprehensive set of skills for working with Inertia.js (Rails + React). Cover
 | `inertia-auth` | Authentication and authorization patterns with Inertia. |
 | `inertia-testing` | RSpec request testing for Inertia responses. |
 | `inertia-pitfalls` | Common Inertia Rails gotchas and fixes. |
-
-### Gemini Image Generation
-
-NOTE: This skill is VERY heavily based on the same named skill in the
-excellent [compounding engineering
-plugin](https://github.com/EveryInc/compound-engineering-plugin/tree/main/plugins/compound-engineering/skills/gemini-imagegen). The only major difference is this
-skill uses `uv` to make it easier to operate.
-
-`gemini-imagegen` — Generate and edit images using the Gemini API (Nano Banana Pro), supporting text-to-image, image editing, multi-turn refinement, and composition from multiple reference images.
-
-### Nano Banana Pro Prompts
-
-`nano-banana-prompts` — Generate professional prompts for Nano Banana Pro image generation, transforming vague requests into detailed, effective prompts following its "thinking model" best practices.
 
 ## License
 
