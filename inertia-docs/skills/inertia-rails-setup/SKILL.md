@@ -31,7 +31,7 @@ end
 ## Layout wiring (this app)
 ```erb
 <!-- app/views/layouts/application.html.erb -->
-<title inertia><%= content_for(:title) || "ToDoOrDie" %></title>
+<title inertia><%= content_for(:title) || "Default Title" %></title>
 <%= vite_typescript_tag "inertia.tsx" %>
 <%= inertia_ssr_head %>
 ```

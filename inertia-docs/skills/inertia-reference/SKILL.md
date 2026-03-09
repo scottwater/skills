@@ -1,11 +1,11 @@
 ---
 name: inertia-reference
-description: "Overview and project conventions for Inertia Rails + React in ToDoOrDie."
+description: "Overview and project conventions for Inertia Rails + React."
 metadata:
   version: "2"
 ---
 
-# Inertia Reference (ToDoOrDie)
+# Inertia Reference 
 
 Use this skill for orientation, file map, and baseline conventions before deeper edits.
 
