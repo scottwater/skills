@@ -22,9 +22,14 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 `gemini-imagegen` — Generate and edit images using the Gemini API (Nano Banana Pro), supporting text-to-image, image editing, multi-turn refinement, and composition from multiple reference images.
 
+
 ### Nano Banana Pro Prompts
 
 `nano-banana-prompts` — Generate professional prompts for Nano Banana Pro image generation, transforming vague requests into detailed, effective prompts following its "thinking model" best practices.
+
+### GPT Image Prompts
+
+`gpt-image-prompts` — Generate professional prompts for OpenAI GPT Image models, especially `gpt-image-2`, transforming vague visual requests into structured creative briefs with recommended API settings for generation, edits, compositing, text-heavy visuals, ads, logos, UI mockups, slides, and product images.
 
 ### Inertia Docs
 
