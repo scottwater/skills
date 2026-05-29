@@ -1,14 +1,14 @@
 ---
 name: rails-security-core
-description: "Coordinate routine codebase-focused Rails security review across authentication/authorization, OWASP appsec, dependency/supply-chain, and prompt-injection lenses. Use when workflows are not available and the user wants recurring PR, branch, last-N-commit, or GitHub code review security validation."
+description: "Run routine codebase-focused Rails security review across authentication/authorization, OWASP appsec, dependency/supply-chain, and prompt-injection lenses for recurring PR, branch, last-N-commit, or GitHub code review security validation."
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
-# Rails Security Core Coordinator
+# Rails Security Core
 
-Coordinate a routine Rails security review for codebase changes. This skill is the skill-only equivalent of the `rails-security-core` workflow for agents that do not have `pi-workflows` available.
+Run a routine Rails security review for codebase changes.
 
-Use this coordinator for frequent GitHub/codebase review, such as daily, weekly, pull-request, branch, pending-change, or last-N-commit checks. It does not assume access to production servers, live domains, cloud accounts, server logs, or forensic images.
+Use this skill for frequent GitHub/codebase review, such as daily, weekly, pull-request, branch, pending-change, or last-N-commit checks. It does not assume access to production servers, live domains, cloud accounts, server logs, or forensic images.
 
 If the user asks for one lens only, use the relevant specialist directly:
 
@@ -17,7 +17,7 @@ If the user asks for one lens only, use the relevant specialist directly:
 - `rails-cybersecurity/dependency-audit`: Ruby, Rails, gem, JavaScript package, lockfile, CI, tooling, and supply-chain review.
 - `rails-cybersecurity/prompt-injection`: Rails AI, LLM, RAG, agent, MCP, automation, tool-use, tenant-leakage, and output-handling review.
 
-The specialist skills must remain independently runnable. This coordinator resolves the shared scope, runs or simulates each specialist lens, and merges the results.
+The specialist skills must remain independently runnable. This skill resolves the shared scope, runs or simulates each specialist lens, and merges the results.
 
 ## Authorization And Scope
 
@@ -61,7 +61,7 @@ git diff --stat abc123..def456
 
 If the requested scope is ambiguous, ask one short clarifying question. Otherwise choose the most likely range, state it, and proceed.
 
-## Coordinator Workflow
+## Review Flow
 
 1. Resolve the range once.
 2. Inspect the changed file list, diff stat, and commit summary.

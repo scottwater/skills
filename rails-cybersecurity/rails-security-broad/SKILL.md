@@ -1,18 +1,18 @@
 ---
 name: rails-security-broad
-description: "Coordinate a broader repository-only Rails security review by running the core codebase lenses plus cloud/platform/IaC/configuration review. Use when workflows are not available and the user wants weekly, branch, PR, last-N-commit, or GitHub code review security validation with repository configuration coverage."
+description: "Run a broader repository-only Rails security review across the core codebase lenses plus cloud/platform/IaC/configuration review for weekly, branch, PR, last-N-commit, or GitHub code review security validation with repository configuration coverage."
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
-# Rails Security Broad Coordinator
+# Rails Security Broad
 
-Coordinate a broader repository-only Rails security review. This skill is the skill-only equivalent of the `rails-security-broad` workflow for agents that do not have `pi-workflows` available.
+Run a broader repository-only Rails security review.
 
-Use this coordinator for recurring GitHub/codebase review when the user wants the routine core Rails security review plus repository evidence for cloud, platform, deployment, CI/CD, and infrastructure configuration. It does not assume access to production servers, live domains, cloud accounts, server logs, or forensic images.
+Use this skill for recurring GitHub/codebase review when the user wants the routine core Rails security review plus repository evidence for cloud, platform, deployment, CI/CD, and infrastructure configuration. It does not assume access to production servers, live domains, cloud accounts, server logs, or forensic images.
 
 If the user wants the fastest routine review, use `rails-cybersecurity/rails-security-core`. If the user asks for one lens only, use the relevant specialist directly.
 
-## Lenses This Coordinator Runs
+## Review Lenses
 
 1. `rails-cybersecurity/rails-security-core` logic:
    - `rails-cybersecurity/rails-auth-audit`
@@ -22,7 +22,7 @@ If the user wants the fastest routine review, use `rails-cybersecurity/rails-sec
 2. `rails-cybersecurity/cloud-audit` in repository-only mode:
    - Rails environment config, storage config, cable config, credentials references, Docker, Procfile, Kamal, Terraform, Kubernetes, CI/CD, GitHub Actions, deployment descriptors, and operational/security configuration available in the repo.
 
-Do not run routine recon, OSINT, incident triage, or disk forensics from this coordinator. Those skills require external target, incident, log, evidence-image, or public-intelligence context that is not available in a normal code scan.
+Do not run routine recon, OSINT, incident triage, or disk forensics as part of this review. Those skills require external target, incident, log, evidence-image, or public-intelligence context that is not available in a normal code scan.
 
 ## Authorization And Scope
 
@@ -66,7 +66,7 @@ git diff --stat abc123..def456
 
 If the requested scope is ambiguous, ask one short clarifying question. Otherwise choose the most likely range, state it, and proceed.
 
-## Coordinator Workflow
+## Review Flow
 
 1. Resolve the range once.
 2. Inspect the changed file list, diff stat, and commit summary.
@@ -201,7 +201,7 @@ Severity guide:
 
 - Do not run live scans, cloud CLI commands, production commands, or external probing unless explicitly authorized.
 - Do not require a domain, server logs, cloud account, or forensic image for routine code review.
-- Do not run recon, OSINT, incident triage, or disk forensics as part of this routine coordinator.
+- Do not run recon, OSINT, incident triage, or disk forensics as part of this routine review.
 - Do not report live-environment assumptions as confirmed findings when only repository evidence is available.
 - Do not list every changed file.
 - Do not treat scanner warnings as vulnerabilities until applicability is checked.

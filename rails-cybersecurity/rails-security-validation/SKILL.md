@@ -1,6 +1,6 @@
 ---
 name: rails-security-validation
-description: "Coordinate validation-focused Ruby on Rails security reviews across authentication, authorization, OWASP risks, dependencies, runtime configuration, cloud/platform settings, and security operations. Use when the user wants to run the Rails security skills as a validation runner against a repo, branch, diff, pull request, or changed files and receive evidence-backed pass/fail findings instead of educational guidance."
+description: "Run validation-focused Ruby on Rails security reviews across authentication, authorization, OWASP risks, dependencies, runtime configuration, cloud/platform settings, and security operations. Use when the user wants evidence-backed pass/fail findings against a repo, branch, diff, pull request, or changed files instead of educational guidance."
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -8,14 +8,14 @@ allowed-tools: Read, Grep, Glob, Bash
 
 Run a validation-focused Rails security review. This skill is not a tutorial and not a general code review. It verifies whether a Rails application satisfies concrete security expectations and reports only evidence-backed findings, validation gaps, and recommended checks.
 
-Use this coordinator for broad Rails security validation. If the user asks for one area only, use the relevant specialist directly:
+Use this skill for broad Rails security validation. If the user asks for one area only, use the relevant specialist directly:
 
 - `rails-auth-audit`: authentication, authorization, policy coverage, roles, tenants, sessions, tokens, and controller access.
 - `owasp-audit`: OWASP-style Rails appsec validation across input handling, XSS, SQL injection, CSRF, SSRF, file handling, logging, and misconfiguration.
 - `dependency-audit`: Rails/Ruby/JS/container dependency, CVE, supply-chain, and security tooling validation.
 - `cloud-audit`: Rails infrastructure, secrets, platform, storage, database, Redis/Memcached, CI/CD, logging, endpoint, and cloud hardening validation.
 
-The specialist skills must remain independently runnable. This coordinator resolves scope once, gathers shared context, runs or simulates each lens, and merges the results.
+The specialist skills must remain independently runnable. This skill resolves scope once, gathers shared context, runs or simulates each lens, and merges the results.
 
 ## Authorization Check
 
@@ -55,7 +55,7 @@ find . -maxdepth 3 -type f \( -name Gemfile -o -name Gemfile.lock -o -name confi
 
 If scope is ambiguous, ask one short clarifying question. Otherwise, choose the most likely scope, state it, and proceed.
 
-## Validation Workflow
+## Validation Flow
 
 1. Resolve scope and authorization.
 2. Identify Rails version, Ruby version, auth stack, policy framework, dependency manifests, deployment/platform files, and security tooling.

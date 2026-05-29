@@ -1,11 +1,11 @@
 ---
 name: deep
-description: Coordinate a deep multi-lens code review including standard review, comments and documentation analysis, and type-design analysis.
+description: Run a deep multi-lens code review including standard review, comments and documentation analysis, and type-design analysis.
 ---
 
 # Code Review: Deep
 
-Coordinate a deeper code review for a requested scope such as a pull request, branch comparison, complex feature, public API change, type-heavy change, or documentation-sensitive change.
+Run a deeper code review for a requested scope such as a pull request, branch comparison, complex feature, public API change, type-heavy change, or documentation-sensitive change.
 
 Use this when the user asks for a deeper review than `code-review/standard`, or when the changes touch comments, documentation, public APIs, types, domain models, or complex behavior.
 
@@ -77,7 +77,7 @@ Your focus:
 Report only high-confidence, actionable findings. Preserve file paths, line references when available, concrete reasoning, and suggested fixes. Do not modify files.
 ```
 
-## Coordinator Workflow
+## Review Flow
 
 1. Resolve the scope and state it briefly.
 2. Inspect changed files, diff stat, and commit summary when available.

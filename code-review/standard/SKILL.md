@@ -1,11 +1,11 @@
 ---
 name: standard
-description: Coordinate a routine multi-lens code review across skeptical design review, general correctness review, test coverage, and silent-failure auditing.
+description: Run a routine multi-lens code review across skeptical design review, general correctness review, test coverage, and silent-failure auditing.
 ---
 
 # Code Review: Standard
 
-Coordinate a routine code review for a requested scope such as the current diff, a pull request, a branch comparison, a file list, or the last N commits.
+Run a routine code review for a requested scope such as the current diff, a pull request, a branch comparison, a file list, or the last N commits.
 
 Use this when the user asks for a normal code review and does not need the deeper comments or type-design lenses.
 
@@ -71,7 +71,7 @@ Your focus:
 Report only high-confidence, actionable findings. Preserve file paths, line references when available, concrete reasoning, and suggested fixes. Do not modify files.
 ```
 
-## Coordinator Workflow
+## Review Flow
 
 1. Resolve the scope and state it briefly.
 2. Inspect changed files, diff stat, and commit summary when available.

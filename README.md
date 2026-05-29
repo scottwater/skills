@@ -36,9 +36,9 @@ A grouped set of Rails-focused security validation skills. These skills favor co
 
 | Skill | Description |
 | --- | --- |
-| `rails-cybersecurity/rails-security-core` | Coordinate routine codebase or diff review across auth/authz, OWASP appsec, dependencies, and prompt-injection checks. |
-| `rails-cybersecurity/rails-security-broad` | Coordinate core Rails security review plus repository-only cloud, platform, IaC, deployment, and configuration review. |
-| `rails-cybersecurity/rails-security-validation` | Coordinate validation-focused Rails security review across major security lenses. |
+| `rails-cybersecurity/rails-security-core` | Run routine codebase or diff review across auth/authz, OWASP appsec, dependencies, and prompt-injection checks. |
+| `rails-cybersecurity/rails-security-broad` | Run core Rails security review plus repository-only cloud, platform, IaC, deployment, and configuration review. |
+| `rails-cybersecurity/rails-security-validation` | Run validation-focused Rails security review across major security lenses. |
 | `rails-cybersecurity/rails-auth-audit` | Review authentication, authorization, policies, roles, tenants, sessions, tokens, and controller access. |
 | `rails-cybersecurity/owasp-audit` | Audit Rails, Ruby, and JavaScript source against OWASP-style application security risks. |
 | `rails-cybersecurity/dependency-audit` | Review Ruby, Rails, gem, JavaScript, lockfile, CI, and supply-chain security posture. |
@@ -51,14 +51,14 @@ A grouped set of Rails-focused security validation skills. These skills favor co
 
 ### Code Review
 
-A grouped set of code-review skills converted from Pi review agents. Use coordinator skills for normal review flows and specialist skills for one focused lens.
+A grouped set of code-review skills. Use review suite skills for normal review flows and specialist skills for one focused lens.
 
-Coordinator skills:
+Review suite skills:
 
 | Skill | Description |
 | --- | --- |
-| `code-review/standard` | Coordinate routine review across skeptical design, general correctness, tests, and silent-failure lenses. |
-| `code-review/deep` | Coordinate standard review plus comments/documentation and type-design lenses. |
+| `code-review/standard` | Run routine review across skeptical design, general correctness, tests, and silent-failure lenses. |
+| `code-review/deep` | Run standard review plus comments/documentation and type-design lenses. |
 | `code-review/oracle` | Review the current plan or conversation for decision drift, contradictions, hidden assumptions, risks, and best next move. |
 
 Specialist skills:
