@@ -1,6 +1,6 @@
 ---
 name: github-social
-description: Generate polished GitHub repository social preview / Open Graph images. Use when the user asks for a GitHub social preview, repo card, repository Open Graph image, GitHub preview image, or an image sized for the repository social preview uploader. Uses the repository-open-graph-template.png safe-area template, targets gpt-image-2, and should not require an OpenAI API key.
+description: Generate polished GitHub repository social preview / Open Graph images. Use when the user asks for a GitHub social preview, repo card, repository Open Graph image, GitHub preview image, or an image sized for the repository social preview uploader. Uses the repository-open-graph-template.png safe-area template, targets gpt-image-2, saves output under assets by default, and should not require an OpenAI API key.
 ---
 
 # GitHub Social Preview
@@ -14,6 +14,8 @@ Create a 1280x640 PNG social preview image for a GitHub repository, using `repos
 3. Generate with the built-in image generation capability targeting `gpt-image-2`. Do not ask for an API key, call the OpenAI REST API, or require `OPENAI_API_KEY`.
 4. Use `repository-open-graph-template.png` as a reference image when the image tool supports reference inputs. Otherwise, manually apply the constraints below.
 5. Inspect the result at full size and thumbnail size. Regenerate or edit if text is misspelled, cramped, low contrast, outside the safe area, or if guide lines/template text appear.
+6. Save the final image in the target repository's `assets/` folder unless the user specifies another path. Create `assets/` if needed. Prefer `assets/github-social-preview.png` unless that conflicts with an existing file the user wants preserved.
+7. Add the image to the top of `README.md` unless the user says not to. Use a relative Markdown image link, avoid duplicating an existing preview image, and preserve the rest of the README content.
 
 If the available image tool does not expose a model selector, still write the prompt and settings for `gpt-image-2`; use the local tool without asking the user for credentials.
 
@@ -21,6 +23,7 @@ If the available image tool does not expose a model selector, still write the pr
 
 - Canvas: exactly 1280x640, PNG, opaque background.
 - GitHub upload target: repository Settings > Social preview.
+- Default output path: `assets/github-social-preview.png`, unless the user requests another path or filename.
 - Safe area: keep all critical text, logos, faces, product UI, and visual focus inside the inner rectangle shown by `repository-open-graph-template.png` (about 80px from each edge on the 1280x640 template).
 - Crop tolerance: allow nonessential background texture outside the safe area.
 - Text: large, sparse, high-contrast. Prefer repo name plus one short descriptor. Avoid tiny labels.
@@ -75,10 +78,23 @@ background: opaque
 output_format: png
 ```
 
+## README Placement
+
+After saving the image, place this at the very top of `README.md` unless told not to:
+
+```markdown
+![Repository social preview](assets/github-social-preview.png)
+
+```
+
+If `README.md` already starts with badges or a project logo, still put the social preview first unless the user asks for a different placement. If a preview image is already present, update its path or replace that block instead of adding a duplicate. If `README.md` does not exist, ask before creating one.
+
 ## QA Checklist
 
 - Dimensions are 1280x640.
 - All critical content sits inside the template safe area.
+- Final file is saved under `assets/` unless the user specified otherwise.
+- `README.md` includes the preview image at the top unless the user opted out.
 - Repo name is spelled correctly and readable at thumbnail size.
 - No template artifacts, guide lines, watermarks, or unintended logos.
 - Visual matches the repository's actual purpose and tone.
