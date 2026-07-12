@@ -44,6 +44,8 @@ Complete when every packet is bounded and equivalent except for its rubric.
 
 Prefer isolated concurrent workers, then sequential delegated workers, then separated in-context passes. Record weak isolation. Continue after one reviewer fails and disclose the missing coverage.
 
+Record each reviewer result separately before synthesis. `source_reviewers` may include only reviewers that independently returned a materially equivalent claim. Reviewer selection alone is not agreement or attribution evidence.
+
 Complete when each reviewer returns findings, `no_findings`, or a recorded failure.
 
 ## Normalize candidates
