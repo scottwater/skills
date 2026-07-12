@@ -49,30 +49,17 @@ A grouped set of Rails-focused security validation skills. These skills favor co
 | `rails-cybersecurity/incident-triage` | Triage security incidents using structured evidence collection and prioritization. |
 | `rails-cybersecurity/disk-forensics` | Analyze disk images, recover evidence, and build forensic timelines. |
 
-### Code Review
+### Code Quorum
 
-A grouped set of code-review skills. Use review suite skills for normal review flows and specialist skills for one focused lens.
+`code-quorum` runs a read-only review through independent lenses, verifies material findings, and returns one prioritized report. It reviews pending changes by default and accepts a PR, branch, revision range, commit, file set, diff, or supplied artifact.
 
-Review suite skills:
-
-| Skill | Description |
+| Mode | Reviewers |
 | --- | --- |
-| `code-review/standard` | Run routine review across skeptical design, general correctness, tests, and silent-failure lenses. |
-| `code-review/deep` | Run standard review plus comments/documentation and type-design lenses. |
-| `code-review/oracle` | Review the current plan or conversation for decision drift, contradictions, hidden assumptions, risks, and best next move. |
+| `quick` | General reviewer and silent-failure hunter |
+| `default` | Adversarial reviewer, general reviewer, silent-failure hunter, and skeptical engineer |
+| `full` | Default reviewers plus simplification reviewer |
 
-Specialist skills:
-
-| Skill | Description |
-| --- | --- |
-| `code-review/general` | Review changed code for guideline compliance, correctness, regressions, and high-confidence implementation issues. |
-| `code-review/skeptic` | Review code like a skeptical senior engineer, focusing on assumptions, design risks, maintainability, and over-engineering. |
-| `code-review/tests` | Review changed behavior for missing tests, weak assertions, brittle tests, and important coverage gaps. |
-| `code-review/failures` | Audit error handling for swallowed errors, weak fallbacks, silent failures, and poor observability. |
-| `code-review/comments` | Review comments, docstrings, and documentation for accuracy, usefulness, and staleness risk. |
-| `code-review/types` | Analyze changed types for invariants, illegal states, encapsulation, naming, and domain clarity. |
-| `code-review/simplify` | Simplify recently changed code for clarity and maintainability while preserving behavior. |
-| `code-review/synthesize` | Consolidate multiple review outputs into one prioritized, actionable final review. |
+Request a mode or named combination, such as `Run a quick code quorum` or `Use the skeptical engineer and silent-failure hunter from code-quorum`.
 
 ### Inertia Docs
 
