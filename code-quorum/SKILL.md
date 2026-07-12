@@ -1,9 +1,13 @@
 ---
 name: code-quorum
-description: Review code changes through independent reviewer lenses, verify material claims, and return one prioritized read-only report. Use when the user asks for a code quorum; requests a quick, default, full, or custom multi-perspective review; names a quorum reviewer; or asks to review pending changes, a branch, commit, pull request, diff, or file set.
+description: Use when the user asks for a code quorum; requests a quick, default, full, or custom review; names a quorum reviewer; or asks to review pending changes, a branch, commit, pull request, diff, or file set.
 ---
 
 # Code Quorum
+
+## Read-only boundary
+
+The entire workflow is inspection and reporting only. The delegator, every reviewer, the synthesizer, and the verifier must not edit reviewed files, generate or apply patches, commit changes, or begin remediation. Recommendations describe directions for a later, separately authorized workflow. Reproduce claims only with non-mutating commands or in disposable isolation that cannot alter the reviewed workspace.
 
 ## Resolve scope
 
@@ -82,7 +86,21 @@ Complete this step when each potential blocker has a status, method, and evidenc
 
 ## Prioritize and report
 
-Assign severity, verification, confidence, and a disposition: `block`, `address`, `investigate`, or `consider`. Permit `block` only for verified material findings. Use P0-P3 aliases only when requested.
+Assign severity using these canonical meanings:
+
+- `critical`: catastrophic, actively dangerous, or irreversible impact.
+- `high`: material, ship-blocking defect.
+- `medium`: important defect that is normally nonblocking.
+- `low`: minor risk or worthwhile improvement.
+
+Keep severity, verification, confidence, and disposition separate. Dispositions mean:
+
+- `block`: only a verified material finding.
+- `address`: a verified or partially verified actionable nonblocker.
+- `investigate`: an important unverified claim; state the missing evidence.
+- `consider`: low-risk simplification or maintainability advice.
+
+Omit rejected findings unless the user requests provenance. Use P0-P3 aliases only when requested.
 
 State scope, reviewer coverage and isolation, prioritized findings, open investigations, and a terse recommendation. Separate verified defects, unresolved risks, and optional improvements.
 
