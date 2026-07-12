@@ -7,7 +7,7 @@ description: Review code changes through independent reviewer lenses, verify mat
 
 ## Resolve scope
 
-Resolve explicit scope first. Otherwise resolve, in order, pending changes against `HEAD`, a branch from its merge-base, an associated pull request, a recent commit, or named task artifacts. Never infer a whole-repository review. Flag unusually large inferred ranges.
+Resolve explicit scope first. Otherwise resolve, in order, pending changes against `HEAD` including staged changes, unstaged tracked changes, and relevant untracked files; a branch from its merge-base; an associated pull request; a recent commit; or named task artifacts. Never infer a whole-repository review. Flag unusually large inferred ranges.
 
 Complete when the exact diff, range, or files can be stated.
 
