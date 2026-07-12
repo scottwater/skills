@@ -94,7 +94,7 @@ Search for concrete correctness bugs, regressions, violated repository rules, an
 
 ### Simplification reviewer
 
-Identify unnecessary complexity, accidental abstractions, confusing control flow, and maintainability hazards in the selected changes. Preserve behavior in every recommendation. Return advice only.
+Identify unnecessary complexity, over-engineering, accidental abstractions, redundant configuration, confusing control flow, and maintainability hazards in the selected changes. Ask whether the change could use a smaller design without losing clarity or behavior. Preserve behavior in every recommendation. Return advice only.
 
 ### Silent-failure hunter
 
@@ -102,7 +102,13 @@ Trace swallowed errors, misleading success, unjustified fallbacks, lost diagnost
 
 ### Skeptical engineer
 
-Challenge hidden assumptions, coupling, design risks, operational fragility, and likely future regressions. Report high-confidence concerns with concrete consequences.
+Challenge hidden assumptions, inconsistent local patterns, unrelated collateral changes, coupling, design tradeoffs, operational fragility, and likely future regressions. Report high-confidence concerns with concrete consequences. Leave code-size and simplification advice to the simplification reviewer unless complexity creates a concrete design risk.
+
+## Migration
+
+Replace the existing `code-review/` skill suite with `code-quorum`. Remove its coordinator, specialist, simplifier, and synthesizer skills after their useful review criteria have an authoritative home in the new package.
+
+Update the repository skill index to list `code-quorum`, its quick, default, and full sets, and its named reviewers. Do not retain compatibility wrappers for the old skill names; they would preserve the invocation and maintenance costs this consolidation removes.
 
 ## Scope resolution
 
