@@ -8,7 +8,9 @@ The skill must work in Codex, Claude, and Pi when the runtime can create indepen
 
 ## Invocation
 
-Make `code-quorum` model-invoked so natural requests can reach it. Support these branches:
+Make `code-quorum` user-invoked. Set `disable-model-invocation: true` so the model cannot select it autonomously; run it only when the user explicitly names `code-quorum` or invokes the skill. Keep `description` as a short human-facing summary rather than a trigger list.
+
+Support these explicit branches:
 
 - `code-quorum`: use the default reviewer set.
 - `quick code-quorum`: use the lightweight set. Accept "simple" and "lightweight" as natural-language aliases.
@@ -269,7 +271,7 @@ The report completes when readers can distinguish verified defects, unresolved r
 
 Validate the implementation with these cases:
 
-- Natural-language invocation for quick, default, full, and explicit selections
+- Explicit invocation for quick, default, full, and named-reviewer selections
 - Staged, unstaged, untracked, clean-branch, PR, recent-commit, and non-Git scopes
 - Malformed, duplicate, speculative, conflicting, and no-findings responses
 - Verified, partially verified, unverified, and rejected claims
