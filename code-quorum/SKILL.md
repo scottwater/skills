@@ -14,7 +14,9 @@ The entire workflow is inspection and reporting only. The delegator, every revie
 
 Confirm an independent-worker mechanism before inspecting the review scope.
 
-When the current workflow uses Solo, check whether Solo MCP is available. If available, use it to create one Solo-managed agent for each selected reviewer. Otherwise use the runtime's subagent abstraction. Do not switch into Solo merely because its tools exist when the current workflow is not using Solo.
+Probe Solo identity first when the runtime exposes a Solo identity or status tool. In Pi, use `solo_status`; with direct Solo MCP access, use `whoami`. A response that identifies the current process as Solo-managed and reports agent spawning available selects Solo for the quorum. Use the runtime's native subagent abstraction only when the Solo probe is unavailable, cannot identify the current process, reports MCP or spawning unavailable, or fails. Tool visibility alone is not proof that the current process is Solo-managed.
+
+When Solo is selected, create every reviewer as a Solo-managed agent. Otherwise create every reviewer through the native subagent abstraction. Do not mix mechanisms within one quorum merely to increase concurrency.
 
 Require a fresh isolated context for every reviewer. Concurrency is optional; independence is required. Do not continue to scope resolution when neither Solo nor another subagent abstraction can create fresh workers. Return an execution-unavailable response that names the missing capability.
 
@@ -59,9 +61,11 @@ Complete this step when every packet is bounded and equivalent except for its ru
 
 Create one fresh agent for each selected reviewer through the mechanism confirmed above. Run agents concurrently when capacity allows. Schedule them sequentially when capacity is constrained, while preserving a fresh isolated context for each reviewer. Give each agent only the shared task packet and its selected rubric. Do not run reviewer passes in the delegator context.
 
+When the native subagent runtime supports acceptance gates, disable them for each reviewer task (for example, `acceptance: "none"`). Never request `reviewed` acceptance for a quorum reviewer: these workers already are the independent reviewers, and requiring another automatic reviewer can falsely mark valid reviewer output as failed.
+
 Report reviewer completion as results arrive when the runtime supports progress updates. Wait until every selected reviewer has returned, failed, timed out, or could not start before synthesis.
 
-Record each returned result separately. `source_reviewers` may include only reviewers that independently returned a materially equivalent claim. Selection alone is not agreement or attribution evidence.
+Record each returned result separately. Judge usability from the returned report, not only the wrapper's lifecycle label. If a worker exits successfully and returns a complete report but the wrapper reports only an unavailable optional acceptance reviewer, retain the report and disclose the wrapper anomaly under coverage limitations. `source_reviewers` may include only reviewers that independently returned a materially equivalent claim. Selection alone is not agreement or attribution evidence.
 
 Synthesize every usable returned result. List each missing reviewer and its failure reason under coverage limitations. Treat no missing reviewer as agreement, disagreement, or `no_findings`. Return an execution failure instead of a review when no reviewer returns a usable result.
 
