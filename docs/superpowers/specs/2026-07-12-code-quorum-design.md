@@ -4,7 +4,7 @@
 
 `code-quorum` performs a read-only review of code changes through multiple independent review lenses. It collects candidate findings, verifies material claims, removes duplicates and weak speculation, then returns a prioritized advisory report.
 
-The skill must work in Codex, Claude, Pi, and runtimes without delegated workers. Platform-specific adapters may translate the execution protocol, but the canonical skill owns all review behavior.
+The skill must work in Codex, Claude, and Pi when the runtime can create independent workers. A runtime without Solo or another subagent abstraction must stop before review. Platform-specific adapters may translate the execution protocol, but the canonical skill owns all review behavior.
 
 ## Invocation
 
@@ -150,13 +150,16 @@ Task construction completes when each selected reviewer has the same scope, focu
 
 ## Execution
 
-Use the strongest isolation the runtime supplies:
+Before resolving scope, confirm that Solo or another subagent abstraction can create fresh workers. Require one fresh, isolated agent for each selected reviewer:
 
-1. Run isolated reviewers independently and concurrently when available.
-2. Run delegated reviewers sequentially when concurrency is unavailable.
-3. Run separated passes in the current context when delegation is unavailable. Do not expose earlier conclusions to later passes when the runtime permits that separation.
+1. When the current workflow uses Solo and Solo MCP is available, create one Solo-managed agent per reviewer.
+2. Otherwise use the runtime's subagent abstraction.
+3. Run reviewer agents concurrently when capacity allows. Schedule fresh agents sequentially when concurrency is constrained.
+4. Stop before inspecting the review scope when neither Solo nor another subagent mechanism is available.
 
-Disclose when reviewers did not receive isolated contexts. The delegator resolves scope, selects reviewers, constructs task packets, collects results, and starts synthesis. It contains no reviewer-specific expertise.
+Do not simulate reviewer passes in the delegator's context. The delegator resolves scope, selects reviewers, constructs task packets, collects results, and starts synthesis. It contains no reviewer-specific expertise.
+
+Report reviewer completion as results arrive when the runtime supports progress updates. Wait until every selected reviewer has returned, failed, or reached a reasonable runtime limit before synthesis.
 
 The quorum completes when every selected reviewer has returned findings, returned an explicit no-findings result, or has a recorded failure.
 
@@ -252,11 +255,14 @@ The report completes when readers can distinguish verified defects, unresolved r
 
 ## Failure handling
 
-- Continue after one reviewer fails and disclose the missing coverage.
+- Attempt every selected reviewer. Synthesize all usable returned findings when a reviewer fails, times out, or cannot start.
+- List each missing reviewer and its failure reason under coverage limitations.
+- Treat no missing reviewer as agreement, disagreement, or `no_findings`.
+- Return an execution failure instead of a review when no reviewer returns a usable result.
 - Normalize malformed reviewer output only when the intended fields are unambiguous.
 - Downgrade findings when verification cannot reach the required evidence.
 - Merge excessive duplicates by root cause.
-- Use the next execution level when the runtime lacks a preferred delegation feature.
+- Stop before review when the runtime has neither Solo nor another subagent abstraction.
 - Report no findings without inventing suggestions.
 
 ## Validation
@@ -267,7 +273,9 @@ Validate the implementation with these cases:
 - Staged, unstaged, untracked, clean-branch, PR, recent-commit, and non-Git scopes
 - Malformed, duplicate, speculative, conflicting, and no-findings responses
 - Verified, partially verified, unverified, and rejected claims
-- Isolated-worker and no-delegation execution
+- Solo-managed, non-Solo subagent, constrained sequential-agent, and no-agent execution
+- Partial completion with one failed or timed-out reviewer
+- Total execution failure with no usable reviewer result
 - A read-only check that detects workspace mutations
 - Forward tests using raw code changes without leaked expected findings
 
