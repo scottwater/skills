@@ -1,6 +1,7 @@
 ---
 name: code-quorum
-description: Use when the user asks for a code quorum; requests a quick, default, full, or custom review; names a quorum reviewer; or asks to review pending changes, a branch, commit, pull request, diff, or file set.
+description: Run independent code-review agents and synthesize verified findings.
+disable-model-invocation: true
 ---
 
 # Code Quorum
@@ -8,6 +9,16 @@ description: Use when the user asks for a code quorum; requests a quick, default
 ## Read-only boundary
 
 The entire workflow is inspection and reporting only. The delegator, every reviewer, the synthesizer, and the verifier must not edit reviewed files, generate or apply patches, commit changes, or begin remediation. Recommendations describe directions for a later, separately authorized workflow. Reproduce claims only with non-mutating commands or in disposable isolation that cannot alter the reviewed workspace.
+
+## Confirm agents
+
+Confirm an independent-worker mechanism before inspecting the review scope.
+
+When the current workflow uses Solo, check whether Solo MCP is available. If available, use it to create one Solo-managed agent for each selected reviewer. Otherwise use the runtime's subagent abstraction. Do not switch into Solo merely because its tools exist when the current workflow is not using Solo.
+
+Require a fresh isolated context for every reviewer. Concurrency is optional; independence is required. Do not continue to scope resolution when neither Solo nor another subagent abstraction can create fresh workers. Return an execution-unavailable response that names the missing capability.
+
+Complete this step when one available mechanism can create a fresh agent for each selected reviewer.
 
 ## Resolve scope
 
@@ -46,11 +57,15 @@ Complete this step when every packet is bounded and equivalent except for its ru
 
 ## Run the quorum
 
-Prefer isolated concurrent workers, then sequential delegated workers, then separated in-context passes. Record weak isolation. Continue after one reviewer fails and disclose the missing coverage.
+Create one fresh agent for each selected reviewer through the mechanism confirmed above. Run agents concurrently when capacity allows. Schedule them sequentially when capacity is constrained, while preserving a fresh isolated context for each reviewer. Give each agent only the shared task packet and its selected rubric. Do not run reviewer passes in the delegator context.
 
-Record each reviewer result separately before synthesis. `source_reviewers` may include only reviewers that independently returned a materially equivalent claim. Reviewer selection alone is not agreement or attribution evidence.
+Report reviewer completion as results arrive when the runtime supports progress updates. Wait until every selected reviewer has returned, failed, timed out, or could not start before synthesis.
 
-Complete this step when each reviewer returns findings, `no_findings`, or a recorded failure.
+Record each returned result separately. `source_reviewers` may include only reviewers that independently returned a materially equivalent claim. Selection alone is not agreement or attribution evidence.
+
+Synthesize every usable returned result. List each missing reviewer and its failure reason under coverage limitations. Treat no missing reviewer as agreement, disagreement, or `no_findings`. Return an execution failure instead of a review when no reviewer returns a usable result.
+
+Complete this step when every selected reviewer has a usable result or a recorded failure reason, and at least one usable result exists.
 
 ## Normalize candidates
 
