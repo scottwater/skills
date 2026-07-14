@@ -20,24 +20,17 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 `github-social` — Generate a 1280x640 GitHub repository social preview (Open Graph) image and link it at the top of the README.
 
-### Rails Cybersecurity
+### Rails Security
 
-A grouped set of Rails-focused security validation skills. These skills favor concrete checks, file paths, commands, test gaps, and remediation over generic security explanation.
+`rails-security` is a multi-agent security review of Rails application code, built on the same quorum pattern as `code-quorum`: independent blind lens agents review the resolved scope, findings are merged, verified against source, and returned as one prioritized report. It reviews only what can be inspected and run in development — server, cloud, container, and CI configuration are out of scope.
 
-| Skill | Description |
+| Mode | Lenses |
 | --- | --- |
-| `rails-cybersecurity/rails-security-core` | Run routine codebase or diff review across auth/authz, OWASP appsec, dependencies, and prompt-injection checks. |
-| `rails-cybersecurity/rails-security-broad` | Run core Rails security review plus repository-only cloud, platform, IaC, deployment, and configuration review. |
-| `rails-cybersecurity/rails-security-validation` | Run validation-focused Rails security review across major security lenses. |
-| `rails-cybersecurity/rails-auth-audit` | Review authentication, authorization, policies, roles, tenants, sessions, tokens, and controller access. |
-| `rails-cybersecurity/owasp-audit` | Audit Rails, Ruby, and JavaScript source against OWASP-style application security risks. |
-| `rails-cybersecurity/dependency-audit` | Review Ruby, Rails, gem, JavaScript, lockfile, CI, and supply-chain security posture. |
-| `rails-cybersecurity/prompt-injection` | Review AI, LLM, RAG, agent, MCP, automation, prompt, tool-use, and output-handling security. |
-| `rails-cybersecurity/cloud-audit` | Review repository evidence for cloud, platform, deployment, infrastructure, and operational security configuration. |
-| `rails-cybersecurity/recon` | Enumerate web application attack surface and reconnaissance targets when authorized scope is available. |
-| `rails-cybersecurity/osint-recon` | Gather and correlate open source intelligence for authorized targets. |
-| `rails-cybersecurity/incident-triage` | Triage security incidents using structured evidence collection and prioritization. |
-| `rails-cybersecurity/disk-forensics` | Analyze disk images, recover evidence, and build forensic timelines. |
+| `quick` | Access control and injection |
+| `default` | Access control, injection, and dependencies |
+| `full` | Default lenses plus AI/prompt injection |
+
+The AI lens joins any mode automatically when the scope contains LLM or agent code. Request a mode or specific lenses, such as `Run a quick rails-security review of this branch` or `Audit the app with the access-control and ai lenses`.
 
 ### Code Quorum
 
