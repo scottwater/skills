@@ -1,5 +1,6 @@
 ---
 name: github-social
+disable-model-invocation: true
 description: Generate polished GitHub repository social preview / Open Graph images. Use when the user asks for a GitHub social preview, repo card, repository Open Graph image, GitHub preview image, or an image sized for the repository social preview uploader. Uses the repository-open-graph-template.png safe-area template, targets gpt-image-2, saves output under assets by default, and should not require an OpenAI API key.
 ---
 

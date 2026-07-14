@@ -1,5 +1,6 @@
 ---
 name: gpt-image-prompts
+disable-model-invocation: true
 description: Generate professional prompts for OpenAI GPT Image models, especially gpt-image-2. Use when the user wants a prompt for text-to-image generation, image edits, reference-image compositing, photorealistic scenes, ads, logos, infographics, UI mockups, slides, product images, or text-heavy visuals. Transforms vague visual ideas into structured, GPT Image-optimized creative briefs with recommended API settings.
 ---
 

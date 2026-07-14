@@ -1,0 +1,5 @@
+interface:
+  display_name: "GPT Image Prompts"
+  short_description: "Craft prompts for OpenAI GPT Image models"
+policy:
+  allow_implicit_invocation: false

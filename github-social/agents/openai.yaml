@@ -2,3 +2,5 @@ interface:
   display_name: "GitHub Social Preview"
   short_description: "Create GitHub Open Graph preview images"
   default_prompt: "Use $github-social to create a repository social preview image."
+policy:
+  allow_implicit_invocation: false

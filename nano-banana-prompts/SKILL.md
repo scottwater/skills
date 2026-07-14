@@ -1,5 +1,6 @@
 ---
 name: nano-banana-prompts
+disable-model-invocation: true
 description: Generate professional prompts for Nano Banana Pro image generation. Use when the user wants to create images, thumbnails, infographics, edit photos, generate character-consistent content, create storyboards, or any visual asset using Nano Banana Pro. Transforms vague requests into detailed, effective prompts following Nano Banana Pro's "thinking model" best practices.
 ---
 

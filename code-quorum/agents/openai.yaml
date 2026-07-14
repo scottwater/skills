@@ -1,0 +1,5 @@
+interface:
+  display_name: "Code Quorum"
+  short_description: "Run independent reviewers and verify findings"
+policy:
+  allow_implicit_invocation: false

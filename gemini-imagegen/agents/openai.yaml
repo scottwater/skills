@@ -1,0 +1,5 @@
+interface:
+  display_name: "Gemini Image Gen"
+  short_description: "Generate and edit images with Gemini"
+policy:
+  allow_implicit_invocation: false

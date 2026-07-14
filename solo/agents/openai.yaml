@@ -1,0 +1,3 @@
+interface:
+  display_name: "Solo"
+  short_description: "Spawn and coordinate Solo-managed agents"
