@@ -109,6 +109,42 @@ Keep severity, verification, confidence, and disposition separate. Dispositions 
 
 Omit rejected findings unless the user requests provenance. Use P0-P3 aliases only when requested.
 
-State scope, reviewer coverage and isolation, prioritized findings, open investigations, and a terse recommendation. Separate verified defects, unresolved risks, and optional improvements.
+Render the report exactly in this template — each section once, in this order, omitting Consider and Open questions when empty:
 
-Complete this step when every reported item has severity, verification, confidence, and disposition, and the report contains all required sections.
+```markdown
+## Verdict
+
+<One sentence: **Merge**, **Merge after fixes**, or **Do not merge** — with the deciding reason.>
+
+Scope: <range/PR · files · +/− lines> · Reviewers: <usable/selected> (<mechanism>)
+
+## Do next
+
+- [ ] `path/to/file:lines` — <imperative action> (finding 1)
+
+## Findings
+
+### 1. <Concrete failure in plain words> — <severity> · <disposition>
+
+- **Where:** `path/to/file:lines` — <function or block name>
+- **What:** <claim and trigger, at most two sentences>
+- **Impact:** <resulting behavior or risk, one sentence>
+- **Fix:** <one imperative sentence>
+- **Verification:** <status> · confidence <n> · <source reviewers>
+
+## Consider
+
+- `path/to/file:lines` — <one-line suggestion> (<source reviewers>)
+
+## Open questions
+
+- <Unverified claim> — <the evidence that would settle it>
+
+## Coverage
+
+<Isolation, reviewer failures, and limitations in two or three lines.>
+```
+
+Every Do next item and every finding carries an exact `file:lines` location — when a reviewer supplied only a file or block name, resolve the line numbers from source before reporting. Do next lists every `block` and `address` item ordered by severity, one imperative line each; `consider` items live only in Consider. Findings are numbered in Do next order so the checklist and the detail cross-reference by number.
+
+Complete this step when the report matches the template: every reported item has severity, verification, confidence, and disposition; every finding and Do next item has a `file:lines` location and a one-sentence fix; and each Do next entry names its finding.
