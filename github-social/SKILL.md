@@ -1,49 +1,34 @@
 ---
 name: github-social
 disable-model-invocation: true
-description: Generate polished GitHub repository social preview / Open Graph images. Use when the user asks for a GitHub social preview, repo card, repository Open Graph image, GitHub preview image, or an image sized for the repository social preview uploader. Uses the repository-open-graph-template.png safe-area template, targets gpt-image-2, saves output under assets by default, and should not require an OpenAI API key.
+description: Generate a 1280x640 GitHub repository social preview (Open Graph) image and link it at the top of the README.
 ---
 
 # GitHub Social Preview
 
-Create a 1280x640 PNG social preview image for a GitHub repository, using `repository-open-graph-template.png` as the safe-area reference.
+Create a 1280x640 PNG social preview for a GitHub repository, using `repository-open-graph-template.png` (in this skill's folder) as the safe-area reference.
 
 ## Workflow
 
-1. Gather repo signal from the user request and local files when available: repo name, owner/org, README tagline, logo/mark, brand colors, domain, primary language, and intended audience.
-2. If the `gpt-image-prompts` skill is available, load it and use it to draft the GPT Image prompt. Keep this skill's GitHub-specific constraints authoritative.
-3. Generate with the built-in image generation capability targeting `gpt-image-2`. Do not ask for an API key, call the OpenAI REST API, or require `OPENAI_API_KEY`.
-4. Use `repository-open-graph-template.png` as a reference image when the image tool supports reference inputs. Otherwise, manually apply the constraints below.
-5. Inspect the result at full size and thumbnail size. Regenerate or edit if text is misspelled, cramped, low contrast, outside the safe area, or if guide lines/template text appear.
-6. Save the final image in the target repository's `assets/` folder unless the user specifies another path. Create `assets/` if needed. Prefer `assets/github-social-preview.png` unless that conflicts with an existing file the user wants preserved.
-7. Add the image to the top of `README.md` unless the user says not to. Use a relative Markdown image link, avoid duplicating an existing preview image, and preserve the rest of the README content.
+1. Gather repo signal from the request and local files: repo name, owner/org, README tagline, logo or mark, brand colors, primary language, and audience. Done when every bracket in the prompt template can be filled.
+2. Draft the prompt from the template below and generate with the built-in image tool, targeting `gpt-image-2` where a model can be chosen — credentials are never needed, so proceed without asking for an API key. Pass `repository-open-graph-template.png` as a reference image when the tool accepts reference inputs; otherwise rely on the template's written safe-area constraint.
+3. Inspect the result at full size and at roughly 320x160. Regenerate or edit until every check passes: repo name spelled correctly and readable at thumbnail size, all critical content inside the safe area, no guide lines, template copy, watermarks, or unintended logos, and the visual matches the repository's actual purpose and tone.
+4. Save to `assets/github-social-preview.png`, creating `assets/` if needed, unless the user names another path or that name collides with a file they want preserved.
+5. Link the image at the very top of `README.md` with a relative Markdown image link — before any badges or logo — unless the user opts out or asks for different placement. Repoint or replace an existing preview block instead of adding a second. If `README.md` does not exist, ask before creating one.
 
-If the available image tool does not expose a model selector, still write the prompt and settings for `gpt-image-2`; use the local tool without asking the user for credentials.
+```markdown
+![Repository social preview](assets/github-social-preview.png)
+```
 
-## Required Specs
+## Specs
 
-- Canvas: exactly 1280x640, PNG, opaque background.
-- GitHub upload target: repository Settings > Social preview.
-- Default output path: `assets/github-social-preview.png`, unless the user requests another path or filename.
-- Safe area: keep all critical text, logos, faces, product UI, and visual focus inside the inner rectangle shown by `repository-open-graph-template.png` (about 80px from each edge on the 1280x640 template).
-- Crop tolerance: allow nonessential background texture outside the safe area.
-- Text: large, sparse, high-contrast. Prefer repo name plus one short descriptor. Avoid tiny labels.
-- Final image must not contain the template's red guide lines, "Repo Card Template" copy, or GitHub logo unless the user explicitly requests GitHub branding.
+- Canvas: exactly 1280x640, opaque PNG — the size GitHub's Settings > Social preview uploader expects.
+- Safe area: all critical text, logos, faces, and visual focus inside the template's inner rectangle (about 80px from each edge); nonessential background texture may bleed past it.
+- Text: large, sparse, high-contrast — repo name plus at most one short descriptor.
+- Composition: one strong concept, not a collage — a project mark beside the repo name and tagline, or an abstract product/code motif tied to the repository. Palette drawn from the repo's brand; generic purple-blue gradients only when they are the brand.
+- Assets: use real project assets when provided; otherwise create an original simple mark. Third-party logos and GitHub's own mark stay out unless the user explicitly requests GitHub branding.
 
-## Composition Guidance
-
-Prefer one strong concept over a collage:
-
-- Left or centered project mark, right/center repo name and tagline.
-- Abstract product metaphor, code/tooling motif, or UI fragment tied to the repository.
-- Distinct palette from the repo/brand; avoid generic purple-blue gradients unless brand-specific.
-- Readable at small social-card sizes; test by viewing around 320x160.
-
-Use real project assets if provided. If no logo exists, create an original simple mark; do not invent third-party logos or copy GitHub's mark from the template.
-
-## Prompt Template
-
-Use or adapt this with the `gpt-image-prompts` skill:
+## Prompt template
 
 ```text
 Create a GitHub repository social preview image for [REPO_NAME].
@@ -78,24 +63,3 @@ quality: high
 background: opaque
 output_format: png
 ```
-
-## README Placement
-
-After saving the image, place this at the very top of `README.md` unless told not to:
-
-```markdown
-![Repository social preview](assets/github-social-preview.png)
-
-```
-
-If `README.md` already starts with badges or a project logo, still put the social preview first unless the user asks for a different placement. If a preview image is already present, update its path or replace that block instead of adding a duplicate. If `README.md` does not exist, ask before creating one.
-
-## QA Checklist
-
-- Dimensions are 1280x640.
-- All critical content sits inside the template safe area.
-- Final file is saved under `assets/` unless the user specified otherwise.
-- `README.md` includes the preview image at the top unless the user opted out.
-- Repo name is spelled correctly and readable at thumbnail size.
-- No template artifacts, guide lines, watermarks, or unintended logos.
-- Visual matches the repository's actual purpose and tone.

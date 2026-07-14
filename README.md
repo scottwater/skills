@@ -12,23 +12,13 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 ## Available Skills
 
-### Gemini Image Generation
-
-> [!NOTE]
-> This skill is heavily based on the similarly named skill in the excellent
-> [compounding engineering plugin](https://github.com/EveryInc/compound-engineering-plugin/tree/main/plugins/compound-engineering/skills/gemini-imagegen). The only major difference is that this
-> skill uses `uv`, which makes it easier to operate.
-
-`gemini-imagegen` — Generate and edit images using the Gemini API (Nano Banana Pro), supporting text-to-image, image editing, multi-turn refinement, and composition from multiple reference images.
-
-
-### Nano Banana Pro Prompts
-
-`nano-banana-prompts` — Generate professional prompts for Nano Banana Pro image generation, transforming vague requests into detailed, effective prompts following its "thinking model" best practices.
-
 ### GPT Image Prompts
 
-`gpt-image-prompts` — Generate professional prompts for OpenAI GPT Image models, especially `gpt-image-2`, transforming vague visual requests into structured creative briefs with recommended API settings for generation, edits, compositing, text-heavy visuals, ads, logos, UI mockups, slides, and product images.
+`gpt-image-prompts` — Turn a visual idea into a production-ready prompt and API settings for OpenAI GPT Image models (`gpt-image-2`), with capability-specific patterns for photorealism, infographics, ads, logos, UI mockups, edits, and compositing.
+
+### GitHub Social Preview
+
+`github-social` — Generate a 1280x640 GitHub repository social preview (Open Graph) image and link it at the top of the README.
 
 ### Rails Cybersecurity
 
