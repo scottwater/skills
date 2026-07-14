@@ -14,9 +14,11 @@ Confirm the worker mechanism before touching the review scope.
 
 Probe Solo first when a Solo identity tool is visible: `whoami` (direct MCP) or `solo_status` (Pi). Select Solo only when the probe confirms this process is Solo-managed with agent spawning available — tool visibility alone is not proof. In every other case (no probe, probe fails, spawning unavailable), use the runtime's native subagent abstraction. One mechanism runs the whole quorum.
 
+When Solo is selected, resolve the current process's configured agent tool before dispatch. Under Pi, use the process id from `solo_status` with `solo_process status`; match its process name and launch command to an enabled agent tool reported by `solo_status`, preferring an exact tool-name match. Pass that tool explicitly as `agentTool` on every `solo_task`; never rely on `solo_task`'s generic default, because it does not inherit the current process's model or arguments. Do not pass separate `model` or `thinking` overrides when the selected agent tool already defines them. With direct MCP, use the equivalent agent-tool identity returned by `whoami`. If the current process cannot be mapped unambiguously to an enabled tool, stop before reviewing scope and ask the user which enabled agent tool to use.
+
 Every reviewer is a blind agent: fresh context, no prior conclusions, no reviewer passes in the delegator context. Concurrency is optional; blindness is required. When no mechanism can create blind agents, stop and return an execution-unavailable response naming the missing capability.
 
-Complete this step when one mechanism can create a blind agent per reviewer.
+Complete this step when one mechanism can create a blind agent per reviewer and, for Solo, the exact agent tool is resolved.
 
 ## Resolve scope
 
@@ -49,7 +51,7 @@ Load only the selected files from `references/reviewers/`. Complete this step wh
 
 ## Run the quorum
 
-Give every reviewer an identical task packet — scope, source, changed files, focus, exclusions, project rules, read-only flag, finding contract — plus its one distinct rubric. Create one blind agent per reviewer through the confirmed mechanism, concurrently when capacity allows, sequentially otherwise.
+Give every reviewer an identical task packet — scope, source, changed files, focus, exclusions, project rules, read-only flag, finding contract — plus its one distinct rubric. Create one blind agent per reviewer through the confirmed mechanism, concurrently when capacity allows, sequentially otherwise. For Solo, pass the resolved `agentTool` explicitly on every dispatch so all reviewers use the parent process's configured agent tool.
 
 Where the runtime offers acceptance gates, disable them (`acceptance: "none"`): the reviewers are the acceptance layer, and a gate can falsely fail valid reviewer output.
 
