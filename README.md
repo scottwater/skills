@@ -51,7 +51,7 @@ A grouped set of Rails-focused security validation skills. These skills favor co
 
 ### Code Quorum
 
-`code-quorum` is an explicitly invoked, read-only review that runs independent reviewer agents, verifies material findings, and returns one prioritized report. It requires Solo MCP or another subagent mechanism, reviews pending changes by default, and accepts a PR, branch, revision range, commit, file set, diff, or supplied artifact.
+`code-quorum` is an explicitly invoked, read-only review that runs independent reviewer agents, verifies material findings, and returns one prioritized report. It runs reviewers on the runtime's native subagent mechanism (ask for Solo explicitly to dispatch through the `solo` skill instead), reviews pending changes by default, and accepts a PR, branch, revision range, commit, file set, diff, or supplied artifact.
 
 | Mode | Reviewers |
 | --- | --- |
