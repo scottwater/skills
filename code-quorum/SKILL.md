@@ -4,23 +4,19 @@ description: Run independent code-review agents and synthesize verified findings
 disable-model-invocation: true
 ---
 
-# Code Quorum
-
 ## Read-only boundary
 
-The entire workflow is inspection and reporting only. The delegator, every reviewer, the synthesizer, and the verifier must not edit reviewed files, generate or apply patches, commit changes, or begin remediation. Recommendations describe directions for a later, separately authorized workflow. Reproduce claims only with non-mutating commands or in disposable isolation that cannot alter the reviewed workspace.
+The whole workflow inspects and reports. No agent in it edits reviewed files, generates or applies patches, commits, or begins remediation; recommendations point at a later, separately authorized workflow. Reproduce claims only with non-mutating commands or in disposable isolation that cannot alter the reviewed workspace.
 
 ## Confirm agents
 
-Confirm an independent-worker mechanism before inspecting the review scope.
+Confirm the worker mechanism before touching the review scope.
 
-Probe Solo identity first when the runtime exposes a Solo identity or status tool. In Pi, use `solo_status`; with direct Solo MCP access, use `whoami`. A response that identifies the current process as Solo-managed and reports agent spawning available selects Solo for the quorum. Use the runtime's native subagent abstraction only when the Solo probe is unavailable, cannot identify the current process, reports MCP or spawning unavailable, or fails. Tool visibility alone is not proof that the current process is Solo-managed.
+Probe Solo first when a Solo identity tool is visible: `whoami` (direct MCP) or `solo_status` (Pi). Select Solo only when the probe confirms this process is Solo-managed with agent spawning available — tool visibility alone is not proof. In every other case (no probe, probe fails, spawning unavailable), use the runtime's native subagent abstraction. One mechanism runs the whole quorum.
 
-When Solo is selected, create every reviewer as a Solo-managed agent. Otherwise create every reviewer through the native subagent abstraction. Do not mix mechanisms within one quorum merely to increase concurrency.
+Every reviewer is a blind agent: fresh context, no prior conclusions, no reviewer passes in the delegator context. Concurrency is optional; blindness is required. When no mechanism can create blind agents, stop and return an execution-unavailable response naming the missing capability.
 
-Require a fresh isolated context for every reviewer. Concurrency is optional; independence is required. Do not continue to scope resolution when neither Solo nor another subagent abstraction can create fresh workers. Return an execution-unavailable response that names the missing capability.
-
-Complete this step when one available mechanism can create a fresh agent for each selected reviewer.
+Complete this step when one mechanism can create a blind agent per reviewer.
 
 ## Resolve scope
 
@@ -51,23 +47,13 @@ full:
 
 Load only the selected files from `references/reviewers/`. Complete this step when the selection has one interpretation.
 
-## Construct task packets
-
-Give every reviewer the same scope, source, changed files, focus, exclusions, project rules, read-only flag, and finding contract. Add one distinct reviewer rubric. Include no prior conclusions.
-
-Complete this step when every packet is bounded and equivalent except for its rubric.
-
 ## Run the quorum
 
-Create one fresh agent for each selected reviewer through the mechanism confirmed above. Run agents concurrently when capacity allows. Schedule them sequentially when capacity is constrained, while preserving a fresh isolated context for each reviewer. Give each agent only the shared task packet and its selected rubric. Do not run reviewer passes in the delegator context.
+Give every reviewer an identical task packet — scope, source, changed files, focus, exclusions, project rules, read-only flag, finding contract — plus its one distinct rubric. Create one blind agent per reviewer through the confirmed mechanism, concurrently when capacity allows, sequentially otherwise.
 
-When the native subagent runtime supports acceptance gates, disable them for each reviewer task (for example, `acceptance: "none"`). Never request `reviewed` acceptance for a quorum reviewer: these workers already are the independent reviewers, and requiring another automatic reviewer can falsely mark valid reviewer output as failed.
+Where the runtime offers acceptance gates, disable them (`acceptance: "none"`): the reviewers are the acceptance layer, and a gate can falsely fail valid reviewer output.
 
-Report reviewer completion as results arrive when the runtime supports progress updates. Wait until every selected reviewer has returned, failed, timed out, or could not start before synthesis.
-
-Record each returned result separately. Judge usability from the returned report, not only the wrapper's lifecycle label. If a worker exits successfully and returns a complete report but the wrapper reports only an unavailable optional acceptance reviewer, retain the report and disclose the wrapper anomaly under coverage limitations. `source_reviewers` may include only reviewers that independently returned a materially equivalent claim. Selection alone is not agreement or attribution evidence.
-
-Synthesize every usable returned result. List each missing reviewer and its failure reason under coverage limitations. Treat no missing reviewer as agreement, disagreement, or `no_findings`. Return an execution failure instead of a review when no reviewer returns a usable result.
+Wait for every reviewer to return, fail, or time out. Judge each result by its returned report, not the wrapper's lifecycle label — retain a complete report even when the wrapper flags an anomaly, and disclose the anomaly under coverage limitations. A missing reviewer contributes only a coverage limitation — never agreement or `no_findings`. Return an execution failure when no reviewer returns a usable result.
 
 Complete this step when every selected reviewer has a usable result or a recorded failure reason, and at least one usable result exists.
 
@@ -89,7 +75,7 @@ recommendation: Direction for addressing it
 source_reviewers: [reviewer-name]
 ```
 
-Require every field. Complete this step when every candidate conforms or has a rejection reason.
+Require every field. List in `source_reviewers` only reviewers whose own report contains a materially equivalent claim — selection alone is not attribution evidence. Complete this step when every candidate conforms or has a rejection reason.
 
 ## Synthesize
 
