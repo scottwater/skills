@@ -1,5 +1,0 @@
-interface:
-  display_name: "Nano Banana Prompts"
-  short_description: "Craft prompts for Nano Banana Pro"
-policy:
-  allow_implicit_invocation: false
