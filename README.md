@@ -38,11 +38,11 @@ The AI lens joins any mode automatically when the scope contains LLM or agent co
 
 | Mode | Reviewers |
 | --- | --- |
-| `quick` | General reviewer and silent-failure hunter |
-| `default` | Adversarial reviewer, general reviewer, silent-failure hunter, and skeptical engineer |
+| `quick` | Correctness reviewer and silent-failure hunter |
+| `default` | Quick reviewers plus failure-mode and test-behavior reviewers |
 | `full` | Default reviewers plus simplification reviewer |
 
-Request a mode or named combination, such as `Run a quick code quorum` or `Use the skeptical engineer and silent-failure hunter from code-quorum`.
+A requirements reviewer joins any mode when the review has testable requirements. Request a mode or named combination, such as `Run a quick code quorum` or `Use the failure-mode reviewer and silent-failure hunter from code-quorum`.
 
 ### Inertia Docs
 

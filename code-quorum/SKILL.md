@@ -20,9 +20,9 @@ Complete this step when one mechanism can create a blind agent per reviewer.
 
 ## Resolve scope
 
-Resolve explicit scope first. Otherwise resolve, in order, pending changes against `HEAD` including staged changes, unstaged tracked changes, and relevant untracked files; a branch from its merge-base; an associated pull request; a recent commit; or named task artifacts. Never infer a whole-repository review. Flag unusually large inferred ranges.
+Resolve explicit scope first. Otherwise resolve, in order, pending changes against `HEAD` including staged changes, unstaged tracked changes, and relevant untracked files; a branch from its merge-base; an associated pull request; a recent commit; or named task artifacts. Record any supplied or associated issue, pull-request description, specification, or acceptance criteria as the requirements source; record its absence. Never infer a whole-repository review. Flag unusually large inferred ranges.
 
-Complete this step when the exact diff, range, or files can be stated.
+Complete this step when the exact diff, range, or files and the requirements source or its absence can be stated.
 
 ## Select reviewers
 
@@ -30,26 +30,28 @@ Honor explicit reviewer names before named sets before the default set. Apply th
 
 ```yaml
 quick:
-  - general-reviewer
+  - correctness-reviewer
   - silent-failure-hunter
 default:
-  - adversarial-reviewer
-  - general-reviewer
+  - correctness-reviewer
+  - failure-mode-reviewer
   - silent-failure-hunter
-  - skeptical-engineer
+  - test-behavior-reviewer
 full:
-  - adversarial-reviewer
-  - general-reviewer
-  - simplification-reviewer
+  - correctness-reviewer
+  - failure-mode-reviewer
   - silent-failure-hunter
-  - skeptical-engineer
+  - simplification-reviewer
+  - test-behavior-reviewer
 ```
 
-Load only the selected files from `references/reviewers/`. Complete this step when the selection has one interpretation.
+Unless excluded, add `requirements-reviewer` to any set when the requirements source states testable behavior. Load only the selected files from `references/reviewers/`.
+
+Complete this step when the selection has one interpretation and every selected reviewer has an applicable rubric.
 
 ## Run the quorum
 
-Give every reviewer an identical task packet — scope, source, changed files, focus, exclusions, project rules, read-only flag, finding contract — plus its one distinct rubric. Create one blind agent per reviewer through the confirmed mechanism, concurrently when capacity allows, sequentially otherwise.
+Give every reviewer an identical task packet — scope, source, changed files, requirements source or absence, focus, exclusions, project rules, read-only flag, finding contract — plus its one distinct rubric. Require every material candidate that clears the rubric's evidence bar, ordered by severity; `no_findings` completes a review when none clear it. Create one blind agent per reviewer through the confirmed mechanism, concurrently when capacity allows, sequentially otherwise.
 
 Where the worker mechanism offers acceptance gates, disable them: the reviewers are the acceptance layer, and a gate can falsely fail valid reviewer output.
 
@@ -66,7 +68,6 @@ title: Concrete failure or concern
 location: { file: path/to/file, lines: 10-18 }
 category: correctness
 severity: critical | high | medium | low
-confidence: 0.0-1.0
 claim: What is wrong
 trigger: Conditions that expose it
 impact: Resulting behavior or risk
@@ -79,15 +80,15 @@ Require every field. List in `source_reviewers` only reviewers whose own report 
 
 ## Synthesize
 
-Merge candidates by root cause. Remove style-only, speculative, pre-existing, and out-of-scope claims. Resolve disagreement from source evidence.
+Merge candidates by root cause. Remove style-only, speculative, pre-existing, and out-of-scope claims. Resolve disagreement from source evidence. Count a second reviewer as corroboration only when it contributes materially independent evidence, a distinct trigger, or a distinct failure mode.
 
-Complete this step when each candidate is merged, retained, rejected, or unresolved.
+Complete this step when each candidate is merged into a retained candidate or rejected with a reason.
 
 ## Verify
 
-Trace every potential blocker through source, safeguards, and tests. Reproduce when proportionate. Assign `verified`, `partially-verified`, `unverified`, or `rejected` and record the method and evidence.
+Resolve every retained candidate against source, safeguards, and tests. Use proportionate verification: trace the relevant code path, inspect callers and contracts, consult authoritative framework or platform behavior, and reproduce when the claim warrants it. Assign `verified`, `partially-verified`, `unresolved`, or `rejected` and record the method and evidence. Move important unresolved candidates to Open questions with the evidence that would settle them.
 
-Complete this step when each potential blocker has a status, method, and evidence.
+Complete this step when every retained candidate has a status, method, evidence, and report destination or rejection reason.
 
 ## Prioritize and report
 
@@ -98,14 +99,13 @@ Assign severity using these canonical meanings:
 - `medium`: important defect that is normally nonblocking.
 - `low`: minor risk or worthwhile improvement.
 
-Keep severity, verification, confidence, and disposition separate. Dispositions mean:
+Keep severity, verification, and disposition separate. Dispositions mean:
 
-- `block`: only a verified material finding.
-- `address`: a verified or partially verified actionable nonblocker.
-- `investigate`: an important unverified claim; state the missing evidence.
-- `consider`: low-risk simplification or maintainability advice.
+- `block`: a verified material finding.
+- `address`: a verified or partially verified actionable finding whose known impact is nonblocking.
+- `consider`: a verified low-risk simplification from the selected simplification reviewer.
 
-Omit rejected findings unless the user requests provenance. Use P0-P3 aliases only when requested.
+Place important unresolved candidates and partially verified candidates with potentially ship-blocking impact only in Open questions; state the evidence that would settle them, and exclude them from the verdict. Omit rejected findings unless the user requests provenance. Use P0-P3 aliases only when requested.
 
 Render the report exactly in this template — each section once, in this order, omitting Consider and Open questions when empty:
 
@@ -128,7 +128,7 @@ Scope: <range/PR · files · +/− lines> · Reviewers: <usable/selected> (<mech
 - **What:** <claim and trigger, at most two sentences>
 - **Impact:** <resulting behavior or risk, one sentence>
 - **Fix:** <one imperative sentence>
-- **Verification:** <status> · confidence <n> · <source reviewers>
+- **Verification:** <status> · <source reviewers>
 
 ## Consider
 
@@ -136,13 +136,13 @@ Scope: <range/PR · files · +/− lines> · Reviewers: <usable/selected> (<mech
 
 ## Open questions
 
-- <Unverified claim> — <the evidence that would settle it>
+- <Unresolved claim> — <the evidence that would settle it>
 
 ## Coverage
 
 <Isolation, reviewer failures, and limitations in two or three lines.>
 ```
 
-Every Do next item and every finding carries an exact `file:lines` location — when a reviewer supplied only a file or block name, resolve the line numbers from source before reporting. Do next lists every `block` and `address` item ordered by severity, one imperative line each; `consider` items live only in Consider. Findings are numbered in Do next order so the checklist and the detail cross-reference by number.
+Every Do next item and every finding carries an exact `file:lines` location — when a reviewer supplied only a file or block name, resolve the line numbers from source before reporting. Do next lists every `block` and `address` item ordered by severity, one imperative line each; verified `consider` items from the simplification reviewer live only in Consider. Findings are numbered in Do next order so the checklist and the detail cross-reference by number.
 
-Complete this step when the report matches the template: every reported item has severity, verification, confidence, and disposition; every finding and Do next item has a `file:lines` location and a one-sentence fix; and each Do next entry names its finding.
+Complete this step when the report matches the template: every finding has severity, verification, and disposition; every finding, Do next item, and Consider item has an exact `file:lines` location; every finding has a one-sentence fix; each Do next entry names its finding; and each open question names the evidence that would settle it.

@@ -2,12 +2,12 @@
 
 ## Search
 
-Over-engineering, needless abstraction, redundant configuration, nesting, duplication, confusing flow, clever compression, oversized changes.
+Named redundant abstractions, configuration, indirection, duplication, nesting, or clever compression in the changed code.
 
 ## Evidence bar
 
-Complexity cost, behavior to preserve, simpler direction.
+Exact location, concrete complexity cost, behavior to preserve, and a smaller direction that removes or consolidates the named construct.
 
 ## Exclude
 
-Edits, patches, cosmetics, weakened used extensibility.
+Edits, patches, cosmetics, subjective readability preferences, speculative future cleanup, and removal of used extensibility.

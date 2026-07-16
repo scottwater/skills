@@ -2,12 +2,12 @@
 
 ## Search
 
-Swallowed errors, broad catches, misleading success, defaults, exhausted retries, lost context, broken propagation, skipped cleanup.
+Swallowed errors, broad catches, misleading success, defaults, exhausted retries, lost context, broken propagation, and skipped cleanup.
 
 ## Evidence bar
 
-Hidden failure, suppression path, impact, visibility or propagation direction.
+Hidden failure, suppression path, impact, and the required visibility or propagation direction.
 
 ## Exclude
 
-Logging or feedback demands when handling preserves an intentional observable outcome.
+Intentional handling with an observable outcome, plus invariant preservation for retries, rollback, cleanup, and partial completion (owned by the failure-mode reviewer).
