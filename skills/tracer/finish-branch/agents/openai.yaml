@@ -1,5 +1,0 @@
-interface:
-  display_name: "Finish Branch"
-  short_description: "Verify, then merge, PR, or discard"
-policy:
-  allow_implicit_invocation: false

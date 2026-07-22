@@ -1,5 +1,0 @@
-interface:
-  display_name: "Wat"
-  short_description: "Route to the right tracer skill"
-policy:
-  allow_implicit_invocation: false

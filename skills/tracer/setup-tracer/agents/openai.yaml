@@ -1,5 +1,0 @@
-interface:
-  display_name: "Setup Tracer"
-  short_description: "Configure repo tracker and domain docs"
-policy:
-  allow_implicit_invocation: false

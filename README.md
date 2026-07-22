@@ -14,7 +14,7 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 ### Tracer
 
-A lean, user-invoked skill set for spec-driven development: `/interview-me` → `/to-spec` → `/to-tickets` → `/implement`, plus supporting skills for reviews, worktrees, and handoffs. See the [Tracer README](skills/tracer/README.md) for the full flow and skill list.
+A lean, user-invoked skill set for spec-driven development: `/tracer-interview-me` → `/tracer-to-spec` → `/tracer-to-tickets` → `/tracer-implement`, plus supporting skills for reviews, worktrees, and handoffs. See the [Tracer README](skills/tracer/README.md) for the full flow and skill list.
 
 ### GPT Image Prompts
 

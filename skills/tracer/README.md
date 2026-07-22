@@ -15,51 +15,51 @@ A lean, user-invoked skill set for spec-driven development. Forked from two pare
 Nothing here auto-invokes. Three invocation tiers, declared twice per skill — `disable-model-invocation` in `SKILL.md` frontmatter (Claude Code) and `policy.allow_implicit_invocation: false` in `agents/openai.yaml` (Codex):
 
 - **User-only** (10 skills) — every entry-point workflow: only you can start it.
-- **Internally driven** ([`tdd`](tdd/SKILL.md), [`code-review`](code-review/SKILL.md)) — model-invocable because `/implement` drives them as part of its gates; they never fire outside a flow you started.
-- **Vocabulary** ([`domain-modeling`](domain-modeling/SKILL.md), [`codebase-design`](codebase-design/SKILL.md)) — model-invoked references that define language and never run a process.
+- **Internally driven** ([`tracer-tdd`](tracer-tdd/SKILL.md), [`tracer-code-review`](tracer-code-review/SKILL.md)) — model-invocable because `/tracer-implement` drives them as part of its gates; they never fire outside a flow you started.
+- **Vocabulary** ([`tracer-domain-modeling`](tracer-domain-modeling/SKILL.md), [`tracer-codebase-design`](tracer-codebase-design/SKILL.md)) — model-invoked references that define language and never run a process.
 
-Not sure which skill fits? **[`/wat`](wat/SKILL.md)** is the router.
+Not sure which skill fits? **[`/tracer-wat`](tracer-wat/SKILL.md)** is the router.
 
 ## The main flow: idea → ship
 
 ```
-/interview-me → /to-spec → /to-tickets → /implement (per ticket) → merge/PR
+/tracer-interview-me → /tracer-to-spec → /tracer-to-tickets → /tracer-implement (per ticket) → merge/PR
 ```
 
-1. **[`/interview-me`](interview-me/SKILL.md)** — the entry point. A relentless interview worked as a design tree: each round asks the entire frontier of answerable questions at once, with recommended answers. Facts get looked up by sub-agents; decisions go to you. Docs-aware in a codebase (existing `CONTEXT.md`/ADRs prune the tree; settled terms and decisions get written back), stateless without one. Done when the frontier is empty and nothing is silently assumed.
-2. **[`/to-spec`](to-spec/SKILL.md)** — synthesize the settled thread into a spec (problem, user stories, implementation and testing decisions, pre-agreed test seams). No interview — the grilling already happened. Durable prose: no file paths or code.
-3. **[`/to-tickets`](to-tickets/SKILL.md)** — split the spec into tracer-bullet vertical slices, each declaring its blocking edges. Skip for single-session work and go straight to `/implement`.
-4. **[`/implement`](implement/SKILL.md)** — the centerpiece. Per ticket: write an **ephemeral task plan** (exact paths, real code, interfaces, global constraints — precision that can't go stale because it dies with the branch), then execute it with a fresh implementer sub-agent per task, a **review gate after every task** (spec compliance + code quality, fix → re-review until approved), and a **commit per task**. Closes with a full-suite run, a whole-branch `/code-review`, and `/finish-branch`.
+1. **[`/tracer-interview-me`](tracer-interview-me/SKILL.md)** — the entry point. A relentless interview worked as a design tree: each round asks the entire frontier of answerable questions at once, with recommended answers. Facts get looked up by sub-agents; decisions go to you. Docs-aware in a codebase (existing `CONTEXT.md`/ADRs prune the tree; settled terms and decisions get written back), stateless without one. Done when the frontier is empty and nothing is silently assumed.
+2. **[`/tracer-to-spec`](tracer-to-spec/SKILL.md)** — synthesize the settled thread into a spec (problem, user stories, implementation and testing decisions, pre-agreed test seams). No interview — the grilling already happened. Durable prose: no file paths or code.
+3. **[`/tracer-to-tickets`](tracer-to-tickets/SKILL.md)** — split the spec into tracer-bullet vertical slices, each declaring its blocking edges. Skip for single-session work and go straight to `/tracer-implement`.
+4. **[`/tracer-implement`](tracer-implement/SKILL.md)** — the centerpiece. Per ticket: write an **ephemeral task plan** (exact paths, real code, interfaces, global constraints — precision that can't go stale because it dies with the branch), then execute it with a fresh implementer sub-agent per task, a **review gate after every task** (spec compliance + code quality, fix → re-review until approved), and a **commit per task**. Closes with a full-suite run, a whole-branch `/tracer-code-review`, and `/tracer-finish-branch`.
 
-Keep steps 1–3 in one unbroken context window; each `/implement` starts fresh from its ticket.
+Keep steps 1–3 in one unbroken context window; each `/tracer-implement` starts fresh from its ticket.
 
-**Parallel tickets:** frontier tickets with no edges between them each get their own `/implement` session in their own [`/worktrees`](worktrees/SKILL.md) checkout. Because every task commits, parallel sessions never collide on a dirty tree, and [`/finish-branch`](finish-branch/SKILL.md) merges or PRs each one when it's done.
+**Parallel tickets:** frontier tickets with no edges between them each get their own `/tracer-implement` session in their own [`/tracer-worktrees`](tracer-worktrees/SKILL.md) checkout. Because every task commits, parallel sessions never collide on a dirty tree, and [`/tracer-finish-branch`](tracer-finish-branch/SKILL.md) merges or PRs each one when it's done.
 
 ## Skills
 
 | Skill | Role |
 |---|---|
-| [`wat`](wat/SKILL.md) | The router — which skill or flow fits your situation |
-| [`interview-me`](interview-me/SKILL.md) | Frontier-driven interview until shared understanding — docs-aware in a repo, stateless without |
-| [`to-spec`](to-spec/SKILL.md) | Conversation → durable spec with pre-agreed test seams |
-| [`to-tickets`](to-tickets/SKILL.md) | Spec → tracer-bullet tickets with blocking edges |
-| [`implement`](implement/SKILL.md) | Ticket → plan → per-task implement/commit/review loop → reviewed branch |
-| [`code-review`](code-review/SKILL.md) | Two-axis review (Standards + Spec), severity-graded, with a consuming fix → re-review loop |
-| [`tdd`](tdd/SKILL.md) | The red → green reference: good tests, seams, anti-patterns |
-| [`worktrees`](worktrees/SKILL.md) | Isolated checkout per parallel ticket |
-| [`setup-tracer`](setup-tracer/SKILL.md) | Once per repo: configure the issue tracker and domain-doc layout |
-| [`finish-branch`](finish-branch/SKILL.md) | Verify → merge/PR/keep/discard → safe cleanup |
-| [`prototype`](prototype/SKILL.md) | Throwaway code that answers one design question |
-| [`handoff`](handoff/SKILL.md) | Compact the conversation into a doc a fresh session picks up |
-| [`domain-modeling`](domain-modeling/SKILL.md) | Vocabulary reference (model-invoked): glossary discipline, CONTEXT.md and ADR formats |
-| [`codebase-design`](codebase-design/SKILL.md) | Vocabulary reference (model-invoked): deep modules, seams, interfaces |
+| [`tracer-wat`](tracer-wat/SKILL.md) | The router — which skill or flow fits your situation |
+| [`tracer-interview-me`](tracer-interview-me/SKILL.md) | Frontier-driven interview until shared understanding — docs-aware in a repo, stateless without |
+| [`tracer-to-spec`](tracer-to-spec/SKILL.md) | Conversation → durable spec with pre-agreed test seams |
+| [`tracer-to-tickets`](tracer-to-tickets/SKILL.md) | Spec → tracer-bullet tickets with blocking edges |
+| [`tracer-implement`](tracer-implement/SKILL.md) | Ticket → plan → per-task implement/commit/review loop → reviewed branch |
+| [`tracer-code-review`](tracer-code-review/SKILL.md) | Two-axis review (Standards + Spec), severity-graded, with a consuming fix → re-review loop |
+| [`tracer-tdd`](tracer-tdd/SKILL.md) | The red → green reference: good tests, seams, anti-patterns |
+| [`tracer-worktrees`](tracer-worktrees/SKILL.md) | Isolated checkout per parallel ticket |
+| [`tracer-setup`](tracer-setup/SKILL.md) | Once per repo: configure the issue tracker and domain-doc layout |
+| [`tracer-finish-branch`](tracer-finish-branch/SKILL.md) | Verify → merge/PR/keep/discard → safe cleanup |
+| [`tracer-prototype`](tracer-prototype/SKILL.md) | Throwaway code that answers one design question |
+| [`tracer-handoff`](tracer-handoff/SKILL.md) | Compact the conversation into a doc a fresh session picks up |
+| [`tracer-domain-modeling`](tracer-domain-modeling/SKILL.md) | Vocabulary reference (model-invoked): glossary discipline, CONTEXT.md and ADR formats |
+| [`tracer-codebase-design`](tracer-codebase-design/SKILL.md) | Vocabulary reference (model-invoked): deep modules, seams, interfaces |
 
 ## Conventions
 
-- **`.tracer/`** (git-ignored) holds everything ephemeral: local specs and tickets (`.tracer/<feature>/`), and `/implement`'s workspace (`.tracer/implement/` — task plan, briefs, reports, review packages, progress ledger).
+- **`.tracer/`** (git-ignored) holds everything ephemeral: local specs and tickets (`.tracer/<feature>/`), and `/tracer-implement`'s workspace (`.tracer/implement/` — task plan, briefs, reports, review packages, progress ledger).
 - **Durable vs. ephemeral:** specs and tickets are durable prose and never contain file paths or code; the task plan is ephemeral and contains exactly that. Precision lives where it can't go stale.
 - **Evidence before claims:** no "done", "passing", or "fixed" without having run the proving command in the current session and read its output.
-- If `docs/agents/issue-tracker.md` exists, `to-spec`/`to-tickets` publish to that tracker; otherwise everything works locally under `.tracer/`. Run [`/setup-tracer`](setup-tracer/SKILL.md) once per repo to configure a real tracker (it also seeds the exact commands for blocking edges and frontier queries).
+- If `docs/agents/issue-tracker.md` exists, `tracer-to-spec`/`tracer-to-tickets` publish to that tracker; otherwise everything works locally under `.tracer/`. Run [`/tracer-setup`](tracer-setup/SKILL.md) once per repo to configure a real tracker (it also seeds the exact commands for blocking edges and frontier queries).
 
 ## Install
 
