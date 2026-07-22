@@ -12,6 +12,10 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 ## Available Skills
 
+### Tracer
+
+A lean, user-invoked skill set for spec-driven development: `/interview-me` → `/to-spec` → `/to-tickets` → `/implement`, plus supporting skills for reviews, worktrees, and handoffs. See the [Tracer README](skills/tracer/README.md) for the full flow and skill list.
+
 ### GPT Image Prompts
 
 `gpt-image-prompts`: Turn a visual idea into a production-ready prompt and API settings for OpenAI GPT Image models (`gpt-image-2`), with capability-specific patterns for photorealism, infographics, ads, logos, UI mockups, edits, and compositing.
