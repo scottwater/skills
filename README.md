@@ -14,15 +14,15 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 ### GPT Image Prompts
 
-`gpt-image-prompts` — Turn a visual idea into a production-ready prompt and API settings for OpenAI GPT Image models (`gpt-image-2`), with capability-specific patterns for photorealism, infographics, ads, logos, UI mockups, edits, and compositing.
+`gpt-image-prompts`: Turn a visual idea into a production-ready prompt and API settings for OpenAI GPT Image models (`gpt-image-2`), with capability-specific patterns for photorealism, infographics, ads, logos, UI mockups, edits, and compositing.
 
 ### GitHub Social Preview
 
-`github-social` — Generate a 1280x640 GitHub repository social preview (Open Graph) image and link it at the top of the README.
+`github-social`: Generate a 1280x640 GitHub repository social preview (Open Graph) image and link it at the top of the README.
 
 ### Rails Security
 
-`rails-security` is a multi-agent security review of Rails application code, built on the same quorum pattern as `code-quorum`: independent blind lens agents review the resolved scope, findings are merged, verified against source, and returned as one prioritized report. It reviews only what can be inspected and run in development — server, cloud, container, and CI configuration are out of scope.
+`rails-security` is a multi-agent security review of Rails application code, built on the same quorum pattern as `code-quorum`: independent blind lens agents review the resolved scope, and their findings are merged, verified against source, and returned as one prioritized report. It reviews only what can be inspected and run in development. Server, cloud, container, and CI configuration are out of scope.
 
 | Mode | Lenses |
 | --- | --- |
@@ -47,16 +47,16 @@ A requirements reviewer joins any mode when the review has testable requirements
 ### Inertia Docs
 
 > [!IMPORTANT]
-> I do not recommend using these skills. Using skills for non-procedural work has
-> been a misstep, and it is something I am backing away from. I will likely remove
-> the Inertia.js skills in the near future.
+> I do not recommend these skills. Using skills for non-procedural work was a
+> misstep, and I am backing away from it. I will likely remove the Inertia.js
+> skills in the near future.
 
 A comprehensive set of skills for working with Inertia.js (Rails + React). Covers setup, conventions, and common patterns.
 
 | Skill | Description |
 | --- | --- |
 | `inertia-reference` | Overview and project conventions for Inertia Rails + React. |
-| `inertia-rails-setup` | Set up and configure inertia_rails + React/Vite. |
+| `inertia-rails-setup` | Set up and configure `inertia_rails` + React/Vite. |
 | `inertia-rendering-props` | Render Inertia responses, shared data, and lazy or deferred props. |
 | `inertia-forms-validation` | Inertia useForm patterns, custom Form helper, and validation errors. |
 | `inertia-navigation` | Links, navigation, partial reloads, scroll, and cache control. |
