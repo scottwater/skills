@@ -48,28 +48,6 @@ The AI lens joins any mode automatically when the scope contains LLM or agent co
 
 A requirements reviewer joins any mode when the review has testable requirements. Request a mode or named combination, such as `Run a quick code quorum` or `Use the failure-mode reviewer and silent-failure hunter from code-quorum`.
 
-### Inertia Docs
-
-> [!IMPORTANT]
-> I do not recommend these skills. Using skills for non-procedural work was a
-> misstep, and I am backing away from it. I will likely remove the Inertia.js
-> skills in the near future.
-
-A comprehensive set of skills for working with Inertia.js (Rails + React). Covers setup, conventions, and common patterns.
-
-| Skill | Description |
-| --- | --- |
-| `inertia-reference` | Overview and project conventions for Inertia Rails + React. |
-| `inertia-rails-setup` | Set up and configure `inertia_rails` + React/Vite. |
-| `inertia-rendering-props` | Render Inertia responses, shared data, and lazy or deferred props. |
-| `inertia-forms-validation` | Inertia useForm patterns, custom Form helper, and validation errors. |
-| `inertia-navigation` | Links, navigation, partial reloads, scroll, and cache control. |
-| `inertia-layouts` | Persistent and nested layout patterns for Inertia pages. |
-| `inertia-ssr` | Server-side rendering setup for Inertia Rails + React. |
-| `inertia-auth` | Authentication and authorization patterns with Inertia. |
-| `inertia-testing` | RSpec request testing for Inertia responses. |
-| `inertia-pitfalls` | Common Inertia Rails gotchas and fixes. |
-
 ## License
 
 [MIT](LICENSE)
