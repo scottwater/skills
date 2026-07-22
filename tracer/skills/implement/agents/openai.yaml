@@ -1,0 +1,5 @@
+interface:
+  display_name: "Implement"
+  short_description: "Build a ticket with plan, gates, commits"
+policy:
+  allow_implicit_invocation: false

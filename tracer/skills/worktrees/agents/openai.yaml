@@ -1,0 +1,5 @@
+interface:
+  display_name: "Worktrees"
+  short_description: "Isolated workspace for parallel work"
+policy:
+  allow_implicit_invocation: false
