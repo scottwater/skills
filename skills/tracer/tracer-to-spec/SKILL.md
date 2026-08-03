@@ -1,22 +1,42 @@
 ---
 name: tracer-to-spec
-description: Turn the current conversation into a spec and publish it — no interview, just synthesis of what you've already discussed.
+description: Turn a settled interview or cleared Wayfinder map into a spec and publish it — no new interview, just synthesis of decisions already made.
 disable-model-invocation: true
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a spec (you may know this document as a PRD). It normally runs right after `/tracer-interview-me`, in the same context window. Do NOT interview the user — the grilling already happened; just synthesize what you already know.
+This skill produces a spec (you may know this document as a PRD) from one of two settled inputs:
 
-**Where it publishes:** if `docs/agents/issue-tracker.md` configures a tracker (set up via `/tracer-setup`), publish there and apply the `ready-for-agent` label. Otherwise write the spec to `.tracer/<feature-slug>/spec.md`.
+- the current conversation after `/tracer-interview-me`, normally in the same context window; or
+- a cleared `/tracer-wayfinder` map passed as a URL, issue number, or local path.
+
+Do NOT restart the interview. The decisions have already been made; synthesize them without silently adding new ones.
+
+**Where it publishes:** if `docs/agents/issue-tracker.md` configures a tracker (set up via `/tracer-setup`), publish there without `ready-for-agent`; that label is reserved for executable tickets from `/tracer-to-tickets`. Otherwise write the spec to `.tracer/<feature-slug>/spec.md`.
 
 ## Process
 
-1. Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the spec, and respect any ADRs in the area you're touching.
+### 1. Gather the settled input
 
-2. Sketch out the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better - the ideal number is one.
+For a normal interview, work from the current conversation.
 
-Check with the user that these seams match their expectations.
+For a Wayfinder map, hydrate its distributed detail before writing:
 
-3. Write the spec using the template below, then publish it (see above).
+1. Read the map's Destination, Notes, Decisions so far, Not yet specified, and Out of scope.
+2. Use the configured tracker's Wayfinding operations to query all children. Stop and return to `/tracer-wayfinder` if any child is open, claimed, or in flight, if Not yet specified is not empty, or if any resolved child is absent from both Decisions so far and Out of scope.
+3. Fetch the full body and resolution comment or Answer section for every resolved ticket indexed under Decisions so far. Follow linked research notes, prototype verdicts, ADRs, and other decision assets as needed. The map's one-line gists are an index, not the source of truth.
+4. Preserve the map's explicit scope boundary. Read a linked out-of-scope ticket when its one-line explanation is not enough to state the exclusion accurately.
+
+### 2. Explore and choose test seams
+
+Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the spec, and respect any ADRs in the area you're touching.
+
+Sketch the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better — the ideal number is one.
+
+Present the inferred seams for confirmation without reopening settled product decisions. If the confirmation exposes a new decision, return it to the originating interview or Wayfinder map instead of inventing an answer inside the spec.
+
+### 3. Write and publish
+
+Write the spec using the template below, then publish it (see above). When the input was a Wayfinder map, include its linked decisions without copying tracker-only bookkeeping into the prose.
 
 Afterwards, the flow continues with `/tracer-to-tickets` (multi-session builds) or straight to `/tracer-implement` (single-session work).
 

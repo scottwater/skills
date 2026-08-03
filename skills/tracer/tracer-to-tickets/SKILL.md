@@ -16,6 +16,8 @@ Break a plan, spec, or conversation into a set of **tickets** — tracer-bullet 
 
 Work from whatever is already in the conversation context. If the user passes a reference (a spec path, an issue number or URL) as an argument, fetch it and read its full body and comments.
 
+If that reference is a `wayfinder:map` or local Wayfinder `map.md`, stop and route it through `/tracer-to-spec` first. A map is a low-resolution index of distributed decisions, not an implementation spec; ticketing it directly would discard the linked resolutions.
+
 ### 2. Explore the codebase (optional)
 
 If you have not already explored the codebase, do so to understand the current state of the code. Ticket titles and descriptions should use the project's domain glossary vocabulary, and respect ADRs in the area you're touching.

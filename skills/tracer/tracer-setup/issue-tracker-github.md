@@ -34,3 +34,18 @@ Express each ticket's blockers as GitHub's **native issue dependencies** — the
 **Frontier query** — the next tickets `/tracer-implement` can grab: list open `ready-for-agent` issues, drop any with an open blocker (`issue_dependencies_summary.blocked_by > 0`, or an open issue in the `Blocked by` line) or an assignee.
 
 **Parent linkage**: where sub-issues are enabled, attach tickets to their parent spec issue as sub-issues; otherwise put `Part of #<parent>` at the top of each ticket body. Never close or modify the parent when publishing.
+
+## Wayfinding operations
+
+Used by `/tracer-wayfinder`. A Wayfinder **map** is one issue whose children are decision tickets; these planning tickets are distinct from the `ready-for-agent` implementation tickets above.
+
+- **Labels**: ensure `wayfinder:map` and the type labels `wayfinder:research`, `wayfinder:prototype`, `wayfinder:interview`, and `wayfinder:task` exist before first use (`gh label create "<label>" --force`).
+- **Map**: `gh issue create --title "<title>" --body-file <body-file> --label wayfinder:map`. Its body holds Destination, Notes, Decisions so far, Not yet specified, and Out of scope.
+- **Child decision ticket**: create an issue with one `wayfinder:<type>` label. Resolve its database id with `gh api repos/<owner>/<repo>/issues/<child> --jq .id`, then attach it with `gh api --method POST repos/<owner>/<repo>/issues/<map>/sub_issues -F sub_issue_id=<child-db-id>`. Where sub-issues are unavailable, put `Part of #<map>` at the top of the child and maintain a task-list link in the map.
+- **Blocking**: use the native dependency operation from the section above, with the same body-line fallback. Add edges only after every new ticket has an identity.
+- **Enumerate children**: with sub-issues, `gh api --paginate repos/<owner>/<repo>/issues/<map>/sub_issues` returns every child in configured order. With the fallback, run `gh issue list --state all --limit 1000 --json number,title,body,state,assignees,labels | jq --arg parent "Part of #<map>" '[.[] | select(.body | startswith($parent))] | sort_by(.number)'`; cross-check the map task list if it exists. Use the complete open-and-closed set for reconciliation and `/tracer-to-spec` hydration.
+- **Frontier query**: filter the complete child set to open issues with no assignee, then fetch each candidate's blocker state through the dependency endpoint or fallback body line. Do not query every Wayfinder ticket in the repo as one frontier.
+- **Claim**: the single map coordinator runs `gh issue edit <n> --add-assignee @me` before dispatch or discussion. Parallel workers receive distinct pre-claimed ticket numbers; they never race this operation. Clear an abandoned claim only after confirming its worker stopped.
+- **Resolve child**: the ticket worker posts one comment containing `## Answer` and `## Map delta`, then closes the child. It never edits the map body.
+- **Update map**: the single coordinator fetches the current body, applies completed deltas one at a time, and writes it with `gh issue edit <map> --body-file <file>`. Do not run multiple coordinator sessions for one map.
+- **Out of scope**: the worker closes the child with an out-of-scope delta; the coordinator omits it from Decisions so far and appends one linked explanation under Out of scope.
