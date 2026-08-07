@@ -1,15 +1,14 @@
 # Tracer
 
-A **tracer bullet** is thin, complete, and visibly lands or visibly misses. That's the unit this whole flow produces, at every scale: tickets are tracer-bullet vertical slices, tests are tracer bullets through pre-agreed seams, and every task ends in a commit that either proves itself or gets sent back.
+A **tracer bullet** is thin and complete, and it visibly lands or visibly misses. That's the unit this whole flow produces, at every scale: tickets are tracer-bullet vertical slices, tests are tracer bullets through pre-agreed seams, and every task ends in a commit that either proves itself or gets sent back.
 
-I been using SuperPowers for a while, but started to find them a big overbearing. I also felt like brainstorming was not fully capturing my intent. I started to use Matt Pocock's sills and found they did a better job of staying out of the way until I needed. However, I also found they did not follow through start to finish quite a well as SuperPowers. So what we have here is a fork of the two. The unubtrusiveness of Matt's skills with his excellent grill-me approach and once we are locked in and doing work, the SuperPowers push to the finish. This is still an experiment, so who knows for sure!
+I've been using SuperPowers for a while, but I started to find them a bit overbearing. I also felt that brainstorming did not fully capture my intent. I started using Matt Pocock's skills and found that they did a better job of staying out of the way until I needed them. However, they did not follow through from start to finish quite as well as SuperPowers. What we have here is a blend of the two: the unobtrusiveness of Matt's skills and his excellent grill-me approach, combined with SuperPowers' push to the finish once we are locked in and doing work. This is still an experiment, so who knows for sure!
 
-> [!IMPORTANT]
-> I cannot state this enough. These skills are 99% based on the back of the hard work by Matt and the SuperPowers team. At this point, I would highly recommend you start there and circle back only if you want to experiment with a more customized workflow.
+> [!IMPORTANT] I cannot state this enough. These skills are 99% built on the hard work of Matt and the SuperPowers team. At this point, I would highly recommend you start there and circle back only if you want to experiment with a more customized workflow.
 
 A lean, user-invoked skill set for spec-driven development. Forked from two parents:
 
-- **[Matt Pocock's skills](https://github.com/mattpocock/skills)**  — the shape and philosophy: lightweight, user-invoked only (nothing auto-triggers), seams-first testing, durable prose specs/tickets, the two-axis review.
+- **[Matt Pocock's skills](https://github.com/mattpocock/skills)** — the shape and philosophy: lightweight, user-invoked only (nothing auto-triggers), seams-first testing, durable prose specs/tickets, the two-axis review.
 - **[superpowers](https://github.com/obra/superpowers)** — the execution machinery: precise task plans, fresh sub-agent per task, a review gate after every task with a fix → re-review loop, a commit per task, worktree isolation, and evidence-before-claims verification.
 
 Entry-point workflows never auto-invoke. Supporting and vocabulary skills may load inside a flow you started. Invocation policy is declared in `SKILL.md` frontmatter (Claude Code) and `agents/openai.yaml` (Codex):
@@ -27,8 +26,8 @@ ordinary idea      → /tracer-interview-me ─┐
 huge, foggy effort → /tracer-wayfinder ────┴→ /tracer-to-spec → /tracer-to-tickets → /tracer-implement (per ticket) → merge/PR
 ```
 
-0. **[`/tracer-wayfinder`](tracer-wayfinder/SKILL.md)** — the situational on-ramp for an effort too large *and too foggy* for one session. It charts a shared issue-tracker map of decision tickets, resolves one per session, and hands the cleared map to `/tracer-to-spec`. Skip it when the decision tree fits in one interview.
-1. **[`/tracer-interview-me`](tracer-interview-me/SKILL.md)** — the normal entry point. A relentless interview worked as a design tree: each round asks the entire frontier of answerable questions at once, with recommended answers. Facts get looked up by sub-agents; decisions go to you. Docs-aware in a codebase (existing `CONTEXT.md`/ADRs prune the tree; settled terms and decisions get written back), stateless without one. Done when the frontier is empty and nothing is silently assumed.
+0. **[`/tracer-wayfinder`](tracer-wayfinder/SKILL.md)** — the situational on-ramp for an effort too large _and too foggy_ for one session. It charts a shared issue-tracker map of decision tickets, resolves one per session, and hands the cleared map to `/tracer-to-spec`. Skip it when the decision tree fits in one interview.
+1. **[`/tracer-interview-me`](tracer-interview-me/SKILL.md)** — the normal entry point. A relentless interview structured as a design tree: each round asks the entire frontier of answerable questions at once, with recommended answers. Facts get looked up by sub-agents; decisions go to you. Docs-aware in a codebase (existing `CONTEXT.md`/ADRs prune the tree; settled terms and decisions get written back), stateless without one. Done when the frontier is empty and nothing is silently assumed.
 2. **[`/tracer-to-spec`](tracer-to-spec/SKILL.md)** — synthesize the settled thread or cleared map into a spec (problem, user stories, implementation and testing decisions, pre-agreed test seams). No new interview — the decisions are already settled. Durable prose: no file paths or code.
 3. **[`/tracer-to-tickets`](tracer-to-tickets/SKILL.md)** — split the spec into tracer-bullet vertical slices, each declaring its blocking edges. Skip for single-session work and go straight to `/tracer-implement`.
 4. **[`/tracer-implement`](tracer-implement/SKILL.md)** — the centerpiece. Per ticket: write an **ephemeral task plan** (exact paths, real code, interfaces, global constraints — precision that can't go stale because it dies with the branch), then execute it with a fresh implementer sub-agent per task, a **review gate after every task** (spec compliance + code quality, fix → re-review until approved), and a **commit per task**. Closes with a full-suite run, a whole-branch `/tracer-code-review`, and `/tracer-finish-branch`.
@@ -40,14 +39,14 @@ For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinde
 ## Skills
 
 | Skill | Role |
-|---|---|
+| --- | --- |
 | [`tracer-wat`](tracer-wat/SKILL.md) | The router — which skill or flow fits your situation |
-| [`tracer-wayfinder`](tracer-wayfinder/SKILL.md) | Huge foggy effort → shared map of decision tickets → cleared route to a spec |
+| [`tracer-wayfinder`](tracer-wayfinder/SKILL.md) | Huge, foggy effort → shared map of decision tickets → cleared route to a spec |
 | [`tracer-interview-me`](tracer-interview-me/SKILL.md) | Frontier-driven interview until shared understanding — docs-aware in a repo, stateless without |
 | [`tracer-to-spec`](tracer-to-spec/SKILL.md) | Conversation → durable spec with pre-agreed test seams |
 | [`tracer-to-tickets`](tracer-to-tickets/SKILL.md) | Spec → tracer-bullet tickets with blocking edges |
 | [`tracer-implement`](tracer-implement/SKILL.md) | Ticket → plan → per-task implement/commit/review loop → reviewed branch |
-| [`tracer-code-review`](tracer-code-review/SKILL.md) | Two-axis review (Standards + Spec), severity-graded, with a consuming fix → re-review loop |
+| [`tracer-code-review`](tracer-code-review/SKILL.md) | Two-axis review (Standards + Spec), severity-graded, with a fix → re-review loop |
 | [`tracer-tdd`](tracer-tdd/SKILL.md) | The red → green reference: good tests, seams, anti-patterns |
 | [`tracer-worktrees`](tracer-worktrees/SKILL.md) | Isolated checkout per parallel ticket |
 | [`tracer-setup`](tracer-setup/SKILL.md) | Once per repo: configure the issue tracker and domain-doc layout |
