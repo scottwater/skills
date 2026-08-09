@@ -4,7 +4,7 @@
 
 `code-quorum` performs a read-only review of code changes through multiple independent review lenses. It collects candidate findings, verifies material claims, removes duplicates and weak speculation, then returns a prioritized advisory report.
 
-The skill must work in Codex, Claude, and Pi when the runtime can create independent workers. A runtime without Solo or another subagent abstraction must stop before review. Platform-specific adapters may translate the execution protocol, but the canonical skill owns all review behavior.
+The skill must work in Codex, Claude, and Pi when the runtime can create independent workers. A runtime without a subagent abstraction must stop before review. Platform-specific adapters may translate the execution protocol, but the canonical skill owns all review behavior.
 
 ## Invocation
 
@@ -152,12 +152,11 @@ Task construction completes when each selected reviewer has the same scope, focu
 
 ## Execution
 
-Before resolving scope, confirm that Solo or another subagent abstraction can create fresh workers. Require one fresh, isolated agent for each selected reviewer:
+Before resolving scope, confirm that the runtime's native subagent abstraction can create fresh workers. Require one fresh, isolated agent for each selected reviewer:
 
-1. When the current workflow uses Solo and Solo MCP is available, create one Solo-managed agent per reviewer.
-2. Otherwise use the runtime's subagent abstraction.
-3. Run reviewer agents concurrently when capacity allows. Schedule fresh agents sequentially when concurrency is constrained.
-4. Stop before inspecting the review scope when neither Solo nor another subagent mechanism is available.
+1. Create one native subagent per reviewer.
+2. Run reviewer agents concurrently when capacity allows. Schedule fresh agents sequentially when concurrency is constrained.
+3. Stop before inspecting the review scope when no subagent mechanism is available.
 
 Do not simulate reviewer passes in the delegator's context. The delegator resolves scope, selects reviewers, constructs task packets, collects results, and starts synthesis. It contains no reviewer-specific expertise.
 
@@ -264,7 +263,7 @@ The report completes when readers can distinguish verified defects, unresolved r
 - Normalize malformed reviewer output only when the intended fields are unambiguous.
 - Downgrade findings when verification cannot reach the required evidence.
 - Merge excessive duplicates by root cause.
-- Stop before review when the runtime has neither Solo nor another subagent abstraction.
+- Stop before review when the runtime has no subagent abstraction.
 - Report no findings without inventing suggestions.
 
 ## Validation
@@ -275,7 +274,7 @@ Validate the implementation with these cases:
 - Staged, unstaged, untracked, clean-branch, PR, recent-commit, and non-Git scopes
 - Malformed, duplicate, speculative, conflicting, and no-findings responses
 - Verified, partially verified, unverified, and rejected claims
-- Solo-managed, non-Solo subagent, constrained sequential-agent, and no-agent execution
+- Native concurrent-agent, constrained sequential-agent, and no-agent execution
 - Partial completion with one failed or timed-out reviewer
 - Total execution failure with no usable reviewer result
 - A read-only check that detects workspace mutations

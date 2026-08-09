@@ -11,7 +11,7 @@ The whole workflow inspects and reports. No agent edits reviewed files, applies 
 
 ## Confirm agents
 
-Run every lens as a blind agent: fresh context, no prior conclusions, no lens passes in the delegator context. Use the runtime's native subagent abstraction; only when the user explicitly asks to run through Solo, invoke the `solo` skill and follow its agent-dispatch guidance instead — and if Solo was requested but is unavailable, stop and report that rather than substituting silently. When no mechanism can create blind agents, stop and return an execution-unavailable response naming the missing capability.
+Run every lens as a blind agent: fresh context, no prior conclusions, no lens passes in the delegator context. Use the runtime's native subagent abstraction. When no mechanism can create blind agents, stop and return an execution-unavailable response naming the missing capability.
 
 Complete this step when one mechanism can create a blind agent per lens.
 

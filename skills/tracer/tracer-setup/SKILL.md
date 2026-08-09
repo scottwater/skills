@@ -36,7 +36,7 @@ Lead each section with the recommended answer so the user can accept it in a wor
 
 - **GitHub** — issues in GitHub Issues (`gh` CLI) → seed from [issue-tracker-github.md](./issue-tracker-github.md)
 - **GitLab** — issues in GitLab Issues (`glab` CLI) → seed from [issue-tracker-gitlab.md](./issue-tracker-gitlab.md)
-- **Local markdown** — files under `.tracer/` (solo projects, no remote) → seed from [issue-tracker-local.md](./issue-tracker-local.md)
+- **Local markdown** — files under `.tracer/` (projects with no remote) → seed from [issue-tracker-local.md](./issue-tracker-local.md)
 - **Other** (Jira, Linear, …) — ask the user to describe the workflow in one paragraph; write `docs/agents/issue-tracker.md` from scratch around it. It must answer how to create and fetch an implementation ticket, express a blocking edge, and mark a ticket agent-ready. It must also include **Wayfinding operations**: create/update a map, create and parent a decision ticket, query the map-scoped frontier, let one coordinator claim tickets before parallel dispatch, let workers resolve only their child ticket, and let the coordinator apply map-index updates serially.
 
 **Section B — Domain docs.** Default to **single-context** — one `CONTEXT.md` + `docs/adr/` at the repo root; write it without asking. Offer **multi-context** (a root `CONTEXT-MAP.md` pointing at per-context `CONTEXT.md` files) only when exploration found monorepo signals. Seed from [domain.md](./domain.md).

@@ -2,19 +2,18 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Make Code Quorum user-invoked and require one fresh Solo-managed or runtime subagent for every selected reviewer.
+**Goal:** Make Code Quorum user-invoked and require one fresh runtime subagent for every selected reviewer.
 
-**Architecture:** Add an agent-capability gate before scope resolution. Prefer Solo only when the current workflow uses Solo and Solo MCP is available; otherwise use the host's subagent abstraction. Remove in-context review simulation, retain valid partial results, and stop when no independent worker mechanism or usable reviewer result exists.
+**Architecture:** Add an agent-capability gate before scope resolution and use the host's native subagent abstraction. Remove in-context review simulation, retain valid partial results, and stop when no independent worker mechanism or usable reviewer result exists.
 
-**Tech Stack:** Markdown skills, YAML frontmatter, Solo MCP contract, runtime subagent abstractions, skill-creator validation
+**Tech Stack:** Markdown skills, YAML frontmatter, runtime subagent abstractions, skill-creator validation
 
 ## Global Constraints
 
 - Set `disable-model-invocation: true`; run only after explicit user invocation.
 - Keep `description` short and human-facing.
 - Create one fresh isolated agent per selected reviewer.
-- Prefer Solo-managed agents when already using Solo and Solo MCP is available.
-- Use another runtime subagent abstraction when Solo is not the active mechanism.
+- Use the runtime's native subagent abstraction.
 - Permit sequential scheduling only when each reviewer still gets a fresh context.
 - Stop before scope inspection when no independent-agent mechanism exists.
 - Synthesize all usable returned findings and disclose missing reviewer coverage.
@@ -39,7 +38,7 @@
 test "$(rg -c '^disable-model-invocation: true$' code-quorum/SKILL.md)" = 1
 test "$(rg -c '^## Confirm agents$' code-quorum/SKILL.md)" = 1
 rg -q 'Do not continue to scope resolution' code-quorum/SKILL.md
-rg -q 'Solo-managed agent' code-quorum/SKILL.md
+rg -q "runtime's native subagent abstraction" code-quorum/SKILL.md
 rg -q 'Do not run reviewer passes in the delegator context' code-quorum/SKILL.md
 ```
 
@@ -66,9 +65,9 @@ Insert this section after `Read-only boundary`:
 
 Confirm an independent-worker mechanism before inspecting the review scope.
 
-When the current workflow uses Solo, check whether Solo MCP is available. If available, use it to create one Solo-managed agent for each selected reviewer. Otherwise use the runtime's subagent abstraction. Do not switch into Solo merely because its tools exist when the current workflow is not using Solo.
+Use the runtime's native subagent abstraction to create one agent for each selected reviewer.
 
-Require a fresh isolated context for every reviewer. Concurrency is optional; independence is required. Do not continue to scope resolution when neither Solo nor another subagent abstraction can create fresh workers. Return an execution-unavailable response that names the missing capability.
+Require a fresh isolated context for every reviewer. Concurrency is optional; independence is required. Do not continue to scope resolution when no subagent abstraction can create fresh workers. Return an execution-unavailable response that names the missing capability.
 
 Complete this step when one available mechanism can create a fresh agent for each selected reviewer.
 ```
@@ -96,7 +95,7 @@ Complete this step when every selected reviewer has a usable result or a recorde
 Replace the first Code Quorum paragraph in `README.md` with:
 
 ```markdown
-`code-quorum` is an explicitly invoked, read-only review that runs independent reviewer agents, verifies material findings, and returns one prioritized report. It requires Solo MCP or another subagent mechanism, reviews pending changes by default, and accepts a PR, branch, revision range, commit, file set, diff, or supplied artifact.
+`code-quorum` is an explicitly invoked, read-only review that runs independent reviewer agents, verifies material findings, and returns one prioritized report. It requires the runtime's native subagent mechanism, reviews pending changes by default, and accepts a PR, branch, revision range, commit, file set, diff, or supplied artifact.
 ```
 
 - [ ] **Step 6: Run GREEN static validation**
@@ -107,13 +106,13 @@ test "$(rg -c '^disable-model-invocation: true$' code-quorum/SKILL.md)" = 1
 test "$(rg -c '^## Confirm agents$' code-quorum/SKILL.md)" = 1
 test "$(rg -c 'Complete this step' code-quorum/SKILL.md)" = 9
 rg -q 'Do not continue to scope resolution' code-quorum/SKILL.md
-rg -q 'Solo-managed agent' code-quorum/SKILL.md
-rg -q "runtime's subagent abstraction" code-quorum/SKILL.md
+rg -q 'blind agent per reviewer' code-quorum/SKILL.md
+rg -q "runtime's native subagent abstraction" code-quorum/SKILL.md
 rg -q 'Do not run reviewer passes in the delegator context' code-quorum/SKILL.md
 rg -q 'Synthesize every usable returned result' code-quorum/SKILL.md
 rg -q 'no reviewer returns a usable result' code-quorum/SKILL.md
 ! rg -n 'separated in-context|separated current-context|simulate reviewer' code-quorum/SKILL.md
-rg -q 'explicitly invoked.*independent reviewer agents.*requires Solo MCP or another subagent mechanism' README.md
+rg -q "explicitly invoked.*independent reviewer agents.*runtime's native subagent mechanism" README.md
 git diff --check
 ```
 
@@ -133,7 +132,7 @@ git commit -m "feat: require agents for code quorum"
 
 **Interfaces:**
 - Consumes: the Task 1 skill and disposable review fixtures.
-- Produces: evidence for non-Solo routing, unavailable-agent stop, isolated reviewer contexts, and partial-result synthesis.
+- Produces: evidence for native-subagent routing, unavailable-agent stop, isolated reviewer contexts, and partial-result synthesis.
 
 - [ ] **Step 1: Create a disposable review fixture**
 
@@ -151,34 +150,33 @@ git -C "$fixture" status --short
 
 Expected: ` M service.py`.
 
-- [ ] **Step 2: Test non-Solo subagent routing**
+- [ ] **Step 2: Test native subagent routing**
 
-Start a fresh controller that is not using Solo with this prompt:
+Start a fresh controller with this prompt:
 
 ```text
-Use code-quorum at /Users/scott/projects/skills/code-quorum/SKILL.md to run a quick review in the repository identified by the shell's $fixture value. This workflow is not using Solo. Use your available subagent mechanism. Do not edit files.
+Use code-quorum at /Users/scott/projects/skills/code-quorum/SKILL.md to run a quick review in the repository identified by the shell's $fixture value. Use your available native subagent mechanism. Do not edit files.
 ```
 
 Require two fresh reviewer agents, one for `general-reviewer` and one for `silent-failure-hunter`. Require the final report to state reviewer coverage without in-context simulation. Confirm `git -C "$fixture" status --short` remains ` M service.py`.
 
-- [ ] **Step 3: Test Solo routing with a capability fixture**
+- [ ] **Step 3: Test per-reviewer routing with a capability fixture**
 
 Start a fresh evaluator with this capability fixture:
 
 ```yaml
-workflow: solo
-solo_mcp: available
+native_subagents: available
 selected_reviewers: [general-reviewer, silent-failure-hunter]
 ```
 
-Require a routing plan that creates one Solo-managed agent for each reviewer. Reject a plan that uses generic subagents, puts both rubrics in one agent, or runs either pass in the delegator context.
+Require a routing plan that creates one fresh native subagent for each reviewer. Reject a plan that puts both rubrics in one agent or runs either pass in the delegator context.
 
 - [ ] **Step 4: Test unavailable-agent behavior**
 
 Start a fresh evaluator with the skill and this capability fixture:
 
 ```text
-The user explicitly invoked code-quorum. This runtime has no Solo MCP and no subagent abstraction. Show the response required before any scope inspection. Do not inspect repository state.
+The user explicitly invoked code-quorum. This runtime has no subagent abstraction. Show the response required before any scope inspection. Do not inspect repository state.
 ```
 
 Require an execution-unavailable response naming the missing independent-worker capability. Reject output that resolves scope or performs any reviewer pass.
