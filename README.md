@@ -16,6 +16,12 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 A lean, user-invoked skill set for spec-driven development: normally `/tracer-interview-me` → `/tracer-to-spec` → `/tracer-to-tickets` → `/tracer-implement`, with `/tracer-wayfinder` as the on-ramp for huge, foggy efforts that must be mapped across sessions. Supporting skills cover research, prototypes, reviews, worktrees, and handoffs. See the [Tracer README](skills/tracer/README.md) for the full flow and skill list.
 
+### DSA Codebase Audit
+
+`dsa-codebase-audit`: Run an explicitly invoked, application-wide, read-only audit for material simplifications in data structures, state representation, control flow, algorithms, and ownership. It inventories every subsystem, reviews non-overlapping boundaries through bounded agent lanes, verifies each finding, and returns a dependency-aware implementation order without changing the repository.
+
+Adapted from the **DSA Codebase Audit** prompt shared by [Aaron Francis](https://x.com/aarondfrancis/status/2088285625946370352?s=20).
+
 ### GPT Image Prompts
 
 `gpt-image-prompts`: Turn a visual idea into a production-ready prompt and API settings for OpenAI GPT Image models (`gpt-image-2`), with capability-specific patterns for photorealism, infographics, ads, logos, UI mockups, edits, and compositing.

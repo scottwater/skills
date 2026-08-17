@@ -1,0 +1,5 @@
+interface:
+  display_name: "DSA Codebase Audit"
+  short_description: "Audit codebase structure for material simplifications"
+policy:
+  allow_implicit_invocation: false
