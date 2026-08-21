@@ -98,6 +98,8 @@ Assign severity using these canonical meanings:
 - `medium`: important defect that is normally nonblocking.
 - `low`: minor risk or worthwhile improvement.
 
+Use `medium` as the reporting floor. Lower it to `low` only when the user explicitly asks for all recommendations. Build the verdict and every report section exclusively from candidates that meet the reporting floor; below-floor candidates are silently excluded and have no effect on the verdict.
+
 Keep severity, verification, and disposition separate. Dispositions mean:
 
 - `block`: a verified material finding.
@@ -144,4 +146,4 @@ Scope: <range/PR · files · +/− lines> · Reviewers: <usable/selected> (<mech
 
 Every Do next item and every finding carries an exact `file:lines` location — when a reviewer supplied only a file or block name, resolve the line numbers from source before reporting. Do next lists every `block` and `address` item ordered by severity, one imperative line each; verified `consider` items from the simplification reviewer live only in Consider. Findings are numbered in Do next order so the checklist and the detail cross-reference by number.
 
-Complete this step when the report matches the template: every finding has severity, verification, and disposition; every finding, Do next item, and Consider item has an exact `file:lines` location; every finding has a one-sentence fix; each Do next entry names its finding; and each open question names the evidence that would settle it.
+Complete this step when the report matches the template: every reported candidate meets the reporting floor; every finding has severity, verification, and disposition; every finding, Do next item, and Consider item has an exact `file:lines` location; every finding has a one-sentence fix; each Do next entry names its finding; and each open question names the evidence that would settle it.
