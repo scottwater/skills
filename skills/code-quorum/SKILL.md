@@ -36,7 +36,6 @@ default:
   - correctness-reviewer
   - failure-mode-reviewer
   - silent-failure-hunter
-  - test-behavior-reviewer
 full:
   - correctness-reviewer
   - failure-mode-reviewer
