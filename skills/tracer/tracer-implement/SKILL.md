@@ -10,7 +10,10 @@ Implement the work described in a ticket (from `/tracer-to-tickets`), a spec, or
 
 ## Phase 0 — Workspace
 
-1. **Never implement on `main`/`master`.** If you're on it, create a feature branch. If this ticket will run alongside other work, use `/tracer-worktrees` for an isolated checkout instead.
+1. **Choose the workspace from the current branch:** run `CURRENT_BRANCH=$(git symbolic-ref --quiet --short HEAD || true)`.
+   - A named branch other than `main` or `master` is already the chosen feature workspace. Work where you are; do not create a worktree.
+   - On `main` or `master`, run `/tracer-worktrees` before implementing so the work gets its own branch and checkout.
+   - A detached HEAD or failed branch lookup is ambiguous. Report it and ask where the work should live rather than creating a worktree by assumption.
 2. **Check for a ledger.** If `.tracer/implement/progress.md` exists, a previous session was mid-flight: tasks it marks complete are DONE — verify against `git log`, then resume at the first incomplete task. Trust the ledger and git over your own recollection.
 3. Ensure `.tracer/` is git-ignored (`git check-ignore -q .tracer` — if not, add it to `.gitignore` and commit).
 4. Run the test suite once to confirm a clean baseline. If it's already red, stop and report — don't build on a broken base.
@@ -120,6 +123,7 @@ If sub-agents are unavailable, or the ticket is genuinely one task big, run the 
 ## Red flags — never
 
 - Implement on `main`/`master` without explicit user consent
+- Create a worktree when a named non-`main`/`master` branch already identifies the feature workspace
 - Leave work uncommitted at the end of a task, or batch several tasks into one commit
 - Skip the task review, accept a review missing either verdict, or move on with open Critical/Important findings
 - Skip the fix → re-review loop ("the fix is obviously right" is not a re-review)
