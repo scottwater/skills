@@ -46,6 +46,7 @@ Frontier tickets (all blockers done) with no edges between them can run **simult
 ## Standalone
 
 - **`/tracer-code-review`** — two-axis review (Standards + Spec) of any diff against a fixed point, severity-graded with a verdict per axis. `/tracer-implement` calls it at close-out; reach for it directly to review a branch or PR. If you produced the diff, its findings loop back: Critical/Important means not done.
+- **`/tracer-convince-me`** — prove completed work against its original goal. It turns every expectation into an observable claim, gathers fresh evidence at the strongest practical boundary, and reports what is proven, disproven, or still unverified.
 - **`/tracer-tdd`** — the red → green reference: what a good test is, seams, anti-patterns, rules of the loop. `/tracer-implement` drives it internally; use it alone to build one behaviour test-first without a full spec.
 - **`/tracer-worktrees`** / **`/tracer-finish-branch`** — bookends for any isolated branch work, even outside the main flow.
 - **`/tracer-prototype`** — a small, throwaway program that answers one design question. The detour in step 1, but reach for it any time a design question is hard to settle on paper.

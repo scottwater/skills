@@ -13,7 +13,7 @@ A lean, user-invoked skill set for spec-driven development. Forked from two pare
 
 Entry-point workflows never auto-invoke. Supporting and vocabulary skills may load inside a flow you started. Invocation policy is declared in `SKILL.md` frontmatter (Claude Code) and `agents/openai.yaml` (Codex):
 
-- **User-only** (11 skills) — every entry-point workflow, including [`tracer-wayfinder`](tracer-wayfinder/SKILL.md): only you can start it.
+- **User-only** (12 skills) — every entry-point workflow, including [`tracer-wayfinder`](tracer-wayfinder/SKILL.md): only you can start it.
 - **Supporting** ([`tracer-tdd`](tracer-tdd/SKILL.md), [`tracer-code-review`](tracer-code-review/SKILL.md), [`tracer-research`](tracer-research/SKILL.md)) — model-invocable references and delegated workflows used beneath a flow you started.
 - **Vocabulary** ([`tracer-domain-modeling`](tracer-domain-modeling/SKILL.md), [`tracer-codebase-design`](tracer-codebase-design/SKILL.md)) — model-invoked references that define language and never run a process.
 
@@ -47,6 +47,7 @@ For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinde
 | [`tracer-to-tickets`](tracer-to-tickets/SKILL.md) | Spec → tracer-bullet tickets with blocking edges |
 | [`tracer-implement`](tracer-implement/SKILL.md) | Ticket → plan → per-task implement/commit/review loop → reviewed branch |
 | [`tracer-code-review`](tracer-code-review/SKILL.md) | Two-axis review (Standards + Spec), severity-graded, with a fix → re-review loop |
+| [`tracer-convince-me`](tracer-convince-me/SKILL.md) | Completed work → observable claims → fresh end-to-end evidence → honest verdict |
 | [`tracer-tdd`](tracer-tdd/SKILL.md) | The red → green reference: good tests, seams, anti-patterns |
 | [`tracer-worktrees`](tracer-worktrees/SKILL.md) | Isolated checkout per parallel ticket |
 | [`tracer-setup`](tracer-setup/SKILL.md) | Once per repo: configure the issue tracker and domain-doc layout |

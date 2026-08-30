@@ -1,0 +1,5 @@
+interface:
+  display_name: "Tracer Convince Me"
+  short_description: "Prove completed work with fresh evidence"
+policy:
+  allow_implicit_invocation: false
