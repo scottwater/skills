@@ -121,7 +121,9 @@ Subagent (general-purpose):
     #### Critical (Must Fix)
     #### Important (Should Fix)
     #### Minor (Nice to Have)
-    [Each: file:line, what's wrong, the concrete trigger that exposes it,
+    Give every finding an ID in severity order: C1, C2; I1, I2;
+    M1, M2. The fixer uses these IDs to account for every correction.
+    [Each: ID, file:line, what's wrong, the concrete trigger that exposes it,
     why it matters, how to fix if not obvious]
 
     ### Assessment
