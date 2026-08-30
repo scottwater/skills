@@ -1,0 +1,5 @@
+interface:
+  display_name: "Rigor"
+  short_description: "Run a focused evidence-driven engineering workflow"
+policy:
+  allow_implicit_invocation: false

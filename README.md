@@ -20,6 +20,12 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 `simplify`: Explicitly invoke a behavior-preserving refinement pass over an implementation to simplify, deduplicate, reorganize, remove low-value tests, and eliminate unnecessary churn.
 
+### Rigor
+
+`rigor`: Apply one focused, evidence-driven engineering workflow to a concrete investigation, bug, feature, refactor, performance problem, prototype, or review. Rigor chooses the matching playbook, scales its gates to the risk, and verifies the requested outcome without starting Tracer's interview, spec, or ticket flow.
+
+Use Rigor when the task is already concrete, such as `/rigor figure out why notifications duplicate after a retry`. Use `/tracer-interview-me` instead when the product idea itself still needs to be discovered.
+
 ### Tracer
 
 A lean, user-invoked skill set for spec-driven development: normally `/tracer-interview-me` → `/tracer-to-spec` → `/tracer-to-tickets` → `/tracer-implement`, with `/tracer-wayfinder` as the on-ramp for huge, foggy efforts that must be mapped across sessions. Supporting skills cover research, prototypes, reviews, worktrees, and handoffs. See the [Tracer README](skills/tracer/README.md) for the full flow and skill list.
@@ -64,7 +70,7 @@ A requirements reviewer joins any mode when the review has testable requirements
 
 ## Credits
 
-`blast-radius`, `bro`, `how`, and `why`, along with the human-voice direction in `stop-slop`, were influenced by, borrowed from, and shamelessly stolen from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by [Lauren “poteto” Tan](https://x.com/poteto). They have been adapted here to remove Cursor- and model-specific assumptions and to follow this repository's skill-writing conventions.
+`rigor`, `blast-radius`, `bro`, `how`, and `why`, along with the human-voice direction in `stop-slop`, were influenced by, borrowed from, and shamelessly stolen from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by [Lauren “poteto” Tan](https://x.com/poteto). They have been adapted here to remove Cursor- and model-specific assumptions and to follow this repository's skill-writing conventions.
 
 ## License
 
