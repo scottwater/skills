@@ -12,6 +12,10 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 ## Available Skills
 
+### ELI5
+
+`eli5`: Explain a topic with a simple HTML artifact that uses big pictures and few words.
+
 ### Simplify
 
 `simplify`: Explicitly invoke a behavior-preserving refinement pass over an implementation to simplify, deduplicate, reorganize, remove low-value tests, and eliminate unnecessary churn.
@@ -48,7 +52,7 @@ The AI lens joins any mode automatically when the scope contains LLM or agent co
 
 ### Code Quorum
 
-`code-quorum` is an explicitly invoked, read-only review that runs independent reviewer agents, verifies material findings, and returns one prioritized report. It runs reviewers on the runtime's native subagent mechanism, reviews pending changes by default, and accepts a PR, branch, revision range, commit, file set, diff, or supplied artifact.
+`code-quorum` is an explicitly invoked, read-only review that runs independent reviewer agents, verifies material findings, and returns one prioritized report. It reports medium-and-higher issues by default; explicitly ask for all recommendations to include low-severity items. It runs reviewers on the runtime's native subagent mechanism, reviews pending changes by default, and accepts a PR, branch, revision range, commit, file set, diff, or supplied artifact.
 
 | Mode | Reviewers |
 | --- | --- |
