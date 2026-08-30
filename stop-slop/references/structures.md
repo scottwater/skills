@@ -83,6 +83,26 @@ Inspect sequences with:
 
 Revise enough of the sequence to restore natural cadence. A three-item list, em dash, or short ending may remain when it fits the syntax and occurs by choice rather than habit.
 
+## Template-shaped presentation
+
+A response can be readable yet still feel generated when every idea arrives in the same container. Inspect:
+
+- a heading for every short paragraph;
+- repeated bold-label-and-colon bullets;
+- symmetrical sections whose content does not need equal weight;
+- a summary that repeats the introduction;
+- title-case headings in conversational writing;
+- a closing “next steps” section with no necessary next step;
+- tables used where two sentences would be easier to read.
+
+Choose structure from the reader's task. Keep headings that help navigation, lists that support scanning, and tables that make comparison easier. Let a short answer remain short.
+
+## Sterile neutrality
+
+Mechanical balance can hide the judgment the reader needs. Common forms include equal lists of pros and cons when one side is decisive, recommendations that avoid choosing, and conclusions that repeat evidence without interpreting it.
+
+State the supported judgment and its trade-off. Preserve genuine uncertainty, but do not manufacture neutrality when the evidence points in one direction.
+
 ## Sweeping authority
 
 Words such as “every,” “always,” “never,” “everyone,” and “nobody” often claim more than the evidence supports. Replace them with the measured scope, named population, or actual frequency. Keep an absolute when the rule or evidence is absolute.

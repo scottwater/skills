@@ -1,69 +1,84 @@
 ---
 name: stop-slop
-description: Edit prose to remove formulaic AI writing patterns. Use when drafting, revising, or reviewing prose for a more direct human voice.
+description: Rewrite prose to sound direct, readable, and distinctly human. Use when drafting, revising, or reviewing reader-facing writing.
 metadata:
   author: Hardik Pandya (https://hvpandya.com)
 ---
 
 # Stop slop
 
-Remove predictable AI mannerisms while preserving the writer's meaning, facts, voice, and required format.
+Write like a specific person helping a specific reader. Remove formulaic AI mannerisms, then restore the judgment, cadence, and concrete detail that make prose easy to follow.
+
+Preserve meaning, facts, confidence, and required format. Human voice comes from clear thought and audience awareness, not forced jokes, slang, or messiness.
 
 ## Editing workflow
 
-### 1. Establish the contract
+### 1. Establish the voice contract
 
-Identify the audience, purpose, tone, factual claims, and formatting constraints. When revising supplied prose, treat these as invariants unless the user asks to change them.
+Identify:
 
-**Complete when:** you can state what the prose must accomplish and what the edit must preserve.
+- who is speaking and who needs to understand them;
+- what the reader should know, decide, feel, or do next;
+- the intended formality and relationship with the reader;
+- facts, qualifications, quotations, terminology, and format that must survive;
+- voice already present in the source that should become stronger.
 
-### 2. Diagnose the draft
+Infer these from the source and conversation when they are clear. Ask only when a missing choice would produce materially different writing.
 
-Mark passages that exhibit one or more high-signal patterns:
+**Complete when:** the reader, purpose, voice, and preserved content are explicit enough to guide every edit.
+
+### 2. Diagnose what gets between the writer and reader
+
+Mark passages with a concrete problem:
 
 - filler that delays the point;
-- canned contrasts or rhetorical reveals;
-- vague claims of importance;
-- jargon where plain language is available;
-- hidden actors or unnecessary passive voice;
-- repetitive sentence and paragraph rhythm;
-- meta-commentary about the writing itself.
+- vague abstractions where a person, action, mechanism, or consequence is available;
+- canned contrasts, conclusions, or rhetorical reveals;
+- unsupported authority, puffery, or generic importance claims;
+- jargon where plain language is more exact;
+- hidden actors or passive voice that obscures responsibility;
+- repetitive sentence, paragraph, heading, or list shapes;
+- chatbot politeness, sycophancy, and commentary about the response itself;
+- technically clean wording that could have come from anyone writing about anything.
 
-Read [references/phrases.md](references/phrases.md) when filler, jargon, or emphasis crutches dominate. Read [references/structures.md](references/structures.md) when syntax, rhythm, agency, or rhetorical templates dominate. Use [references/examples.md](references/examples.md) when a marked passage needs a transformation pattern.
+Read [references/phrases.md](references/phrases.md) when filler, jargon, attribution, or emphasis crutches dominate. Read [references/structures.md](references/structures.md) when syntax, rhythm, agency, or presentation templates dominate. Use [references/examples.md](references/examples.md) when a passage needs a transformation pattern.
 
-A listed phrase or structure is evidence to inspect, not an automatic deletion. Keep it when it carries precise meaning or suits the writer's established voice.
+A listed phrase or structure is a signal to inspect, not an automatic deletion. Keep it when it carries precise meaning and belongs to the voice.
 
-**Complete when:** every marked passage has a specific diagnosis rather than a general “sounds like AI” label.
+**Complete when:** every marked passage has a specific readability or voice diagnosis rather than a general “sounds like AI” label.
 
-### 3. Revise from meaning outward
+### 3. Rewrite from the reader outward
 
 Apply these moves in order:
 
-1. Lead with the substantive claim.
-2. Replace vague abstractions with concrete actors, actions, evidence, and consequences.
-3. Prefer active voice when the actor matters; retain passive voice when the actor is unknown or irrelevant.
-4. Collapse formulaic setups into direct statements.
-5. Replace jargon with the shortest accurate wording.
-6. Cut modifiers and asides that add no meaning.
-7. Vary sentence length and paragraph endings where the rhythm has become mechanical.
-8. Use punctuation for syntax rather than manufactured drama.
+1. Lead with what the reader came to learn or decide.
+2. Name concrete actors, actions, evidence, numbers, and consequences.
+3. Use the shortest accurate words while retaining domain terms the reader needs.
+4. Prefer active voice when responsibility matters; retain passive voice when the actor is unknown or irrelevant.
+5. Collapse staged reveals and false contrasts into direct claims.
+6. Cut modifiers, asides, and scaffolding that add no meaning.
+7. Group related ideas in the order a reader needs them, not the order the writer discovered them.
+8. Vary rhythm where repeated shapes feel mechanical. Let important points breathe without manufacturing punchlines.
+9. Use first person, second person, humor, fragments, analogy, or strong opinion only when they fit the voice contract and improve understanding.
+10. Replace generic polish with a concrete observation or useful judgment the evidence supports.
 
-Address the reader directly only when the genre calls for it. Preserve legitimate contrast, emphasis, technical terms, and cadence instead of enforcing blanket bans.
+Match the scale of the edit to the prose. A short answer may need only a direct opening and one cleaner sentence. A long document may need structural changes.
 
-**Complete when:** each revision is clearer or more specific and no revision exists only to satisfy a surface rule.
+**Complete when:** each change makes the prose easier to understand or more recognizably aligned with the writer, and no personality has been invented merely to sound human.
 
-### 4. Verify the edit
+### 4. Read it as the recipient
 
-Compare the revision with the source. Confirm that it preserves facts, qualifications, intent, and the writer's level of confidence. Read it aloud or simulate the cadence to catch repeated shapes.
+Compare the revision with the source for lost facts, shifted confidence, accidental tone changes, and unsupported opinions. Read it aloud or simulate its cadence.
 
-Use this five-part check:
+Ask:
 
-| Dimension | Check |
-| --- | --- |
-| Directness | Does the prose state claims instead of announcing them? |
-| Rhythm | Do sentence and paragraph shapes vary naturally? |
-| Trust | Does it avoid over-explaining and manufactured emphasis? |
-| Authenticity | Does the wording fit this writer, audience, and genre? |
-| Density | Can any remaining words go without losing meaning? |
+- Can the reader find the answer or next action on the first pass?
+- Does the wording sound like one person addressing this audience?
+- Could a sentence appear unchanged in an unrelated project's writing?
+- Does each paragraph earn its place and lead naturally to the next?
+- Do sentence and paragraph shapes feel chosen rather than templated?
+- Can another word go without losing meaning, warmth, or precision?
 
-**Complete when:** no high-signal pattern remains without a deliberate reason, and the revision preserves the writing contract from step 1.
+Return the finished prose without narrating the edit pass unless the user asked for editorial notes.
+
+**Complete when:** the writing preserves its contract, no high-signal pattern remains without a reason, and a reader can understand the point without translating agent-speak into human language.

@@ -103,3 +103,55 @@ The actor, evidence, and action make responsibility and causality visible.
 **Why**
 
 The passive construction keeps attention on the samples and conditions. Surface rules should not override the genre's information priorities.
+
+## 8. Clean but generic agent-speak
+
+**Before**
+
+> The implementation introduces a robust caching mechanism that enhances performance while ensuring data consistency. Additionally, comprehensive error handling provides a seamless experience in failure scenarios.
+
+**After**
+
+> The client now keeps successful responses for five minutes, cutting repeated requests during page navigation. Failed requests bypass the cache, so a temporary outage cannot leave users with a stored error.
+
+**Why**
+
+The revision replaces praise with behavior, timing, and a failure guarantee. A reader can now evaluate what the change does instead of accepting the writer's description of how it feels.
+
+## 9. Polite but distant answer
+
+**Before**
+
+> Great question! There are several factors to consider. Both approaches offer meaningful benefits, and the optimal choice ultimately depends on your specific requirements. I hope this helps!
+
+**After**
+
+> Keep the existing queue. Your workload is small, and the migration would add another service without fixing a measured problem. Reconsider it if queue latency reaches the 500 ms limit.
+
+**Why**
+
+The revision answers the decision, gives the evidence and trade-off, and names the condition that would change the recommendation. It sounds human because it exercises judgment, not because it adds casual language.
+
+## 10. Over-structured short response
+
+**Before**
+
+> ## Summary
+>
+> The deployment failed because the token expired.
+>
+> ## Root cause
+>
+> The authentication token had exceeded its validity period.
+>
+> ## Next steps
+>
+> Generate a new token and deploy again.
+
+**After**
+
+> The deployment token expired. Generate a new one, then rerun the deployment.
+
+**Why**
+
+The headings repeat information that fits in two sentences. The revision follows the reader's task: explain the failure and say what to do next.

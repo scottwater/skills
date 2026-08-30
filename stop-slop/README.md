@@ -1,6 +1,6 @@
 # Stop Slop
 
-A skill for editing formulaic AI patterns out of prose without flattening the writer's voice.
+A skill for turning formulaic agent output into direct, readable prose with a specific human voice.
 
 <img width="3840" height="2160" alt="Stop Slop example" src="https://github.com/user-attachments/assets/902afc15-1f40-4a9d-af24-8cd67afb8ebf" />
 
@@ -27,7 +27,7 @@ npx skills add scottwater/skills
 
 ## Scope
 
-The skill targets filler, canned rhetorical structures, vague emphasis, hidden agency, and mechanical rhythm. It treats these as diagnostic signals rather than banning words or punctuation in every context. The edit must preserve facts, intent, genre, and the writer's own voice.
+The skill removes filler, canned rhetorical structures, vague emphasis, hidden agency, mechanical rhythm, and generic chatbot polish. It then strengthens audience awareness, concrete judgment, and the writer's existing cadence. Patterns remain diagnostic signals rather than universal bans, and every edit must preserve facts, confidence, intent, genre, and voice.
 
 ## Author
 

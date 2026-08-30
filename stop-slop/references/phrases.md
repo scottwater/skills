@@ -70,6 +70,19 @@ Prefer a plain verb or concrete noun when shorthand hides the action:
 
 Technical and domain terms can be the clearest wording for an expert audience. Replace jargon only when a more exact phrase exists.
 
+## Unsupported attribution
+
+These phrases borrow authority without giving the reader evidence:
+
+- “Experts believe…”
+- “Industry reports suggest…”
+- “Many people agree…”
+- “Research shows…”
+- “It is widely understood…”
+- “Some critics argue…”
+
+Name the source and what it found. If the source is unavailable or irrelevant, state the claim at the confidence the evidence supports or remove it.
+
 ## Empty modifiers
 
 Inspect softeners and intensifiers such as:
@@ -107,3 +120,21 @@ These phrases can imitate intimacy without creating it:
 - “They exist, I promise.”
 
 Keep a familiar phrase only when it is the most accurate wording and fits the established voice. Familiarity alone is not emphasis.
+
+## Chatbot voice
+
+These phrases make a response sound like a service script rather than a person answering:
+
+- “Of course!” / “Certainly!”
+- “Great question!”
+- “You're absolutely right.”
+- “I hope this helps.”
+- “Let me know if you have any other questions.”
+- “I'd be happy to…”
+- “Found the smoking gun!”
+
+Begin with the answer. Acknowledge the user when the acknowledgment carries useful social meaning, not as an automatic preface. End with the result or next action instead of a generic offer.
+
+## Generic polish
+
+Phrases such as “seamless experience,” “robust solution,” “powerful capabilities,” “the future looks bright,” and “unlock value” can fit almost any subject. Replace them with the mechanism, observed result, trade-off, or next step that makes this subject distinct.

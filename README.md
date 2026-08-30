@@ -62,6 +62,10 @@ The AI lens joins any mode automatically when the scope contains LLM or agent co
 
 A requirements reviewer joins any mode when the review has testable requirements. Request a mode or named combination, such as `Run a quick code quorum` or `Use the failure-mode reviewer and silent-failure hunter from code-quorum`.
 
+## Credits
+
+`blast-radius`, `bro`, `how`, and `why`, along with the human-voice direction in `stop-slop`, were influenced by, borrowed from, and shamelessly stolen from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by [Lauren “poteto” Tan](https://x.com/poteto). They have been adapted here to remove Cursor- and model-specific assumptions and to follow this repository's skill-writing conventions.
+
 ## License
 
 [MIT](LICENSE)
