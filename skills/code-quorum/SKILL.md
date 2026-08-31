@@ -12,7 +12,7 @@ The whole workflow inspects and reports. No agent in it edits reviewed files, ge
 
 Confirm the worker mechanism before touching the review scope.
 
-Use the runtime's native subagent abstraction for the whole quorum.
+Use the runtime's native subagent abstraction for the whole quorum. The reviewer names below are rubrics, not required configured agent names: create one fresh blind child per selected rubric and include that rubric in its task packet.
 
 Every reviewer is a blind agent: fresh context, no prior conclusions, no reviewer passes in the delegator context. Concurrency is optional; blindness is required. When no mechanism can create blind agents, stop and return an execution-unavailable response naming the missing capability.
 

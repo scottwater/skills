@@ -4,7 +4,7 @@ Dispatch one fresh reviewer after every task. It returns two verdicts:
 spec compliance and code quality. Fill every `[BRACKET]`.
 
 ```
-Subagent (general-purpose):
+Subagent (general-purpose; fresh read-only reviewer):
   description: "Review Task N (spec + quality)"
   prompt: |
     You are reviewing one task's implementation: first whether it matches

@@ -3,7 +3,7 @@
 Dispatch one fresh implementer per task. Fill every `[BRACKET]`.
 
 ```
-Subagent (general-purpose):
+Subagent (general-purpose; fresh implementer):
   description: "Implement Task N: [task name]"
   prompt: |
     You are implementing Task N: [task name]

@@ -1,6 +1,6 @@
 ---
 name: tracer-code-review
-description: Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel sub-agents, reports them side by side with severity-graded findings and a verdict per axis. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to "review since X".
+description: Run Tracer's two-axis Standards-versus-Spec review from a fixed point. Use when /tracer-implement calls for its whole-branch review or the user explicitly requests Tracer's Standards and Spec verdicts.
 ---
 
 Two-axis review of the diff between `HEAD` and a fixed point the user supplies:
@@ -55,7 +55,7 @@ Each smell reads *what it is* → *how to fix*; match it against the diff:
 
 ### 4. Spawn both sub-agents in parallel
 
-Send a single message with two `Agent` tool calls. Use the `general-purpose` subagent for both. Both prompts carry this preamble:
+Send a single message with two `Agent` tool calls and await both results. Use a fresh `general-purpose` sub-agent for each; Standards and Spec are rubrics, not configured agent types. Both prompts carry this preamble:
 
 > Verify, don't trust. Commit messages, code comments, and any implementer report are unverified claims — judge only the diff. Read-only review: never mutate the working tree, index, or HEAD.
 >

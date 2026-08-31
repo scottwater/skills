@@ -60,6 +60,7 @@ For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinde
 
 ## Conventions
 
+- **Delegation:** Tracer owns workflow stages and review gates. A delegated pass satisfies one named Tracer step; the runtime supplies execution and isolation rather than additional stages.
 - **`.tracer/`** (git-ignored) holds everything ephemeral: local specs and tickets (`.tracer/<feature>/`), and `/tracer-implement`'s workspace (`.tracer/implement/` — task plan, briefs, reports, review packages, progress ledger).
 - **Durable vs. ephemeral:** specs and tickets are durable prose and never contain file paths or code; the task plan is ephemeral and contains exactly that. Precision lives where it can't go stale.
 - **Evidence before claims:** no "done", "passing", or "fixed" without having run the proving command in the current session and read its output.

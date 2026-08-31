@@ -84,7 +84,7 @@ For each task, in order:
 
 1. **Record BASE:** `BASE=$(git rev-parse HEAD)` — before dispatching. Re-reviews and multi-commit tasks depend on this; never substitute `HEAD~1` later.
 2. **Extract the brief:** run this skill's `scripts/task-brief plan.md N` — it writes `.tracer/implement/task-N-brief.md` and prints the path. The brief, not pasted text, is the implementer's source of requirements.
-3. **Dispatch a fresh implementer sub-agent** using [implementer-prompt.md](implementer-prompt.md). The dispatch contains: one line of scene-setting (where this task fits), the brief path, interfaces/decisions from earlier tasks the brief can't know, your resolution of any ambiguity you noticed, and the report-file path (`.tracer/implement/task-N-report.md`). Exact values live only in the brief — don't paste the plan or prior-task history into the prompt.
+3. **Dispatch a fresh implementer sub-agent** using [implementer-prompt.md](implementer-prompt.md). The dispatch contains: one line of scene-setting (where this task fits), the brief path, interfaces/decisions from earlier tasks the brief can't know, your resolution of any ambiguity you noticed, and the report-file path (`.tracer/implement/task-N-report.md`). Exact values live only in the brief — don't paste the plan or prior-task history into the prompt. Run it synchronously or await its result before evaluating status.
 4. **Handle the status it returns:**
    - **DONE** → proceed to review.
    - **DONE_WITH_CONCERNS** → read the concerns. Correctness or scope doubts: address before review. Observations: note them, proceed.
@@ -101,7 +101,7 @@ Do not pause between tasks to check in — the user asked for the ticket impleme
 Every task gets reviewed by a fresh sub-agent before the next task starts — issues caught here are cheap; the same issue three tasks later has cascaded.
 
 1. **Build the review package:** run `scripts/review-package $BASE HEAD` — it writes the commit list, stat summary, and full diff to one file and prints the path. The diff never enters your context.
-2. **Dispatch the task reviewer** using [task-reviewer-prompt.md](task-reviewer-prompt.md), passing three paths — brief, report, review package — plus the plan's Global Constraints copied verbatim. Never tell a reviewer what *not* to flag or pre-rate a finding's severity; if you think a finding will be a false positive, let it be raised and adjudicate then.
+2. **Dispatch the task reviewer** using [task-reviewer-prompt.md](task-reviewer-prompt.md), passing three paths — brief, report, review package — plus the plan's Global Constraints copied verbatim. Run it synchronously or await its result before evaluating the verdicts. Never tell a reviewer what *not* to flag or pre-rate a finding's severity; if you think a finding will be a false positive, let it be raised and adjudicate then.
 
    **High-risk tasks** — concurrency, auth/permissions, data migration, irreversible operations, money: dispatch two or three reviewers in parallel instead of one, each restricted to a single lens from the template (silent failures / hidden assumptions & failure modes / test integrity), and merge their findings yourself. Re-ID the merged findings into one unique C/I/M sequence before sending them to a fixer. A small quorum for the tasks that earn it; the single generalist reviewer stays the default.
 3. **Act on the verdicts.** The reviewer returns a spec-compliance verdict and a quality verdict:
