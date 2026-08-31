@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Speak"
+  short_description: "Write documents agents consume"

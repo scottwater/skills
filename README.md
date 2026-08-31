@@ -20,6 +20,10 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 `simplify`: Explicitly invoke a behavior-preserving refinement pass over an implementation to simplify, deduplicate, reorganize, remove low-value tests, and eliminate unnecessary churn.
 
+### Agent Speak
+
+`agent-speak`: Write and refine skills, `AGENTS.md`, `CLAUDE.md`, and other documents agents consume, with explicit context pointers, progressive disclosure, completion criteria, leading words, and pruning.
+
 ### Rigor
 
 `rigor`: Apply one focused, evidence-driven engineering workflow to a concrete investigation, bug, feature, refactor, performance problem, prototype, or review. Rigor chooses the matching playbook, scales its gates to the risk, and verifies the requested outcome without starting Tracer's interview, spec, or ticket flow.
@@ -71,6 +75,8 @@ A requirements reviewer joins any mode when the review has testable requirements
 ## Credits
 
 `rigor`, `blast-radius`, `bro`, `how`, and `why`, along with the human-voice direction in `stop-slop`, were influenced by, borrowed from, and shamelessly stolen from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by [Lauren “poteto” Tan](https://x.com/poteto). They have been adapted here to remove Cursor- and model-specific assumptions and to follow this repository's skill-writing conventions.
+
+`agent-speak` is adapted from Matt Pocock's original [`writing-for-agents`](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-for-agents) skill.
 
 ## License
 
