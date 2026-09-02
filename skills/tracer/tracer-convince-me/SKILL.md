@@ -39,4 +39,8 @@ Present:
 - whether it was proven, disproven, or remains unverified;
 - any limits or environmental differences that weaken the case.
 
+Use the smallest presentation that makes the proof traceable. Default to a claim/evidence/verdict table. Add one focused call tree, state flow, component or file tree, diff, screenshot, or diagram only when it clarifies sequence, ownership, change, or observed behavior. Place it beside the claim it supports and omit unrelated detail.
+
+Explanatory visuals organize evidence; they are not evidence themselves. Only artifacts captured from an executed verification—such as a screenshot of the tested user path—can support a verdict.
+
 The verification is complete only when every expectation is backed by fresh evidence or explicitly named as unverified. Never claim more than the evidence establishes.
