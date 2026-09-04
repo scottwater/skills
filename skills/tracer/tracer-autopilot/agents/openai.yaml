@@ -1,0 +1,5 @@
+interface:
+  display_name: "Tracer Autopilot"
+  short_description: "Deliver a ticket through review and branch finish"
+policy:
+  allow_implicit_invocation: false

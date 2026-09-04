@@ -1,5 +1,5 @@
 interface:
   display_name: "Tracer Implement"
-  short_description: "Build a ticket with plan, gates, commits"
+  short_description: "Build, review twice, test, and stop"
 policy:
   allow_implicit_invocation: false

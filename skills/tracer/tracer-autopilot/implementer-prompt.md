@@ -34,15 +34,10 @@ Subagent (general-purpose; fresh implementer):
 
     1. Implement exactly what the brief specifies — TDD, red before green,
        at the seams the brief names. Nothing more (YAGNI), nothing less.
-    2. Run the focused tests for this task while iterating. The controller
-       runs the full suite after all tasks and both reviews are complete.
+    2. While iterating, run the focused test for what you're changing; run
+       the full suite once before committing, not after every edit.
     3. Commit your work with the message(s) the brief specifies.
-    4. Self-review (below), correct material defects, then report.
-
-    Spend attention on current correctness: requirements, broken behavior,
-    security or data-integrity risks, silent failures, and tests that cannot
-    detect a regression. Record optional polish, speculative hardening, and
-    minor style ideas as concerns rather than expanding this task to fix them.
+    4. Self-review (below), fix what you find, then report.
 
     Follow the codebase's established patterns. If a file you're creating
     grows beyond the brief's intent, don't restructure on your own — finish
@@ -66,8 +61,7 @@ Subagent (general-purpose; fresh implementer):
     - Tests: do they verify behavior through the seam, not implementation
       details or mocks? Is the test output pristine — zero warnings/noise?
 
-    Fix material defects you find now. Report non-blocking polish or minor
-    maintainability ideas as concerns without changing the code for them.
+    Fix anything you find now, before reporting.
 
     ## Report
 
@@ -91,10 +85,8 @@ Subagent (general-purpose; fresh implementer):
 
     ## If a reviewer sends back findings
 
-    The controller sends only findings selected by the workflow's attention
-    budget. Fix every finding it sends, re-run the tests covering the amended
-    code, and commit the fixes before reporting. The commit history is the
-    review record:
+    Fix them, re-run the tests covering the amended code, and commit the
+    fixes before reporting. The commit history is the review record:
 
     - Group related findings into one coherent commit; use separate commits
       when the findings correct unrelated behavior.

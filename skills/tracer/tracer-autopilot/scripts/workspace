@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Print (creating if needed) the implement workspace for this checkout.
+# Per worktree root, so parallel tickets in separate worktrees never collide.
+set -euo pipefail
+root=$(git rev-parse --show-toplevel)
+dir="$root/.tracer/implement"
+mkdir -p "$dir"
+echo "$dir"

@@ -1,30 +1,43 @@
 ---
 name: tracer-implement
-description: "Implement a ticket or spec with a task plan, fresh sub-agent per task, a review gate after every task, and a commit per task."
+description: "Implement a ticket or spec with a visible task plan, sequential task commits, two bounded ticket-wide review passes, and a final test run."
 disable-model-invocation: true
 ---
 
 # Implement
 
-Implement the work described in a ticket (from `/tracer-to-tickets`), a spec, or the user's description. The flow is: **plan → per-task loop (implement, commit, review, fix) → final review → finish the branch**. Precision comes from the plan; quality comes from the review gates; parallel-safety comes from committing every task on an isolated branch.
+Implement a ticket, spec, or user description and stop with reviewed code on the current feature branch. The flow is: **plan checkpoint → implement every task → review → targeted fix → verification review → test → report**.
+
+This skill does not run `/tracer-code-review`, `/tracer-finish-branch`, merge, open a PR, or clean up the workspace. Use `/tracer-autopilot` when the user asks for that end-to-end flow.
+
+## Attention budget
+
+Spend review and repair effort on defects that matter now:
+
+- **Always address:** P0/Critical and High findings.
+- **Address selectively:** P1/Medium findings only when evidence shows a current spec violation, incorrect user-visible behavior, security or data-integrity risk, silent failure, or a test that cannot detect broken behavior.
+- **Report without fixing:** Low/Minor findings, polish, speculative hardening, hypothetical future consumers, and stylistic preferences not required by the repository.
+
+Severity labels are not sufficient by themselves. Require a concrete trigger and consequence before selecting a finding for repair. Preserve deferred findings in the final report as concerns; do not silently discard them.
 
 ## Phase 0 — Workspace
 
-1. **Choose the workspace from the current branch:** run `CURRENT_BRANCH=$(git symbolic-ref --quiet --short HEAD || true)`.
-   - A named branch other than `main` or `master` is already the chosen feature workspace. Work where you are; do not create a worktree.
-   - On `main` or `master`, run `/tracer-worktrees` before implementing so the work gets its own branch and checkout.
-   - A detached HEAD or failed branch lookup is ambiguous. Report it and ask where the work should live rather than creating a worktree by assumption.
-2. **Check for a ledger.** If `.tracer/implement/progress.md` exists, a previous session was mid-flight: tasks it marks complete are DONE — verify against `git log`, then resume at the first incomplete task. Trust the ledger and git over your own recollection.
-3. Ensure `.tracer/` is git-ignored (`git check-ignore -q .tracer` — if not, add it to `.gitignore` and commit).
-4. Run the test suite once to confirm a clean baseline. If it's already red, stop and report — don't build on a broken base.
+1. Choose the workspace from the current branch: run `CURRENT_BRANCH=$(git symbolic-ref --quiet --short HEAD || true)`.
+   - A named branch other than `main` or `master` is already the feature workspace. Work where you are.
+   - On `main` or `master`, run `/tracer-worktrees` before implementing.
+   - A detached HEAD or failed branch lookup is ambiguous. Ask where the work should live.
+2. If `.tracer/implement/progress.md` exists, read its `Base: <sha>` entry, verify completed tasks against `git log`, and resume at the first incomplete task with that recorded base.
+3. Ensure `.tracer/` is git-ignored (`git check-ignore -q .tracer`; if not, add it to `.gitignore` and commit).
+4. Run the test suite once to establish a clean baseline. Stop and report a red baseline.
+5. On a fresh run, record `BASE=$(git rev-parse HEAD)` once and create `.tracer/implement/progress.md` with `Base: $BASE`. Every task and both reviews use this fixed point. If a resumed ledger has no base or the base no longer resolves, stop and ask rather than reviewing a partial range.
 
-## Phase 1 — Task plan
+**Complete when:** the feature workspace, green baseline, resume point, and fixed review base are known.
 
-Tickets and specs deliberately avoid file paths and code because they'd go stale. The plan is where that precision gets manufactured — it's **ephemeral** (lives in `.tracer/implement/plan.md`, dies with the branch), so exact paths and real code belong here.
+## Phase 1 — Task plan and checkpoint
 
-Write the plan as if the implementer has zero context for this codebase and questionable taste — because each task's implementer is a fresh sub-agent that sees only its own task.
+Write `.tracer/implement/plan.md`. Tickets and specs deliberately omit paths and code that go stale; this ephemeral plan supplies exact paths, interfaces, commands, and test code.
 
-**Header:**
+Use this header:
 
 ```markdown
 # <Feature> — Task Plan
@@ -32,104 +45,118 @@ Write the plan as if the implementer has zero context for this codebase and ques
 **Goal:** one sentence.
 **Ticket/Spec:** reference or path.
 **Architecture:** 2–3 sentences.
-**Seams under test:** the pre-agreed seams from the spec (see /tracer-tdd) — every test in this plan lives at one of these.
+**Seams under test:** the pre-agreed seams from the spec.
 
 ## Global Constraints
 
-Project-wide requirements copied VERBATIM from the spec/ticket — exact
-values, version floors, naming rules, copy strings. Every task implicitly
-includes this section.
+Project-wide requirements copied verbatim from the spec or ticket.
 ```
 
-**Each task:**
+Write each task as the smallest sequential implementation unit worth its own commit:
 
 ````markdown
 ### Task N: <name>
 
 **Files:**
-- Create: `exact/path/to/file.ts`
-- Modify: `exact/path/to/existing.ts`
-- Test: `exact/path/to/file.test.ts`
+- Create: `exact/path`
+- Modify: `exact/path`
+- Test: `exact/path`
 
 **Interfaces:**
-- Consumes: what this task uses from earlier tasks — exact signatures
-- Produces: what later tasks rely on — exact names, parameter and return
-  types. (A task's implementer sees only its own task; this block is how
-  it learns what its neighbours expect.)
+- Consumes: exact names and signatures from earlier tasks
+- Produces: exact names and signatures later tasks need
 
-Steps, each one small action: write the failing test (show the actual test
-code), run it and confirm it fails (exact command + expected failure),
-write the minimal implementation (show the code), run and confirm green,
-**commit** (exact `git commit` message).
+Steps: write the failing test with actual code, run it with the exact command
+and expected failure, write the minimal implementation with actual code, run
+the focused test, and commit with the exact message.
 ````
 
-**Right-sizing:** a task is the smallest unit that carries its own test cycle and is worth a fresh reviewer's gate. Fold setup/scaffolding into the task whose deliverable needs it; split only where a reviewer could reject one task while approving its neighbour.
+Reject placeholders such as “TBD,” “handle edge cases,” “write tests,” or “similar to Task N.” Self-review the plan for requirement coverage, placeholders, and interface consistency.
 
-**No placeholders — these are plan failures, never write them:**
-- "TBD", "add appropriate error handling", "handle edge cases"
-- "Write tests for the above" without the actual test code
-- "Similar to Task N" (repeat the code — tasks are read in isolation)
-- References to types or functions no task defines
+Before dispatching work, show the user:
 
-**Self-review the plan** before executing (a checklist you run yourself, not a dispatch):
-1. **Spec coverage** — walk the ticket/spec requirement by requirement; point each at a task. Gaps become tasks.
-2. **Placeholder scan** — search the plan for the patterns above; fix inline.
-3. **Interface consistency** — do names/signatures used in later tasks match what earlier tasks define?
+- the task count and ordered task names;
+- the purpose of each task in one line;
+- that all tasks run before either ticket-wide review;
+- that there will be exactly two review passes and one targeted fix pass between them;
+- that this skill stops before whole-branch review and branch finishing.
 
-If the plan surfaced a contradiction in the ticket/spec itself, put it to the user as one batched question before executing — not one interrupt per discovery mid-run.
+Wait for approval or corrections. Batch any contradictions found in the source into this checkpoint.
 
-## Phase 2 — Per-task loop
+**Complete when:** the user has seen and approved the execution shape.
 
-For each task, in order:
+## Phase 2 — Implement every task
 
-1. **Record BASE:** `BASE=$(git rev-parse HEAD)` — before dispatching. Re-reviews and multi-commit tasks depend on this; never substitute `HEAD~1` later.
-2. **Extract the brief:** run this skill's `scripts/task-brief plan.md N` — it writes `.tracer/implement/task-N-brief.md` and prints the path. The brief, not pasted text, is the implementer's source of requirements.
-3. **Dispatch a fresh implementer sub-agent** using [implementer-prompt.md](implementer-prompt.md). The dispatch contains: one line of scene-setting (where this task fits), the brief path, interfaces/decisions from earlier tasks the brief can't know, your resolution of any ambiguity you noticed, and the report-file path (`.tracer/implement/task-N-report.md`). Exact values live only in the brief — don't paste the plan or prior-task history into the prompt. Run it synchronously or await its result before evaluating status.
-4. **Handle the status it returns:**
-   - **DONE** → proceed to review.
-   - **DONE_WITH_CONCERNS** → read the concerns. Correctness or scope doubts: address before review. Observations: note them, proceed.
-   - **NEEDS_CONTEXT** → provide the missing context, re-dispatch.
-   - **BLOCKED** → change something before retrying: more context, a more capable model, a smaller task split, or escalate to the user if the plan itself is wrong. Never re-run the same dispatch unchanged.
-5. **Review the task** (Phase 3). Only a clean review marks the task complete.
-6. **Update the ledger:** append to `.tracer/implement/progress.md`:
-   `Task N: complete (commits <base7>..<head7>, review clean)`.
+For each incomplete task, in order:
 
-Do not pause between tasks to check in — the user asked for the ticket implemented. Stop only for BLOCKED you can't resolve, genuine ambiguity, or completion.
+1. Run `scripts/task-brief .tracer/implement/plan.md N`; it writes `.tracer/implement/task-N-brief.md`.
+2. Dispatch a fresh implementer using [implementer-prompt.md](implementer-prompt.md). Pass the brief path, one or two lines of feature context, earlier-task interfaces the brief cannot know, the Global Constraints verbatim, and `.tracer/implement/task-N-report.md`.
+3. Handle its status:
+   - **DONE** — verify the named commit exists, then continue.
+   - **DONE_WITH_CONCERNS** — record the concerns and continue unless they question correctness or scope.
+   - **NEEDS_CONTEXT** — supply the missing context and re-dispatch.
+   - **BLOCKED** — change the context, model, or task shape before retrying; ask the user when the plan is wrong.
+4. Append `Task N: implemented (commit <sha>, focused tests green)` to `.tracer/implement/progress.md`.
+5. Report one progress line to the user and continue without a review gate.
 
-## Phase 3 — Task review gate
+Implementers run focused tests and commit their task. They do not run the full suite; the controller runs it once after both ticket-wide reviews.
 
-Every task gets reviewed by a fresh sub-agent before the next task starts — issues caught here are cheap; the same issue three tasks later has cascaded.
+**Complete when:** every planned task is committed and every report exists. Do not begin review while a task remains incomplete.
 
-1. **Build the review package:** run `scripts/review-package $BASE HEAD` — it writes the commit list, stat summary, and full diff to one file and prints the path. The diff never enters your context.
-2. **Dispatch the task reviewer** using [task-reviewer-prompt.md](task-reviewer-prompt.md), passing three paths — brief, report, review package — plus the plan's Global Constraints copied verbatim. Run it synchronously or await its result before evaluating the verdicts. Never tell a reviewer what *not* to flag or pre-rate a finding's severity; if you think a finding will be a false positive, let it be raised and adjudicate then.
+## Phase 3 — Review pass 1 and targeted repair
 
-   **High-risk tasks** — concurrency, auth/permissions, data migration, irreversible operations, money: dispatch two or three reviewers in parallel instead of one, each restricted to a single lens from the template (silent failures / hidden assumptions & failure modes / test integrity), and merge their findings yourself. Re-ID the merged findings into one unique C/I/M sequence before sending them to a fixer. A small quorum for the tasks that earn it; the single generalist reviewer stays the default.
-3. **Act on the verdicts.** The reviewer returns a spec-compliance verdict and a quality verdict:
-   - Both clean → task complete.
-   - **Critical or Important findings** → record `FIX_BASE=$(git rev-parse HEAD)`, then dispatch one fix sub-agent with the complete findings list (fixes spec gaps and quality issues together) and the **If a reviewer sends back findings** instructions from [implementer-prompt.md](implementer-prompt.md). The fixer re-runs the covering tests, commits the corrections, and appends results plus its finding → commit mapping to the report file. Before re-review, run `git log --format=full "$FIX_BASE"..HEAD`: every Critical/Important finding ID must appear in a commit body beside its defect and corrected behavior; a count or generic "address review feedback" message fails the gate and goes back to the fixer for rewording. Then re-run `review-package $BASE HEAD` and **re-review**. Loop until approved — never proceed with open Critical/Important findings.
-   - **Minor findings** → record in the ledger; the final review triages them.
-   - **⚠️ cannot-verify items** (requirements living in unchanged code or spanning tasks) → resolve them yourself; you hold the cross-task context. A confirmed gap is a failed spec review — back to the fixer.
+1. Run `scripts/review-package $BASE HEAD` to capture the cumulative ticket diff.
+2. Dispatch one fresh ticket-wide reviewer using [ticket-reviewer-prompt.md](ticket-reviewer-prompt.md). Pass the ticket/spec, plan, all task reports, review package, BASE/HEAD, and Global Constraints.
+3. Verify each finding against the code. Classify it using the Attention budget as **actionable now** or **reported concern**.
+4. If there are actionable findings, dispatch one fixer with the complete actionable list and the review-fix instructions from [implementer-prompt.md](implementer-prompt.md). The fixer runs focused tests, commits coherent corrections, and maps every finding ID to a commit in its report.
+5. Do not send reported concerns to the fixer.
 
-## Phase 4 — Close out
+There is one targeted repair pass. The next review verifies the cumulative result; it does not restart an open-ended fix loop.
 
-1. **Full suite, fresh evidence.** Run the complete test suite and typecheck now (focused tests were fine during the loop). No completion claim without having run the proving command *in this session* and read its output — "should pass" is not a status.
-2. **Whole-branch review:** run `/tracer-code-review` against the branch point (`git merge-base main HEAD`), pointing it at the originating ticket/spec and the ledger's list of accumulated Minor findings. Treat its Critical/Important findings as un-done work: give each confirmed finding a unique axis-qualified ID (`STD-I1`, `SPEC-I1`, etc.), then dispatch **one** fix sub-agent with the complete list (never one fixer per finding), applying the same review-fix commit-message gate from Phase 3, then re-run the failed axis until it approves. (A heavyweight multi-reviewer pack — e.g. `/code-quorum` — belongs at milestone boundaries or before merging a large feature, not per task; the task gates exist so it finds little.)
-3. **Finish the branch:** use `/tracer-finish-branch` — verify tests, then present the merge / PR / keep / discard options. Everything is committed by construction; nothing rides on a dirty working tree.
+**Complete when:** pass 1 is recorded and every selected finding is either mapped to a correction commit or explicitly reported as blocked.
 
-## Inline mode
+## Phase 4 — Review pass 2
 
-If sub-agents are unavailable, or the ticket is genuinely one task big, run the same shape yourself: plan (even a three-line plan states files, interface, and test), TDD at the pre-agreed seams, **commit per task**, self-review against the brief with the reviewer prompt's checklist, full suite + `/tracer-code-review` + `/tracer-finish-branch` at the end. The gates don't disappear when the sub-agents do.
+Rebuild the review package from the original `$BASE` through current `HEAD`. Dispatch one fresh reviewer with the same ticket-wide prompt and current reports.
+
+This is the final review pass:
+
+- Verify its findings against the code and apply the Attention budget.
+- Do not dispatch another fixer from this skill.
+- Any remaining P0/Critical or High finding makes the result **Needs attention**.
+- Any selected P1/Medium finding makes the result **Needs attention**.
+- Deferred P1/Medium and Low/Minor findings become reported concerns.
+
+**Complete when:** the second verdict and unresolved concern list are captured. There is no third review.
+
+## Phase 5 — Final evidence and report
+
+Run the complete test suite and typecheck once against final `HEAD` and read the output.
+
+Report:
+
+- task commits and implementation status;
+- both review verdicts;
+- fixes made after pass 1, mapped to finding IDs;
+- unresolved actionable findings;
+- deferred concerns, including implementer concerns;
+- exact full-suite and typecheck commands with results;
+- the current branch and that it was left in place.
+
+Use one outcome:
+
+- **Implemented** — tests are green and pass 2 has no actionable findings or reported concerns.
+- **Implemented with concerns** — tests are green and only deferred concerns remain.
+- **Needs attention** — tests are red, an actionable finding remains, or a task is blocked.
+
+End after the report. Do not invoke another review or branch workflow.
 
 ## Red flags — never
 
-- Implement on `main`/`master` without explicit user consent
-- Create a worktree when a named non-`main`/`master` branch already identifies the feature workspace
-- Leave work uncommitted at the end of a task, or batch several tasks into one commit
-- Accept a generic review-fix commit message or one that leaves a Critical/Important finding ID unaccounted for
-- Skip the task review, accept a review missing either verdict, or move on with open Critical/Important findings
-- Skip the fix → re-review loop ("the fix is obviously right" is not a re-review)
-- Dispatch parallel implementers inside one ticket (they conflict; parallelism belongs at the ticket/worktree level)
-- Paste the whole plan or session history into a dispatch — brief file + interfaces + constraints, nothing else
-- Trust an implementer's or fixer's report without the reviewer verifying it against the diff
-- Re-dispatch a task the ledger already marks complete
-- Claim done without fresh full-suite evidence from this session
+- Implement on `main` or `master` without explicit consent
+- Begin either review before all subtasks are implemented
+- Run more than two ticket-wide review passes
+- Spend the repair pass on Low/Minor polish or speculative hardening
+- Hide deferred findings to claim a clean result
+- Run `/tracer-code-review` or `/tracer-finish-branch` from this skill
+- Claim completion without fresh full-suite evidence

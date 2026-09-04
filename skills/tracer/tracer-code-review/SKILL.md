@@ -1,6 +1,6 @@
 ---
 name: tracer-code-review
-description: Run Tracer's two-axis Standards-versus-Spec review from a fixed point. Use when /tracer-implement calls for its whole-branch review or the user explicitly requests Tracer's Standards and Spec verdicts.
+description: Run Tracer's two-axis Standards-versus-Spec review from a fixed point. Use when /tracer-autopilot calls for its whole-branch review or the user explicitly requests Tracer's Standards and Spec verdicts.
 ---
 
 Two-axis review of the diff between `HEAD` and a fixed point the user supplies:
@@ -14,7 +14,7 @@ Both axes run as **parallel sub-agents** so they don't pollute each other's cont
 
 ### 1. Pin the fixed point
 
-Whatever the user said is the fixed point — a commit SHA, branch name, tag, `main`, `HEAD~5`, etc. If they didn't specify one, ask for it (when called from `/tracer-implement`, it's the branch's merge-base).
+Whatever the user said is the fixed point — a commit SHA, branch name, tag, `main`, `HEAD~5`, etc. If they didn't specify one, ask for it (when called from `/tracer-autopilot`, it's the branch's merge-base).
 
 Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, so the comparison is against the merge-base). Also note the list of commits via `git log <fixed-point>..HEAD --oneline`.
 
@@ -83,7 +83,7 @@ End with a one-line summary: verdict and finding counts per axis, and the worst 
 
 ### 6. Consuming the review
 
-A review with open Critical/Important findings means **the work is not done** — reporting is not resolving. If you produced the diff under review (e.g. called from `/tracer-implement`):
+A review with open Critical/Important findings means **the work is not done** — reporting is not resolving. If you produced the diff under review (e.g. called from `/tracer-autopilot`):
 
 1. **Verify before implementing.** Each finding is a claim — check it against the codebase. If a finding is wrong for this codebase (breaks existing behavior, misses context, violates YAGNI — grep for actual usage before "implementing properly"), push back with technical reasoning or put it to the user; don't blindly apply it. No performative agreement either way — evaluate, then fix or contest.
 2. **Fix in one pass.** Dispatch one fix sub-agent (or fix inline) with the complete list of confirmed Critical/Important findings — never one fixer per finding. The fixer re-runs the covering tests and reports the output.

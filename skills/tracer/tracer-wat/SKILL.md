@@ -20,13 +20,11 @@ Most work travels one **main flow**. A huge, foggy effort enters through the Way
    - **Yes** → **`/tracer-to-tickets`**: split the spec into tracer-bullet vertical slices, each declaring its **blocking edges**. Then kick off **`/tracer-implement`** per ticket, clearing context between each one.
    - **No** → **`/tracer-implement`** right here.
 
-4. **`/tracer-implement`** — the workhorse. Per ticket it:
-   - writes an **ephemeral task plan** (`.tracer/implement/plan.md`) — exact file paths, real code, interfaces, global constraints copied verbatim; the precision the durable spec/tickets deliberately omit, safe here because the plan dies with the branch;
-   - executes one task at a time with a **fresh implementer sub-agent**, driving `/tracer-tdd` at the pre-agreed seams, **committing every task**;
-   - gates every task with a **reviewer sub-agent** (spec compliance + code quality), looping fix → re-review until approved;
-   - closes with a fresh full-suite run, a whole-branch **`/tracer-code-review`**, and **`/tracer-finish-branch`**.
+4. Choose how much control to keep:
+   - **`/tracer-implement`** — the visible, bounded default. It writes an ephemeral task plan, shows the task order for approval, implements and commits every task sequentially, then runs two ticket-wide review passes with one targeted repair pass between them. It reports actionable and deferred concerns after one final full-suite run, then stops before whole-branch review or branch finishing.
+   - **`/tracer-autopilot`** — unattended end-to-end delivery. It preserves the exhaustive flow: fresh implementer and review gate per task, fix → re-review until approved, whole-branch `/tracer-code-review`, then `/tracer-finish-branch`.
 
-Keep steps 1–3 in **one unbroken context window** — don't compact or clear until the tickets are published, so the interview, spec, and tickets build on the same thinking. Each `/tracer-implement` then starts fresh from its ticket.
+Keep steps 1–3 in **one unbroken context window** — don't compact or clear until the tickets are published, so the interview, spec, and tickets build on the same thinking. Each implementation or autopilot run then starts fresh from its ticket.
 
 ## On-ramp: a huge, foggy effort
 
@@ -45,7 +43,7 @@ Frontier tickets (all blockers done) with no edges between them can run **simult
 
 ## Standalone
 
-- **`/tracer-code-review`** — two-axis review (Standards + Spec) of any diff against a fixed point, severity-graded with a verdict per axis. `/tracer-implement` calls it at close-out; reach for it directly to review a branch or PR. If you produced the diff, its findings loop back: Critical/Important means not done.
+- **`/tracer-code-review`** — two-axis review (Standards + Spec) of any diff against a fixed point, severity-graded with a verdict per axis. `/tracer-autopilot` calls it at close-out; after `/tracer-implement`, invoke it only when you want this review instead of another review pack. If you produced the diff, its findings loop back: Critical/Important means not done.
 - **`/tracer-convince-me`** — prove completed work against its original goal. It turns every expectation into an observable claim, gathers fresh evidence at the strongest practical boundary, and reports what is proven, disproven, or still unverified.
 - **`/tracer-tdd`** — the red → green reference: what a good test is, seams, anti-patterns, rules of the loop. `/tracer-implement` drives it internally; use it alone to build one behaviour test-first without a full spec.
 - **`/tracer-worktrees`** / **`/tracer-finish-branch`** — bookends for any isolated branch work, even outside the main flow.

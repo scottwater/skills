@@ -13,7 +13,7 @@ A lean, user-invoked skill set for spec-driven development. Forked from two pare
 
 Entry-point workflows never auto-invoke. Supporting and vocabulary skills may load inside a flow you started. Invocation policy is declared in `SKILL.md` frontmatter (Claude Code) and `agents/openai.yaml` (Codex):
 
-- **User-only** (12 skills) — every entry-point workflow, including [`tracer-wayfinder`](tracer-wayfinder/SKILL.md): only you can start it.
+- **User-only** (13 skills) — every entry-point workflow, including [`tracer-wayfinder`](tracer-wayfinder/SKILL.md): only you can start it.
 - **Supporting** ([`tracer-tdd`](tracer-tdd/SKILL.md), [`tracer-code-review`](tracer-code-review/SKILL.md), [`tracer-research`](tracer-research/SKILL.md)) — model-invocable references and delegated workflows used beneath a flow you started.
 - **Vocabulary** ([`tracer-domain-modeling`](tracer-domain-modeling/SKILL.md), [`tracer-codebase-design`](tracer-codebase-design/SKILL.md)) — model-invoked references that define language and never run a process.
 
@@ -23,18 +23,22 @@ Not sure which skill fits? **[`/tracer-wat`](tracer-wat/SKILL.md)** is the route
 
 ```
 ordinary idea      → /tracer-interview-me ─┐
-huge, foggy effort → /tracer-wayfinder ────┴→ /tracer-to-spec → /tracer-to-tickets → /tracer-implement (per ticket) → merge/PR
+huge, foggy effort → /tracer-wayfinder ────┴→ /tracer-to-spec → /tracer-to-tickets → /tracer-implement (per ticket)
+                                                                                              └→ optional review → /tracer-finish-branch
+
+End-to-end alternative: replace `/tracer-implement` plus the explicit review/finish steps with `/tracer-autopilot`.
 ```
 
 0. **[`/tracer-wayfinder`](tracer-wayfinder/SKILL.md)** — the situational on-ramp for an effort too large _and too foggy_ for one session. It charts a shared issue-tracker map of decision tickets, resolves one per session, and hands the cleared map to `/tracer-to-spec`. Skip it when the decision tree fits in one interview.
 1. **[`/tracer-interview-me`](tracer-interview-me/SKILL.md)** — the normal entry point. A relentless interview structured as a design tree: each round asks the entire frontier of answerable questions at once, with recommended answers. Facts get looked up by sub-agents; decisions go to you. Docs-aware in a codebase (existing `CONTEXT.md`/ADRs prune the tree; settled terms and decisions get written back), stateless without one. Done when the frontier is empty and nothing is silently assumed.
 2. **[`/tracer-to-spec`](tracer-to-spec/SKILL.md)** — synthesize the settled thread or cleared map into a spec (problem, user stories, implementation and testing decisions, pre-agreed test seams). No new interview — the decisions are already settled. Durable prose: no file paths or code.
 3. **[`/tracer-to-tickets`](tracer-to-tickets/SKILL.md)** — split the spec into tracer-bullet vertical slices, each declaring its blocking edges. Skip for single-session work and go straight to `/tracer-implement`.
-4. **[`/tracer-implement`](tracer-implement/SKILL.md)** — the centerpiece. Per ticket: write an **ephemeral task plan** (exact paths, real code, interfaces, global constraints — precision that can't go stale because it dies with the branch), then execute it with a fresh implementer sub-agent per task, a **review gate after every task** (spec compliance + code quality, fix → re-review until approved), and a **commit per task**. Closes with a full-suite run, a whole-branch `/tracer-code-review`, and `/tracer-finish-branch`.
+4. **[`/tracer-implement`](tracer-implement/SKILL.md)** — the visible, bounded workhorse. Per ticket: write an **ephemeral task plan** (exact paths, real code, interfaces, global constraints), show the execution shape for approval, implement and commit every task sequentially, then run two ticket-wide review passes with one targeted repair pass between them. It runs the full suite once, reports actionable and deferred concerns, and stops. It does not run a whole-branch audit or finish the branch.
+5. Choose the close-out deliberately: run your own review pack or [`/tracer-code-review`](tracer-code-review/SKILL.md) when warranted, then invoke [`/tracer-finish-branch`](tracer-finish-branch/SKILL.md). For unattended end-to-end delivery, use [`/tracer-autopilot`](tracer-autopilot/SKILL.md), which preserves the former per-task review loops, whole-branch review, and branch-finishing flow.
 
-For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinder deliberately spans sessions and persists its state in the map; `/tracer-to-spec` reloads every linked resolution. Each `/tracer-implement` starts fresh from its ticket.
+For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinder deliberately spans sessions and persists its state in the map; `/tracer-to-spec` reloads every linked resolution. Each implementation or autopilot run starts fresh from its ticket.
 
-**Parallel tickets:** frontier tickets with no edges between them each get their own `/tracer-implement` session in their own [`/tracer-worktrees`](tracer-worktrees/SKILL.md) checkout. Because every task commits, parallel sessions never collide on a dirty tree, and [`/tracer-finish-branch`](tracer-finish-branch/SKILL.md) merges or PRs each one when it's done.
+**Parallel tickets:** frontier tickets with no edges between them each get their own implementation session in their own [`/tracer-worktrees`](tracer-worktrees/SKILL.md) checkout. Because every task commits, parallel sessions never collide on a dirty tree. Finish each branch explicitly, or choose `/tracer-autopilot` when that decision should remain inside the automated flow.
 
 ## Skills
 
@@ -45,7 +49,8 @@ For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinde
 | [`tracer-interview-me`](tracer-interview-me/SKILL.md) | Frontier-driven interview until shared understanding — docs-aware in a repo, stateless without |
 | [`tracer-to-spec`](tracer-to-spec/SKILL.md) | Conversation → durable spec with pre-agreed test seams |
 | [`tracer-to-tickets`](tracer-to-tickets/SKILL.md) | Spec → tracer-bullet tickets with blocking edges |
-| [`tracer-implement`](tracer-implement/SKILL.md) | Ticket → plan → per-task implement/commit/review loop → reviewed branch |
+| [`tracer-implement`](tracer-implement/SKILL.md) | Ticket → approved plan → sequential task commits → two bounded reviews → report and stop |
+| [`tracer-autopilot`](tracer-autopilot/SKILL.md) | Ticket → per-task review loops → whole-branch review → branch finishing |
 | [`tracer-code-review`](tracer-code-review/SKILL.md) | Two-axis review (Standards + Spec), severity-graded, with a fix → re-review loop |
 | [`tracer-convince-me`](tracer-convince-me/SKILL.md) | Completed work → observable claims → fresh end-to-end evidence → honest verdict |
 | [`tracer-tdd`](tracer-tdd/SKILL.md) | The red → green reference: good tests, seams, anti-patterns |
