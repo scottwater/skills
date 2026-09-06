@@ -1,137 +1,138 @@
 ---
 name: tracer-autopilot
-description: "Deliver a ticket or spec end to end with per-task implementation and review loops, whole-branch review, and branch finishing."
+description: "Deliver a ticket or spec through bounded review, fresh proof, and a branch-finishing choice."
 disable-model-invocation: true
 ---
 
 # Autopilot
 
-Deliver the work described in a ticket (from `/tracer-to-tickets`), a spec, or the user's description. This preserves Tracer's exhaustive flow: **plan → per-task loop (implement, commit, review, fix) → final review → finish the branch**. Precision comes from the plan; quality comes from the review gates; parallel-safety comes from committing every task on an isolated branch.
+Deliver the user's agreed scope: **plan → implement and test every task → broad review → one repair pass → focused review with completion evidence → report and finish**. Continue between tasks without approval checkpoints; stop for a material ambiguity, a blocker, or the final branch decision.
 
-Use `/tracer-implement` instead when the user wants a visible, bounded implementation flow that stops after two ticket-wide reviews and final test evidence.
+Use `/tracer-implement` when the user wants to approve the task order and stop with the implementation report rather than proceed to branch finishing.
 
-## Phase 0 — Workspace
+## Delivery budget
 
-1. **Choose the workspace from the current branch:** run `CURRENT_BRANCH=$(git symbolic-ref --quiet --short HEAD || true)`.
-   - A named branch other than `main` or `master` is already the chosen feature workspace. Work where you are; do not create a worktree.
-   - On `main` or `master`, run `/tracer-worktrees` before implementing so the work gets its own branch and checkout.
-   - A detached HEAD or failed branch lookup is ambiguous. Report it and ask where the work should live rather than creating a worktree by assumption.
-2. **Check for a ledger.** If `.tracer/implement/progress.md` exists, a previous session was mid-flight: tasks it marks complete are DONE — verify against `git log`, then resume at the first incomplete task. Trust the ledger and git over your own recollection.
-3. Ensure `.tracer/` is git-ignored (`git check-ignore -q .tracer` — if not, add it to `.gitignore` and commit).
-4. Run the test suite once to confirm a clean baseline. If it's already red, stop and report — don't build on a broken base.
+A **delivery** is the entire scope accepted for this invocation, including every ticket and task it contains. It has **two review rounds and at most one consolidated repair pass**, not that allowance per task, reviewer, or axis.
+
+- Round 1 discovers material defects against the agreed requirements.
+- Round 2 verifies corrections, affected behavior, and the original goal with fresh evidence.
+- Tasks use TDD and implementer self-checks; they have no independent review gates.
+- All delegated and inline reviews count toward the same budget. Helpers return evidence to the controller; they cannot launch nested reviews, fixers, or approval gates.
+- After round 2, report unresolved work. No third review, second repair pass, or extra whole-branch audit. A new user authorization may extend the budget; a resume, compaction, renamed task, or generic “continue” does not reset it.
+
+**Material findings** identify a reachable trigger, a violated requirement or invariant, and a current consequence: incorrect user-visible behavior, data loss, security exposure, silent failure, or tests that cannot detect broken required behavior. A severity label alone does not qualify. Record polish, speculative hardening, hypothetical consumers, and structural preferences as follow-ups. Treat stronger safety guarantees as scope proposals.
+
+## Phase 0 — Workspace and resume
+
+1. Run `CURRENT_BRANCH=$(git symbolic-ref --quiet --short HEAD || true)`.
+   - A named branch other than `main` or `master` identifies the feature workspace; stay there.
+   - On `main` or `master`, follow the `/tracer-worktrees` workspace instructions before implementation unless the user explicitly chose this checkout.
+   - For detached HEAD or a failed lookup, ask where the work should live.
+2. Ensure `.tracer/` is git-ignored; commit a needed ignore rule before recording the delivery base. Inspect `.tracer/implement/progress.md` before starting work.
+   - **Fresh delivery:** establish a clean baseline with the project's tests, record `BASE=$(git rev-parse HEAD)`, and create the ledger below. A failing baseline is Blocked, not permission to fix unrelated defects. If no suite exists yet, record that limitation rather than inventing a green baseline.
+   - **Resume:** verify the scope, base, task commits, reviewed HEADs, and saved reports against Git. Resume the unfinished phase with its existing budget. A missing base, legacy ledger without review accounting, or unexplained HEAD change requires clarification; never silently start over.
+3. Keep these fields in the ledger:
+
+```text
+Workflow: autopilot-bounded-v1
+Scope: <ticket/spec references and agreed boundaries>
+Base: <immutable commit SHA>
+Tasks: <implemented commits, focused checks, concerns>
+Round 1: not-started | running | complete; head=<sha>; report=<path>; agent=<id>
+Repair: not-started | running | complete | skipped; base=<sha>; head=<sha>; report=<path>
+Round 2: not-started | running | complete; head=<sha>; report=<path>; agent=<id>
+Outcome: pending | Complete | Complete with follow-ups | Blocked
+```
+
+Mark a phase running **before** dispatch; save its ID and result as they become available. If interrupted, recover the existing worker/report before continuing the same phase. Give a failed worker's replacement the saved findings, evidence, scope, and unfinished work within the same phase. If that cannot be recovered safely, report Blocked. When round 2 is already complete, report its saved outcome rather than rerunning verification; only an outstanding branch decision may continue within this budget.
+
+**Complete when:** the workspace, baseline state, fixed delivery base, and remaining budget are known.
 
 ## Phase 1 — Task plan
 
-Tickets and specs deliberately avoid file paths and code because they'd go stale. The plan is where that precision gets manufactured — it's **ephemeral** (lives in `.tracer/implement/plan.md`, dies with the branch), so exact paths and real code belong here.
-
-Write the plan as if the implementer has zero context for this codebase and questionable taste — because each task's implementer is a fresh sub-agent that sees only its own task.
-
-**Header:**
+Write `.tracer/implement/plan.md`. This ephemeral plan supplies the paths and test precision omitted from durable specs.
 
 ```markdown
 # <Feature> — Task Plan
 
 **Goal:** one sentence.
-**Ticket/Spec:** reference or path.
+**Ticket/Spec:** references or paths covering the entire delivery.
 **Architecture:** 2–3 sentences.
-**Seams under test:** the pre-agreed seams from the spec (see /tracer-tdd) — every test in this plan lives at one of these.
+**Seams under test:** the pre-agreed test seams.
+**Acceptance claims:** observable required behavior, including material failure paths.
+**Limits:** agreed environment, concurrency, durability, and recovery guarantees;
+identify unresolved assumptions instead of silently strengthening the contract.
 
 ## Global Constraints
 
-Project-wide requirements copied VERBATIM from the spec/ticket — exact
-values, version floors, naming rules, copy strings. Every task implicitly
-includes this section.
-```
+Project-wide requirements copied verbatim from the spec/ticket.
 
-**Each task:**
-
-````markdown
 ### Task N: <name>
 
-**Files:**
-- Create: `exact/path/to/file.ts`
-- Modify: `exact/path/to/existing.ts`
-- Test: `exact/path/to/file.test.ts`
+**Files:** exact create/modify/test paths.
+**Interfaces:** exact names/signatures consumed from and produced for other tasks.
 
-**Interfaces:**
-- Consumes: what this task uses from earlier tasks — exact signatures
-- Produces: what later tasks rely on — exact names, parameter and return
-  types. (A task's implementer sees only its own task; this block is how
-  it learns what its neighbours expect.)
+Steps: write the failing test with actual code, run the exact command and
+confirm the expected failure, implement the minimal change, run focused
+checks, self-check against the brief, and commit with the intended message.
+```
 
-Steps, each one small action: write the failing test (show the actual test
-code), run it and confirm it fails (exact command + expected failure),
-write the minimal implementation (show the code), run and confirm green,
-**commit** (exact `git commit` message).
-````
+Group tasks by coherent behavior and commits. Check requirement coverage, executable test steps, and cross-task interfaces; replace every placeholder with the code, command, or decision needed to execute it.
 
-**Right-sizing:** a task is the smallest unit that carries its own test cycle and is worth a fresh reviewer's gate. Fold setup/scaffolding into the task whose deliverable needs it; split only where a reviewer could reject one task while approving its neighbour.
+Show a short task-order summary and the delivery budget, then proceed. Batch material contradictions into one question; routine task boundaries need no user approval.
 
-**No placeholders — these are plan failures, never write them:**
-- "TBD", "add appropriate error handling", "handle edge cases"
-- "Write tests for the above" without the actual test code
-- "Similar to Task N" (repeat the code — tasks are read in isolation)
-- References to types or functions no task defines
+**Complete when:** every acceptance claim maps to a task and verification step, cross-task interfaces agree, and material scope decisions are settled.
 
-**Self-review the plan** before executing (a checklist you run yourself, not a dispatch):
-1. **Spec coverage** — walk the ticket/spec requirement by requirement; point each at a task. Gaps become tasks.
-2. **Placeholder scan** — search the plan for the patterns above; fix inline.
-3. **Interface consistency** — do names/signatures used in later tasks match what earlier tasks define?
+## Phase 2 — Implement every task
 
-If the plan surfaced a contradiction in the ticket/spec itself, put it to the user as one batched question before executing — not one interrupt per discovery mid-run.
+For each incomplete task, in order:
 
-## Phase 2 — Per-task loop
+1. Record the task's starting SHA. Run this skill's `scripts/task-brief .tracer/implement/plan.md N` to write its brief.
+2. Dispatch a fresh implementer using [implementer-prompt.md](implementer-prompt.md): brief path, concise scene-setting, earlier-task interfaces, Global Constraints, checkout, and `.tracer/implement/task-N-report.md`. Await its result. Choose an available model suited to the task.
+3. Verify its commits and focused-check evidence. Record DONE_WITH_CONCERNS observations for round 1. Supply missing context for NEEDS_CONTEXT; if a task cannot safely support its dependents, resolve the implementation context or report Blocked rather than continue on a broken prerequisite.
+4. Append `Task N: implemented (commits <base>..<head>, focused checks <result>)` and continue. Implemented does not mean independently reviewed.
 
-For each task, in order:
+Implementers run focused TDD checks and one self-check, not full-suite runs or review subagents per task. Keep tasks sequential within a checkout. Review findings belong to the delivery's repair pass, not newly invented implementation tasks.
 
-1. **Record BASE:** `BASE=$(git rev-parse HEAD)` — before dispatching. Re-reviews and multi-commit tasks depend on this; never substitute `HEAD~1` later.
-2. **Extract the brief:** run this skill's `scripts/task-brief plan.md N` — it writes `.tracer/implement/task-N-brief.md` and prints the path. The brief, not pasted text, is the implementer's source of requirements.
-3. **Dispatch a fresh implementer sub-agent** using [implementer-prompt.md](implementer-prompt.md). The dispatch contains: one line of scene-setting (where this task fits), the brief path, interfaces/decisions from earlier tasks the brief can't know, your resolution of any ambiguity you noticed, and the report-file path (`.tracer/implement/task-N-report.md`). Exact values live only in the brief — don't paste the plan or prior-task history into the prompt. Run it synchronously or await its result before evaluating status.
-4. **Handle the status it returns:**
-   - **DONE** → proceed to review.
-   - **DONE_WITH_CONCERNS** → read the concerns. Correctness or scope doubts: address before review. Observations: note them, proceed.
-   - **NEEDS_CONTEXT** → provide the missing context, re-dispatch.
-   - **BLOCKED** → change something before retrying: more context, a more capable model, a smaller task split, or escalate to the user if the plan itself is wrong. Never re-run the same dispatch unchanged.
-5. **Review the task** (Phase 3). Only a clean review marks the task complete.
-6. **Update the ledger:** append to `.tracer/implement/progress.md`:
-   `Task N: complete (commits <base7>..<head7>, review clean)`.
+**Complete when:** every task has verified commits and a report with focused-check results; unresolved concerns are recorded for round 1.
 
-Do not pause between tasks to check in — the user asked for the ticket implemented. Stop only for BLOCKED you can't resolve, genuine ambiguity, or completion.
+## Phase 3 — Round 1: discover and repair
 
-## Phase 3 — Task review gate
+1. Pin `REVIEW_HEAD=$(git rev-parse HEAD)`, record round 1 running, and run `scripts/review-package "$BASE" "$REVIEW_HEAD"` once for the cumulative delivery diff.
+2. Dispatch one fresh reviewer using [delivery-reviewer-prompt.md](delivery-reviewer-prompt.md). Pass the original scope, plan, task reports, package, and fixed SHAs. Save its result to `.tracer/implement/review-1.md` and mark round 1 complete.
+3. Adjudicate the findings yourself against their cited evidence. In `.tracer/implement/findings.md`, give each a stable ID and record: violated claim, trigger/consequence, evidence, disposition (**accepted / contested / deferred**), and any correction commit. Combine overlapping findings. Distinguish existing defects from correction-induced ones where evidence allows; mark uncertain provenance rather than guessing.
+4. If material findings are accepted, record `FIX_BASE=$REVIEW_HEAD` and dispatch **one** fixer using [fixer-prompt.md](fixer-prompt.md) with the complete accepted list. Record its correction commits, check results, and unresolved findings in the ledger. If nothing is accepted, mark repair skipped and set `FIX_BASE=$REVIEW_HEAD`.
 
-Every task gets reviewed by a fresh sub-agent before the next task starts — issues caught here are cheap; the same issue three tasks later has cascaded.
+Ask the user to resolve contested requirements that materially change acceptance. Keep repairs within the agreed scope and invariants. After the repair pass, proceed to closing verification with any unresolved findings.
 
-1. **Build the review package:** run `scripts/review-package $BASE HEAD` — it writes the commit list, stat summary, and full diff to one file and prints the path. The diff never enters your context.
-2. **Dispatch the task reviewer** using [task-reviewer-prompt.md](task-reviewer-prompt.md), passing three paths — brief, report, review package — plus the plan's Global Constraints copied verbatim. Run it synchronously or await its result before evaluating the verdicts. Never tell a reviewer what *not* to flag or pre-rate a finding's severity; if you think a finding will be a false positive, let it be raised and adjudicate then.
+**Complete when:** round 1 and the repair disposition are recorded, with each accepted finding linked to evidence and a correction or an explicit unresolved reason.
 
-   **High-risk tasks** — concurrency, auth/permissions, data migration, irreversible operations, money: dispatch two or three reviewers in parallel instead of one, each restricted to a single lens from the template (silent failures / hidden assumptions & failure modes / test integrity), and merge their findings yourself. Re-ID the merged findings into one unique C/I/M sequence before sending them to a fixer. A small quorum for the tasks that earn it; the single generalist reviewer stays the default.
-3. **Act on the verdicts.** The reviewer returns a spec-compliance verdict and a quality verdict:
-   - Both clean → task complete.
-   - **Critical or Important findings** → record `FIX_BASE=$(git rev-parse HEAD)`, then dispatch one fix sub-agent with the complete findings list (fixes spec gaps and quality issues together) and the **If a reviewer sends back findings** instructions from [implementer-prompt.md](implementer-prompt.md). The fixer re-runs the covering tests, commits the corrections, and appends results plus its finding → commit mapping to the report file. Before re-review, run `git log --format=full "$FIX_BASE"..HEAD`: every Critical/Important finding ID must appear in a commit body beside its defect and corrected behavior; a count or generic "address review feedback" message fails the gate and goes back to the fixer for rewording. Then re-run `review-package $BASE HEAD` and **re-review**. Loop until approved — never proceed with open Critical/Important findings.
-   - **Minor findings** → record in the ledger; the final review triages them.
-   - **⚠️ cannot-verify items** (requirements living in unchanged code or spanning tasks) → resolve them yourself; you hold the cross-task context. A confirmed gap is a failed spec review — back to the fixer.
+## Phase 4 — Round 2: focused review and completion evidence
 
-## Phase 4 — Close out
+Pin `FINAL_HEAD=$(git rev-parse HEAD)` and record round 2 running. Generate the correction package with `scripts/review-package "$FIX_BASE" "$FINAL_HEAD"`. An empty correction diff is valid when repair was skipped.
 
-1. **Full suite, fresh evidence.** Run the complete test suite and typecheck now (focused tests were fine during the loop). No completion claim without having run the proving command *in this session* and read its output — "should pass" is not a status.
-2. **Whole-branch review:** run `/tracer-code-review` against the branch point (`git merge-base main HEAD`), pointing it at the originating ticket/spec and the ledger's list of accumulated Minor findings. Treat its Critical/Important findings as un-done work: give each confirmed finding a unique axis-qualified ID (`STD-I1`, `SPEC-I1`, etc.), then dispatch **one** fix sub-agent with the complete list (never one fixer per finding), applying the same review-fix commit-message gate from Phase 3, then re-run the failed axis until it approves. (A heavyweight multi-reviewer pack — e.g. `/code-quorum` — belongs at milestone boundaries or before merging a large feature, not per task; the task gates exist so it finds little.)
-3. **Finish the branch:** use `/tracer-finish-branch` — verify tests, then present the merge / PR / keep / discard options. Everything is committed by construction; nothing rides on a dirty working tree.
+Dispatch one fresh closing verifier using [closing-verifier-prompt.md](closing-verifier-prompt.md). Give it the original acceptance claims and limits, round-1 findings/dispositions, repair report (or skipped status), correction package, and the prior delivery package for reference. Pass the shared [proof protocol](../tracer-convince-me/proof-protocol.md) for fresh claim-by-claim evidence within this round.
+
+The verifier checks corrections and affected callers, proves the original acceptance claims, and runs the full suite and typecheck once where available. Inspect its commands and results; save `.tracer/implement/review-2.md` with claim/evidence/verdict rows and the checked HEAD.
+
+Newly demonstrated defects remain visible, including regressions caused by the repair. Record them and their consequences; **no implementation repair follows round 2**. Mark failed proof as disproven and inconclusive proof as unverified. An unresolved serious finding may justify stopping proof work early; list the remaining claims as unverified.
+
+**Complete when:** every acceptance claim and accepted finding is proven, disproven, or explicitly unverified; the final report names all remaining concerns. Record round 2 complete even when the outcome is Blocked.
+
+## Phase 5 — Outcome and branch decision
+
+Record and report one outcome:
+
+- **Complete:** required acceptance claims have fresh evidence, applicable checks pass, and no material blockers or follow-ups remain.
+- **Complete with follow-ups:** required behavior is proven and checks pass; only non-blocking concerns or limitations within the agreed scope remain. For each follow-up, state the affected area, evidence or uncertainty, consequence, and suggested next action. Do not automatically schedule or implement it.
+- **Blocked:** a task is incomplete, a material defect or required claim remains disproven/unverified, an applicable check fails, or a scope decision prevents acceptance. Preserve the branch and reports; explain the smallest decision or repair needed. Stop without merge, push, PR, discard, or cleanup.
+
+Include the goal, task/fix commits, each round's status (including not run if blocked earlier), accepted/contested/deferred findings, exact verification commands/results and limits, and the branch/HEAD. A clean reviewer verdict alone is not completion evidence.
+
+For either Complete outcome, follow the shared [branch-finishing procedure](../tracer-finish-branch/branch-finishing.md). Carry the outcome and follow-ups into the merge / PR / keep / discard choice; wait for the user's explicit choice. Use that procedure's evidence-reuse and merged-result checks. A finishing failure stops the attempt for the user's decision.
+
+**Complete when:** the outcome is reported and either the blocked workspace is preserved or the authorized branch decision is executed.
 
 ## Inline mode
 
-If sub-agents are unavailable, or the ticket is genuinely one task big, run the same shape yourself: plan (even a three-line plan states files, interface, and test), TDD at the pre-agreed seams, **commit per task**, self-review against the brief with the reviewer prompt's checklist, full suite + `/tracer-code-review` + `/tracer-finish-branch` at the end. The gates don't disappear when the sub-agents do.
-
-## Red flags — never
-
-- Implement on `main`/`master` without explicit user consent
-- Create a worktree when a named non-`main`/`master` branch already identifies the feature workspace
-- Leave work uncommitted at the end of a task, or batch several tasks into one commit
-- Accept a generic review-fix commit message or one that leaves a Critical/Important finding ID unaccounted for
-- Skip the task review, accept a review missing either verdict, or move on with open Critical/Important findings
-- Skip the fix → re-review loop ("the fix is obviously right" is not a re-review)
-- Dispatch parallel implementers inside one ticket (they conflict; parallelism belongs at the ticket/worktree level)
-- Paste the whole plan or session history into a dispatch — brief file + interfaces + constraints, nothing else
-- Trust an implementer's or fixer's report without the reviewer verifying it against the diff
-- Re-dispatch a task the ledger already marks complete
-- Claim done without fresh full-suite evidence from this session
+When subagents are unavailable or the delivery is one small task, perform the same phases inline. Use the same ledger, two-round budget, one repair pass, evidence protocol, and outcomes. The absence of delegation changes execution, not the stopping rule.

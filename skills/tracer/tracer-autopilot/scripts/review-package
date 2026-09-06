@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Generate a review package: commit list, stat summary, and the net diff
 # with extended context, written to a file the reviewer reads in one call.
-# Use the BASE recorded before dispatching the implementer (never HEAD~1,
-# which silently drops all but the last commit of a multi-commit task).
+# Round 1 uses the recorded delivery BASE; round 2 uses FIX_BASE for the
+# correction delta. Never substitute HEAD~1 for either recorded boundary.
 #
 # Usage: review-package BASE HEAD [OUTFILE]
 # Default OUTFILE: <repo-root>/.tracer/implement/review-<base7>..<head7>.diff

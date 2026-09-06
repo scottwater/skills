@@ -22,7 +22,7 @@ Most work travels one **main flow**. A huge, foggy effort enters through the Way
 
 4. Choose how much control to keep:
    - **`/tracer-implement`** — the visible, bounded default. It writes an ephemeral task plan, shows the task order for approval, implements and commits every task sequentially, then runs two ticket-wide review passes with one targeted repair pass between them. It reports actionable and deferred concerns after one final full-suite run, then stops before whole-branch review or branch finishing.
-   - **`/tracer-autopilot`** — unattended end-to-end delivery. It preserves the exhaustive flow: fresh implementer and review gate per task, fix → re-review until approved, whole-branch `/tracer-code-review`, then `/tracer-finish-branch`.
+   - **`/tracer-autopilot`** — autonomous delivery through branch finishing. It implements all tasks, runs one broad review and at most one repair pass, then verifies corrections and proves the original goal. Its two-round budget covers the whole delivery and survives resumes. Complete outcomes lead to your branch-finishing choice; Blocked preserves the workspace and reports what needs attention.
 
 Keep steps 1–3 in **one unbroken context window** — don't compact or clear until the tickets are published, so the interview, spec, and tickets build on the same thinking. Each implementation or autopilot run then starts fresh from its ticket.
 
@@ -43,8 +43,8 @@ Frontier tickets (all blockers done) with no edges between them can run **simult
 
 ## Standalone
 
-- **`/tracer-code-review`** — two-axis review (Standards + Spec) of any diff against a fixed point, severity-graded with a verdict per axis. `/tracer-autopilot` calls it at close-out; after `/tracer-implement`, invoke it only when you want this review instead of another review pack. If you produced the diff, its findings loop back: Critical/Important means not done.
-- **`/tracer-convince-me`** — prove completed work against its original goal. It turns every expectation into an observable claim, gathers fresh evidence at the strongest practical boundary, and reports what is proven, disproven, or still unverified.
+- **`/tracer-code-review`** — two-axis review (Standards + Spec) of any diff against a fixed point, severity-graded with a verdict per axis. Choose it for an independent review; Autopilot uses its own bounded reviewers. Workflow callers own any repair budget.
+- **`/tracer-convince-me`** — prove completed work against its original goal. It turns every expectation into an observable claim, gathers fresh evidence at the strongest practical boundary, and reports what is proven, disproven, or still unverified. Autopilot uses the same proof protocol in round 2. Proof reports failures; it does not authorize repairs.
 - **`/tracer-tdd`** — the red → green reference: what a good test is, seams, anti-patterns, rules of the loop. `/tracer-implement` drives it internally; use it alone to build one behaviour test-first without a full spec.
 - **`/tracer-worktrees`** / **`/tracer-finish-branch`** — bookends for any isolated branch work, even outside the main flow.
 - **`/tracer-prototype`** — a small, throwaway program that answers one design question. The detour in step 1, but reach for it any time a design question is hard to settle on paper.

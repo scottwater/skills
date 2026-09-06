@@ -9,7 +9,7 @@ I've been using SuperPowers for a while, but I started to find them a bit overbe
 A lean, user-invoked skill set for spec-driven development. Forked from two parents:
 
 - **[Matt Pocock's skills](https://github.com/mattpocock/skills)** — the shape and philosophy: lightweight, user-invoked only (nothing auto-triggers), seams-first testing, durable prose specs/tickets, the two-axis review.
-- **[superpowers](https://github.com/obra/superpowers)** — the execution machinery: precise task plans, fresh sub-agent per task, a review gate after every task with a fix → re-review loop, a commit per task, worktree isolation, and evidence-before-claims verification.
+- **[superpowers](https://github.com/obra/superpowers)** — the execution machinery: precise task plans, fresh sub-agent per task, a commit per task, worktree isolation, and evidence-before-claims verification. Tracer now bounds review at the delivery level rather than repeating a gate after every task.
 
 Entry-point workflows never auto-invoke. Supporting and vocabulary skills may load inside a flow you started. Invocation policy is declared in `SKILL.md` frontmatter (Claude Code) and `agents/openai.yaml` (Codex):
 
@@ -34,7 +34,7 @@ End-to-end alternative: replace `/tracer-implement` plus the explicit review/fin
 2. **[`/tracer-to-spec`](tracer-to-spec/SKILL.md)** — synthesize the settled thread or cleared map into a spec (problem, user stories, implementation and testing decisions, pre-agreed test seams). No new interview — the decisions are already settled. Durable prose: no file paths or code.
 3. **[`/tracer-to-tickets`](tracer-to-tickets/SKILL.md)** — split the spec into tracer-bullet vertical slices, each declaring its blocking edges. Skip for single-session work and go straight to `/tracer-implement`.
 4. **[`/tracer-implement`](tracer-implement/SKILL.md)** — the visible, bounded workhorse. Per ticket: write an **ephemeral task plan** (exact paths, real code, interfaces, global constraints), show the execution shape for approval, implement and commit every task sequentially, then run two ticket-wide review passes with one targeted repair pass between them. It runs the full suite once, reports actionable and deferred concerns, and stops. It does not run a whole-branch audit or finish the branch.
-5. Choose the close-out deliberately: run your own review pack or [`/tracer-code-review`](tracer-code-review/SKILL.md) when warranted, then invoke [`/tracer-finish-branch`](tracer-finish-branch/SKILL.md). For unattended end-to-end delivery, use [`/tracer-autopilot`](tracer-autopilot/SKILL.md), which preserves the former per-task review loops, whole-branch review, and branch-finishing flow.
+5. Choose the close-out deliberately: run your own review pack or [`/tracer-code-review`](tracer-code-review/SKILL.md) when warranted, then invoke [`/tracer-finish-branch`](tracer-finish-branch/SKILL.md). For autonomous end-to-end delivery, use [`/tracer-autopilot`](tracer-autopilot/SKILL.md). It implements all tasks, runs one broad review and at most one repair pass, then verifies corrections and proves the original goal. The two-round budget covers every ticket and task and survives resumes. **Complete** and **Complete with follow-ups** lead to your branch-finishing choice; **Blocked** preserves the workspace and reports what needs attention.
 
 For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinder deliberately spans sessions and persists its state in the map; `/tracer-to-spec` reloads every linked resolution. Each implementation or autopilot run starts fresh from its ticket.
 
@@ -50,7 +50,7 @@ For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinde
 | [`tracer-to-spec`](tracer-to-spec/SKILL.md) | Conversation → durable spec with pre-agreed test seams |
 | [`tracer-to-tickets`](tracer-to-tickets/SKILL.md) | Spec → tracer-bullet tickets with blocking edges |
 | [`tracer-implement`](tracer-implement/SKILL.md) | Ticket → approved plan → sequential task commits → two bounded reviews → report and stop |
-| [`tracer-autopilot`](tracer-autopilot/SKILL.md) | Ticket → per-task review loops → whole-branch review → branch finishing |
+| [`tracer-autopilot`](tracer-autopilot/SKILL.md) | Delivery → task commits → broad review → one repair → focused review + proof → outcome and branch decision |
 | [`tracer-code-review`](tracer-code-review/SKILL.md) | Two-axis review (Standards + Spec), severity-graded, with a fix → re-review loop |
 | [`tracer-convince-me`](tracer-convince-me/SKILL.md) | Completed work → observable claims → fresh end-to-end evidence → honest verdict |
 | [`tracer-tdd`](tracer-tdd/SKILL.md) | The red → green reference: good tests, seams, anti-patterns |
@@ -65,11 +65,20 @@ For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinde
 
 ## Conventions
 
-- **Delegation:** Tracer owns workflow stages and review gates. A delegated pass satisfies one named Tracer step; the runtime supplies execution and isolation rather than additional stages.
+- **Delegation:** Tracer owns workflow stages and review budgets. A delegated pass satisfies one named Tracer step; the runtime supplies execution and isolation rather than additional stages. Helpers return findings to the controller within that budget.
+- **Shared procedures:** Convince Me's [proof protocol](tracer-convince-me/proof-protocol.md) and Finish Branch's [finishing procedure](tracer-finish-branch/branch-finishing.md) are plain references shared with Autopilot, not extra skill invocations. Invoke their standalone skills when you want proof or branch finishing separately.
 - **`.tracer/`** (git-ignored) holds everything ephemeral: local specs and tickets (`.tracer/<feature>/`), and `/tracer-implement`'s workspace (`.tracer/implement/` — task plan, briefs, reports, review packages, progress ledger).
 - **Durable vs. ephemeral:** specs and tickets are durable prose and never contain file paths or code; the task plan is ephemeral and contains exactly that. Precision lives where it can't go stale.
 - **Evidence before claims:** no "done", "passing", or "fixed" without having run the proving command in the current session and read its output.
 - If `docs/agents/issue-tracker.md` exists, `tracer-wayfinder` charts there and `tracer-to-spec`/`tracer-to-tickets` publish there; otherwise everything works locally under `.tracer/`. Run [`/tracer-setup`](tracer-setup/SKILL.md) once per repo to configure a real tracker (it seeds exact Wayfinding, blocking-edge, and frontier operations).
+
+## Autopilot contract checks
+
+```bash
+python3 -B -m unittest discover -s skills/tracer/tracer-autopilot/tests -v
+```
+
+Run from the repo root. These check instruction boundaries, reference links, and full-versus-correction review packages in temporary Git fixtures. They make no model calls. Check whether models obey the stopping rule on actual deliveries.
 
 ## Install
 
