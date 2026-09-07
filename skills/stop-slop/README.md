@@ -35,4 +35,4 @@ The skill removes filler, canned rhetorical structures, vague emphasis, hidden a
 
 ## License
 
-[MIT](../LICENSE)
+[MIT](../../LICENSE)
