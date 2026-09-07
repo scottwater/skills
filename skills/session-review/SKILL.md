@@ -45,24 +45,25 @@ Build two inventories:
 - **Delegation:** child ID/type, parent, purpose, requested/actual model and effort, launch/resume/outcome, tokens, cost, and duration. Distinguish dispatch attempts from actual child runs and configuration labels from observed execution.
 - **User-added machinery:** skills, agent definitions, plugins/extensions, MCP servers, hooks, and custom tools. Distinguish user invocation, agent-initiated invocation/read, automatic injection, and merely installed/advertised availability. Trace delegated use back to its parent. Record version/source evidence; current configuration alone does not prove historical use.
 
-Investigate **friction episodes**, not isolated error counts: trigger → attempts/workarounds → resolution or abandonment. Look for dependency/version/runtime conflicts, test/spec runner failures, missing tools, authentication/model routing, permissions, flaky tests, malformed edits, output/context limits, failed resumes, repeated research, scope drift, and review/fix loops. Group cascaded errors under their episode while retaining attempt counts. Read successful turns around failures: terminal error counters can omit substantial partial work.
+Investigate **friction episodes**, not isolated error counts: trigger → attempts/workarounds → resolution or abandonment. Read [the friction rubric](references/friction-rubric.md) and assess every category. Also inspect authentication/model routing, permissions, flaky tests, malformed edits, output limits, and failed resumes. Group cascaded errors under their episode while retaining attempt counts. Read successful turns around failures: terminal error counters can omit substantial partial work.
 
 For each material episode, cite evidence, affected work, attempts, models/tools involved, measured usage/time or a labeled bound, and outcome. Separate necessary investigation, useful defect discovery, repeated verification, incomplete fixes, and likely avoidable overhead. Mark overlapping episode costs; they are not additive. Do not equate review findings with unique bugs or all correction work with waste.
 
 When relevant, compare skill/plugin changes with the instructions captured at execution time and Git history. Establish chronology without inventing causation. If delegating analysis, assign disjoint evidence sets and merge once rather than creating another review loop.
 
-**Done:** each material conclusion is sourced or marked inference; absent capabilities and uncertain causes remain explicit.
+**Done:** every rubric category is assessed or marked unassessable; each material conclusion is sourced or marked inference. Absent capabilities and uncertain causes remain explicit.
 
 ## 5. Deliver
 
 Deliver a detailed inline report, or write it to the requested file, covering:
 
 1. Executive findings, completed/unresolved work, scope, and coverage limits.
-2. Timeline; aggregate, model, phase, session, and per-response metrics; distributions and outliers where counters support them.
-3. Subagent inventory and user-added machinery: observed contribution, repeated use, and overhead that can actually be attributed.
-4. Ranked friction episodes and review/retry convergence, including valuable outcomes and plausible alternatives—not promised savings.
-5. Relevant configuration/skill history, measurement gaps, and the next evidence worth collecting.
-6. Accounting definitions, source references, and reproduction commands.
+2. **What to change next time:** for each actionable finding, give the pattern, evidence pointer, remedy, owner (user, skill maintainer, or project tooling owner), and next-session success check. Rank by supported impact and recurrence; distinguish quick fixes from structural changes and estimated benefits from measured savings. Frame remedies as reusable practices. If none are supported, say so.
+3. Timeline; aggregate, model, phase, session, and per-response metrics; distributions and outliers where counters support them.
+4. Subagent inventory and user-added machinery: observed contribution, repeated use, and overhead that can actually be attributed.
+5. Ranked friction episodes and review/retry convergence, including valuable outcomes and plausible alternatives—not promised savings. Summarize compaction by automatic/manual/unknown trigger, skill recursion, and recurring execution failures as observed, not observed, or unassessable; keep absence of evidence distinct from evidence of absence.
+6. Relevant configuration/skill history, measurement gaps, and the next evidence worth collecting.
+7. Accounting definitions, source references, and reproduction commands.
 
 For example, `/session-review look at the last 3 days and generate a 3-day-report.md` selects a three-day window and writes `3-day-report.md` in the current directory. Include machine-readable ledgers only if requested.
 

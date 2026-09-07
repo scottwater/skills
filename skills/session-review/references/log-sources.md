@@ -2,6 +2,14 @@
 
 Use the invoking harness's branch below. Paths are discovery hints, not a fixed schema: check environment/configuration overrides, installed documentation, and actual records. Read metadata first; inspect message bodies only for the selected project and linked children. Avoid credential stores. A conversation-history index alone is not a usage ledger.
 
+## Friction evidence across formats
+
+Retain friction events even without usage counters:
+
+- **Compaction:** preserve trigger/reason metadata and explicit user compact actions tied to the event. Verify trigger semantics against the running harness's format; marker names and generated summaries alone may not identify the trigger.
+- **Skill execution:** preserve invocation and child-dispatch links to reconstruct call chains.
+- **Execution failures:** preserve operation, exit status, exception/message, and subsequent workaround to compare causes and remedies across sessions.
+
 ## Pi
 
 Start with `~/.pi/agent/sessions/`, overridden by `PI_CODING_AGENT_DIR`, `PI_CODING_AGENT_SESSION_DIR`, or an explicit session directory. Locate the current session through harness metadata such as `PI_SESSION_FILE` when available. Check installed Pi session-format documentation for the running version.
