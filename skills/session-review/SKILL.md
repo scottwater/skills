@@ -1,6 +1,6 @@
 ---
 name: session-review
-description: Report what recent project work took from coding-agent session logs: usage, cost, delegation, customizations, and friction.
+description: "Report what recent project work took from coding-agent session logs: usage, cost, delegation, customizations, and friction."
 disable-model-invocation: true
 ---
 
