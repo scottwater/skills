@@ -89,38 +89,8 @@ Subagent (general-purpose; fresh implementer):
     If BLOCKED or NEEDS_CONTEXT, put the specifics in the reply itself.
     Never silently produce work you're unsure about.
 
-    ## If a reviewer sends back findings
-
-    The controller sends only findings selected by the workflow's attention
-    budget. Fix every finding it sends, re-run the tests covering the amended
-    code, and commit the fixes before reporting. The commit history is the
-    review record:
-
-    - Group related findings into one coherent commit; use separate commits
-      when the findings correct unrelated behavior.
-    - Give each commit an action-oriented subject that names the behavior
-      corrected. Subjects such as "address review feedback", "fix three
-      issues", or "review fixes" fail this requirement.
-    - Write a commit body with one bullet per finding, beginning with the
-      reviewer's finding ID. Each bullet names the original defect and the
-      corrected behavior, including the trigger or consequence that made the
-      defect matter.
-    - Account for every Critical and Important finding ID in exactly one commit
-      body. Do not collapse several findings into a count or a generic phrase.
-
-    Example:
-
-    ```text
-    Correct session handling during concurrent token refresh
-
-    - [I1] Serialize refreshes so a slower response cannot overwrite a rotated token.
-    - [I2] Propagate refresh failures instead of returning a stale authenticated session.
-    - [I3] Roll back the pending session when persistence fails, preventing a partial login.
-    ```
-
-    Append the test results and a finding → commit SHA mapping to your report
-    file. The report is the test evidence; the reviewer will not re-run tests
-    for you.
+    Stop after the task report. The controller owns the two review passes
+    and single repair pass; do not dispatch reviewers, fixers, or other agents.
 ```
 
 **Placeholders:**
@@ -128,5 +98,7 @@ Subagent (general-purpose; fresh implementer):
 - `[REPORT_FILE]` — `.tracer/implement/task-N-report.md`
 - `[GLOBAL_CONSTRAINTS]` — verbatim from the plan header
 - `[DIRECTORY]` — the worktree/checkout root
+
+Review corrections use the separate [fixer-prompt.md](fixer-prompt.md), not a new implementation task.
 
 **Model choice:** when the brief contains the complete code (transcription + testing), use a cheap model; prose-described or multi-file tasks warrant a standard one. Cheap models often take 2–3× the turns on judgment work — turn count beats token price.

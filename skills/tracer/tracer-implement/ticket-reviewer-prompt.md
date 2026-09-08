@@ -21,8 +21,31 @@ Subagent (general-purpose; fresh read-only reviewer):
     Read every implementer/fixer report:
     [REPORT_FILES]
 
+    Previous review and adjudicated findings: [PRIOR_REVIEW_AND_FINDINGS]
+    Save the full review, including the checked HEAD, to [REVIEW_REPORT_FILE].
+
     Reports, commit messages, comments, and rationales are unverified claims.
-    Judge the cumulative diff.
+    Judge them against code and the original requirements.
+
+    ## Pass-specific scope
+
+    Pass 1 discovers material defects across the complete ticket. For each
+    finding, name the violated requirement and behavior a correction must
+    preserve, not just a preferred patch.
+
+    Pass 2 reconciles every prior finding, including deferred, contested,
+    and blocked findings. Verify accepted corrections, affected callers and
+    preserved invariants, and original ticket requirements. Use the cumulative
+    diff as context, not to restart a search for unrelated improvements.
+    Report newly demonstrated defects, especially correction-induced ones;
+    state when provenance is uncertain.
+
+    If a new finding contradicts an earlier decision, cite its finding ID,
+    explain the conflicting requirement and evidence, and identify the
+    decision needed. Do not silently reverse or erase earlier findings.
+    Keep prior IDs; give new findings unused IDs rather than restarting
+    numbering. Return evidence to the controller without repairs or nested
+    reviewers, fixers, or approval workflows.
 
     ## Diff under review
 
@@ -31,7 +54,8 @@ Subagent (general-purpose; fresh read-only reviewer):
 
     It contains the commit list, stat summary, and cumulative diff. Inspect
     unchanged code only to test a concrete risk at a named call site or
-    contract. Read-only: never mutate the worktree, index, or HEAD.
+    contract. Preserve tracked files, index, and HEAD. Write only the ignored
+    review report and disposable evidence; safely clean up disposable evidence.
 
     ## Attention budget
 
@@ -79,12 +103,20 @@ Subagent (general-purpose; fresh read-only reviewer):
     [Specific strengths with file:line]
 
     ### Actionable now
-    [P0/Critical and High findings; P1/Medium findings selected for current
-    repair. For each: ID, severity, file:line, trigger, consequence, and fix.]
+    [P0/Critical and High findings; P1/Medium findings meeting the repair
+    threshold. For each: ID, severity, file:line, violated requirement,
+    trigger, consequence, evidence, invariant to preserve, and proposed fix.
+    Pass 2 reports these only; it cannot authorize another repair.]
 
     ### Reported concerns
     [Deferred P1/Medium and Low/Minor findings. For each: ID, file:line,
     evidence, and why it does not cross the current repair threshold.]
+
+    ### Prior finding reconciliation
+    [Pass 1: "Not applicable". Pass 2: every prior ID, original disposition,
+    resolved / unresolved / unverified status, and evidence. For deferred or
+    contested findings, state whether the earlier disposition still holds.
+    Identify proposed reversals explicitly, with conflicting IDs and reasons.]
 
     ### Cannot verify
     [Requirement and what the controller must check, or "None"]
@@ -92,9 +124,12 @@ Subagent (general-purpose; fresh read-only reviewer):
     ### Checks run
     [Focused command and result, or "None"]
 
-    `Approved` means no actionable findings and no reported concerns.
-    `Concerns` means only reported concerns remain. `Needs attention` means at
-    least one actionable finding exists.
+    `Approved` means required behavior is verified and no actionable findings,
+    material requirement conflicts, or reported concerns remain.
+    `Concerns` means required behavior is verified and only reported concerns
+    remain. `Needs attention` means
+    an actionable finding, unresolved material requirement conflict, or
+    unverified required behavior remains.
 ```
 
 **Placeholders:**
@@ -103,7 +138,9 @@ Subagent (general-purpose; fresh read-only reviewer):
 - `[TICKET_OR_SPEC]` — path, URL, or fetched issue contents
 - `[PLAN_FILE]` — `.tracer/implement/plan.md`
 - `[GLOBAL_CONSTRAINTS]` — verbatim from the plan
-- `[REPORT_FILES]` — every `.tracer/implement/task-*-report.md` plus the fixer report when present
+- `[REPORT_FILES]` — every `.tracer/implement/task-*-report.md` plus `.tracer/implement/repair-report.md` when present; otherwise state repair skipped for pass 2
+- `[PRIOR_REVIEW_AND_FINDINGS]` — pass 1: `None`; pass 2: `.tracer/implement/review-1.md` and `.tracer/implement/findings.md`
+- `[REVIEW_REPORT_FILE]` — `.tracer/implement/review-1.md` or `.tracer/implement/review-2.md`, matching the pass
 - `[BASE_SHA]` / `[HEAD_SHA]` — the fixed base recorded before task execution and current HEAD
 - `[DIFF_FILE]` — from `scripts/review-package BASE HEAD`
 
