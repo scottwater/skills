@@ -5,7 +5,6 @@
 ```yaml
 workers:
   - codex|gpt-6-astra|medium
-  - pi|opencode-go/glm-5.3|medium
   - pi|xai/grok-4.6|medium
   - claude|fable|high
 ```
