@@ -35,21 +35,29 @@ QUORUM_BRIEF
 
 Run from the project directory. Choose a heredoc delimiter absent from the brief and shell-quote each tuple as one argument. Pass `--direction right` or `--direction down` only when the user requested that first split direction. Allow 120 seconds for the launcher command; worker execution continues independently afterward.
 
-The launcher creates sibling panes without moving focus, partitions only its own worker area, starts fresh interactive agents concurrently, and prompts each immediately when ready. It preserves native configuration and permissions. Each worker receives only the common brief, never another worker's conclusions or the lead's proposed answer.
+The launcher creates sibling panes without moving focus, partitions only its own worker area, starts fresh interactive agents concurrently, and prompts each immediately when ready. It preserves native configuration and permissions. Each worker receives the common brief plus ten-minute pacing instructions: reserve the final minute for reporting and disclose unfinished scope. Workers remain blind to each other's conclusions and the lead's proposed answer.
 
-Its JSON events print a private temporary `run_dir` containing `brief.txt` and an incrementally saved `run.json`. The manifest records each tuple, name, pane ID, phase, errors, and a ten-minute deadline measured from brief submission. Exit 0 means every worker was dispatched; exit 1 means recorded failures, with any dispatched workers still running; exit 2 means invalid input or context. Inspect the manifest after any interruption, including a tool timeout. Never rerun the launcher automatically or regenerate its mechanics in shell.
+Its JSON output prints a private temporary `run_dir` containing `brief.txt`, `run.json`, and `monitor.log`. A detached monitor owns concurrent `agent prompt --wait` calls, durable collection events, and each worker's deadline from submission. It inspects and interrupts only this run's working agents at their deadlines, recording uncertain or still-active outcomes. It continues while the lead reviews reports or a collection command is interrupted.
+
+The launcher returns when every worker has reached a wait attempt or a recorded failure; `waiting` is not proof of prompt delivery or completion. Exit 0 means no failure was recorded at return, not that workers succeeded; exit 1 means recorded failures or a launch/monitor problem; exit 2 means invalid input or context. Inspect the manifest after any interruption, including a tool timeout. Never rerun the launcher automatically or regenerate its mechanics in shell.
 
 Startup or dispatch failures are missing coverage: continue with survivors without retries, substitutions, or repairs. A layout failure stops launch with partial pane IDs preserved. Leave approval decisions to the user.
 
-Complete when every worker has received the brief or has a recorded failure.
+Complete when the launcher returns or its interrupted outcome has been inspected in the recorded run directory.
 
 ## Collect progressively
 
-Use names, pane IDs, and deadlines from `run.json`. Check this run's live states together with `herdr agent list`; read completed reports promptly and source-check them while other workers continue. Keep those findings with the lead so remaining workers stay blind.
+Use the [collector](scripts/collect.py) rather than agent-state polling:
 
-When no new report is ready, use a bounded `herdr agent wait <name> --timeout <ms>` of at most 30 seconds and no longer than that worker's remaining budget, then check the run's states again. A slice timeout means keep waiting within the budget, not worker failure. Avoid a single all-worker join that defers collection until the slowest finishes.
+```sh
+python3 /absolute/skill/path/scripts/collect.py --run-dir '<run_dir>' --after 0
+```
 
-Inspect blocked, unknown, or timed-out workers through Herdr. A lifecycle label alone is not a report, and the idle snapshot returned by non-waiting dispatch is not completion evidence. On timeout or cancellation, interrupt only this run's working agents and report any that remain active. A failed or interrupted command can have an uncertain outcome; inspect its recorded pane rather than relaunching it.
+Allow 390 seconds for each collector command. It blocks until new events, monitor completion, or a five-minute checkpoint; already-recorded events return immediately. Read reports for newly settled workers promptly and source-check them while others continue. Keep those findings with the lead so remaining workers stay blind. Pass the returned `cursor` as `--after` on the next call, after processing the batch. An interrupted call can safely reuse its previous cursor; collection never consumes events.
+
+A `checkpoint` permits one health inspection of this run's unresolved workers, then another blocking collection. A settled state, including `blocked`, is only a cue to inspect—not a usable report. Inspect failed, blocked, unknown, deadline, and interruption events through Herdr. `complete: true` means monitoring ended, not that every worker succeeded. Reconcile every worker in the returned snapshot, including any still active, before synthesis. If the monitor is unavailable, inspect `run.json`, `monitor.log`, and the recorded panes; handle survivors within their remaining budgets without relaunching.
+
+To cancel the run, use the same collector with `--cancel` and allow 720 seconds. It inspects and interrupts this run's working agents without answering approval dialogs or closing panes. Cancellation overlapping a slow submission waits for activity within the worker's original budget. Review the recorded outcomes and report any agents still active; if monitoring has already finished, the collector sends no new input and directs cleanup back to Herdr. A collector/tool timeout alone leaves the monitor and workers running; reconnect with the same cursor. If the monitor is unavailable during cancellation, inspect and interrupt only this run's working agents directly through Herdr.
 
 Read reports using Herdr's recent-unwrapped output. Follow its larger-read and temporary-Markdown fallback when a complete response cannot be recovered. Preserve usable reports even when accompanied by a lifecycle anomaly, and disclose that anomaly. Treat an observed failure to honor an explicit model or reasoning setting as a worker failure. Missing output is missing coverage, not agreement or a no-findings result.
 
