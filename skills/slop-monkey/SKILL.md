@@ -1,11 +1,12 @@
 ---
-name: stop-slop
+name: slop-monkey
 description: Rewrite prose to sound direct, readable, and distinctly human. Use when drafting, revising, or reviewing reader-facing writing.
 metadata:
-  author: Hardik Pandya (https://hvpandya.com)
+  author: scottwater
+  based-on: Stop Slop by Hardik Pandya (https://github.com/hardikpandya/stop-slop)
 ---
 
-# Stop slop
+# Slop Monkey
 
 Write like a specific person helping a specific reader. Remove formulaic AI mannerisms, then restore the judgment, cadence, and concrete detail that make prose easy to follow.
 

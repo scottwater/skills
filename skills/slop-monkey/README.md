@@ -1,13 +1,13 @@
-# Stop Slop
+# Slop Monkey
 
 A skill for turning formulaic agent output into direct, readable prose with a specific human voice.
 
-<img width="3840" height="2160" alt="Stop Slop example" src="https://github.com/user-attachments/assets/902afc15-1f40-4a9d-af24-8cd67afb8ebf" />
+This is a modified adaptation of [Stop Slop](https://github.com/hardikpandya/stop-slop) by [Hardik Pandya](https://hvpandya.com), not the original skill. It has a different name so users can distinguish this version from upstream.
 
 ## Contents
 
 ```text
-stop-slop/
+slop-monkey/
 ├── SKILL.md
 └── references/
     ├── examples.md
@@ -29,9 +29,13 @@ npx skills add scottwater/skills
 
 The skill removes filler, canned rhetorical structures, vague emphasis, hidden agency, mechanical rhythm, and generic chatbot polish. It then strengthens audience awareness, concrete judgment, and the writer's existing cadence. Patterns remain diagnostic signals rather than universal bans, and every edit must preserve facts, confidence, intent, genre, and voice.
 
-## Author
+## Credits
 
-[Hardik Pandya](https://hvpandya.com)
+The original **Stop Slop** skill was created by [Hardik Pandya](https://hvpandya.com). [Stop Slop's repository](https://github.com/hardikpandya/stop-slop) contains the upstream version.
+
+This adaptation is maintained in `scottwater/skills`. Changes include a voice-contract editing workflow, explicit completion checks, and diagnostic references loaded as needed. It treats writing patterns as signals to inspect rather than universal bans, with an emphasis on preserving facts, confidence, genre, and the writer's voice.
+
+The human-voice direction also draws from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by [Lauren “poteto” Tan](https://x.com/poteto).
 
 ## License
 
