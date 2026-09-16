@@ -8,21 +8,21 @@ disable-model-invocation: true
 
 You don't remember every skill, so ask.
 
-Most work travels one **main flow**. A huge, foggy effort enters through the Wayfinder on-ramp; a few other skills run underneath the flow or stand alone. Entry-point workflows are user-invoked rather than auto-triggered.
+Start at the lightest step that fits. A small, settled request can go directly to `/tracer-implement`; use an interview or spec only when it resolves uncertainty or creates useful durable context. A huge, foggy effort enters through Wayfinder. Entry-point workflows are user-invoked rather than auto-triggered.
 
 ## The main flow: idea → ship
 
 1. **`/tracer-interview-me`** — start here. A relentless interview worked as a design tree: each round asks the **entire frontier** of currently answerable questions at once, numbered, each with a recommended answer. Facts get looked up by sub-agents; decisions are yours. In a codebase it's docs-aware — existing `CONTEXT.md`/ADRs prune the tree before round 1, and settled terms/decisions get written back; with no codebase it runs stateless. If a frontier question needs a *runnable* answer (does this state model feel right, what should this UI look like), detour through **`/tracer-prototype`** — throwaway code that answers the question; keep the answer, delete the code. Done when the frontier is empty and nothing is silently assumed — then it hands off to `/tracer-to-spec`.
 
-2. **`/tracer-to-spec`** — synthesize the settled thread or cleared map into a spec: problem, user stories, implementation and testing decisions, and the **pre-agreed test seams**. No new interview — the decisions are already settled. Durable prose: no file paths, no code.
+2. **`/tracer-to-spec`**: synthesize settled decisions into concise acceptance criteria, safety limits, and focused verification. Preserve explicit decisions without turning implementation suggestions into requirements. Skip the spec for a small request that is already clear.
 
 3. **Branch — is this a multi-session build?**
    - **Yes** → **`/tracer-to-tickets`**: split the spec into tracer-bullet vertical slices, each declaring its **blocking edges**. Then kick off **`/tracer-implement`** per ticket, clearing context between each one.
    - **No** → **`/tracer-implement`** right here.
 
 4. Choose how much control to keep:
-   - **`/tracer-implement`** — the visible, bounded default. It writes an ephemeral task plan, shows the task order for approval, implements and commits every task sequentially, then runs two ticket-wide review passes with one targeted repair pass between them. It reports actionable and deferred concerns after one final full-suite run, then stops before whole-branch review or branch finishing.
-   - **`/tracer-autopilot`** — autonomous delivery through branch finishing. It implements all tasks, runs one broad review and at most one repair pass, then verifies corrections and proves the original goal. Its two-round budget covers the whole delivery and survives resumes. Complete outcomes lead to your branch-finishing choice; Blocked preserves the workspace and reports what needs attention.
+   - **`/tracer-implement`**: approve a short approach and focused checks, implement in one context, then review once. Repair accepted defects in one pass and recheck corrections only if code changed. Report evidence and concerns, leaving the branch in place.
+   - **`/tracer-autopilot`**: the same proportionate delivery without routine approval checkpoints, followed by your explicit branch-finishing choice. Custom infrastructure or stronger guarantees still require a decision. Review/repair limits survive resumes; unresolved material work is Blocked.
 
 Keep steps 1–3 in **one unbroken context window** — don't compact or clear until the tickets are published, so the interview, spec, and tickets build on the same thinking. Each implementation or autopilot run then starts fresh from its ticket.
 
@@ -44,7 +44,7 @@ Frontier tickets (all blockers done) with no edges between them can run **simult
 ## Standalone
 
 - **`/tracer-code-review`** — two-axis review (Standards + Spec) of any diff against a fixed point, severity-graded with a verdict per axis. Choose it for an independent review; Autopilot uses its own bounded reviewers. Workflow callers own any repair budget.
-- **`/tracer-convince-me`** — prove completed work against its original goal. It turns every expectation into an observable claim, gathers fresh evidence at the strongest practical boundary, and reports what is proven, disproven, or still unverified. Autopilot uses the same proof protocol in round 2. Proof reports failures; it does not authorize repairs.
+- **`/tracer-convince-me`** — prove completed work against its original goal. It turns every expectation into an observable claim, gathers fresh evidence at the strongest practical boundary, and reports what is proven, disproven, or still unverified. Use it when you explicitly want deeper proof than the delivery's focused checks. It is not an automatic Autopilot step. Proof reports failures; it does not authorize repairs.
 - **`/tracer-tdd`** — the red → green reference: what a good test is, seams, anti-patterns, rules of the loop. `/tracer-implement` drives it internally; use it alone to build one behaviour test-first without a full spec.
 - **`/tracer-worktrees`** / **`/tracer-finish-branch`** — bookends for any isolated branch work, even outside the main flow.
 - **`/tracer-prototype`** — a small, throwaway program that answers one design question. The detour in step 1, but reach for it any time a design question is hard to settle on paper.

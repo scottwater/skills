@@ -4,9 +4,11 @@ Finish a verified branch: check evidence → detect checkout → present options
 
 ## 1. Verify entry evidence
 
-Run the project's full test suite now and read the output. Reuse a caller's suite output only after verifying that it comes from this same close-out for the **same unchanged HEAD and tracked tree**, with no intervening implementation changes. Otherwise, run the suite.
+Use the caller's agreed verification scope, or select checks based on the changed behavior when invoked standalone. Focused checks are the default; a full suite or broad typecheck needs repository policy, an explicit user request, or a stated impact-based reason. Finishing does not automatically expand that scope.
 
-If tests fail or required acceptance remains blocked/unverified: show the failures or gaps, preserve the branch, and stop. No merge or PR. An absent test suite is not a green result: report the limitation and ask the user for an explicit finishing decision rather than silently passing this gate.
+Reuse evidence only after verifying that it comes from this same close-out for the **same unchanged HEAD and tracked tree**, with no intervening implementation changes. Run any missing required checks and read their output. Report broader checks left to CI or the user.
+
+If required checks fail or acceptance remains blocked/unverified: show the failures or gaps, preserve the branch, and stop. No merge or PR. If no applicable checks exist, report that limitation and ask for an explicit finishing decision rather than inventing a green result.
 
 Carry forward the caller's outcome and non-blocking follow-ups, including the qualification in Complete with follow-ups.
 
@@ -46,7 +48,7 @@ Wait for the user's explicit choice. Detached HEAD: drop option 1; option 2 beco
 MAIN_ROOT=$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)
 cd "$MAIN_ROOT"
 git checkout <base-branch> && git pull && git merge <feature-branch>
-<test command>   # verify tests on the merged result
+<agreed verification commands>   # verify the merged result
 ```
 
 Only after the merge succeeds and tests pass: clean up the worktree (step 5), then `git branch -d <feature-branch>` — in that order; branch deletion fails while a worktree still references it. A failed merge or check stops here for the user's decision; preserve the workspace and report its actual state rather than beginning another repair loop.

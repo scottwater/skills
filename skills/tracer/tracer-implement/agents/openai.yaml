@@ -1,5 +1,5 @@
 interface:
   display_name: "Tracer Implement"
-  short_description: "Build, review twice, test, and stop"
+  short_description: "Short plan, focused checks, one review, then stop"
 policy:
   allow_implicit_invocation: false

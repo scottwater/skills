@@ -1,6 +1,6 @@
 ---
 name: tracer-to-spec
-description: Turn a settled interview or cleared Wayfinder map into a spec and publish it — no new interview, just synthesis of decisions already made.
+description: "Turn settled decisions into a concise spec with observable acceptance and material safety limits."
 disable-model-invocation: true
 ---
 
@@ -30,13 +30,13 @@ For a Wayfinder map, hydrate its distributed detail before writing:
 
 Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the spec, and respect any ADRs in the area you're touching.
 
-Sketch the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better — the ideal number is one.
+Prefer existing high-level test seams and focused checks for observable acceptance and material failure paths. Reuse prior exploration. A test seam is not a requirement to build a new fixture framework, enumerate every configuration, or run every platform and full suite.
 
-Present the inferred seams for confirmation without reopening settled product decisions. If the confirmation exposes a new decision, return it to the originating interview or Wayfinder map instead of inventing an answer inside the spec.
+State the proposed verification briefly. Ask for confirmation only when it introduces a new seam with substantial machinery, expensive/external verification, or an unsettled acceptance decision. Separate required evidence from optional broader checks. Return new product or safety decisions to the user or originating Wayfinder map rather than inventing them here.
 
 ### 3. Write and publish
 
-Write the spec using the template below, then publish it (see above). When the input was a Wayfinder map, include its linked decisions without copying tracker-only bookkeeping into the prose.
+Write the shortest spec that preserves the settled behavior and material limits using the template below, then publish it (see above). Omit empty optional sections and combine overlapping criteria. When the input was a Wayfinder map, include its linked decisions without copying tracker-only bookkeeping into the prose.
 
 Afterwards, the flow continues with `/tracer-to-tickets` (multi-session builds) or straight to `/tracer-implement` (single-session work).
 
@@ -50,21 +50,15 @@ The problem that the user is facing, from the user's perspective.
 
 The solution to the problem, from the user's perspective.
 
-## User Stories
+## Acceptance Criteria
 
-A LONG, numbered list of user stories. Each user story should be in the format of:
+A concise numbered list of observable outcomes, including material failure behavior and data/security invariants. Each criterion must follow from a settled user requirement, not a hypothetical consumer or planner preference. Group related variants; more criteria are not inherently a better spec.
 
-1. As an <actor>, I want a <feature>, so that <benefit>
-
-<user-story-example>
-1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
-</user-story-example>
-
-This list of user stories should be extremely extensive and cover all aspects of the feature.
+Use a user story only when the actor's motivation clarifies a distinct requirement. Ordinary implementation steps do not need separate stories.
 
 ## Implementation Decisions
 
-A list of implementation decisions that were made. This can include:
+Only implementation decisions explicitly settled with the user or already required by the repository. Distinguish those constraints from optional suggestions, which the implementer may simplify. Do not turn safe reruns into concurrency/crash-recovery guarantees or a clear permission error into a custom authorization evaluator without an explicit decision. This optional section can include:
 
 - The modules that will be built/modified
 - The interfaces of those modules that will be modified
@@ -74,21 +68,19 @@ A list of implementation decisions that were made. This can include:
 - API contracts
 - Specific interactions
 
-Do NOT include specific file paths or code snippets. They may end up being outdated very quickly. (The precise, path-and-code level lives in `/tracer-implement`'s ephemeral task plan, which dies with the branch.)
+Keep durable decisions at the behavior/interface level. Exact affected paths and verification commands belong in `/tracer-implement`'s short ephemeral plan; implementation code belongs in the implementation.
 
-Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it within the relevant decision and note briefly that it came from a prototype. Trim to the decision-rich parts — not a working demo, just the important bits.
+Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it within the relevant decision and note briefly that it came from a prototype. Trim to the decision-rich parts, not a working demo.
 
 ## Testing Decisions
 
-A list of testing decisions that were made. Include:
+Name existing seams and focused evidence for the acceptance criteria. Cover material failures without requiring every speculative variant. Record required real-environment checks only when agreed or mandated by repository policy; label broader platform runs and full-suite checks as optional unless impact justifies them.
 
-- A description of what makes a good test (only test external behavior, not implementation details)
-- Which modules will be tested
-- Prior art for the tests (i.e. similar types of tests in the codebase)
+Reference useful prior tests rather than prescribing a new harness or duplicating test code.
 
 ## Out of Scope
 
-A description of the things that are out of scope for this spec.
+State the exclusions and limits that keep this small, including supported environments and any relevant concurrency or recovery boundaries. Preserve required safeguards; clarify a genuine safety trade-off rather than silently omitting it.
 
 ## Further Notes
 

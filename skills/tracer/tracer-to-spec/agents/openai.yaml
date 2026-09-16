@@ -1,5 +1,5 @@
 interface:
   display_name: "Tracer To Spec"
-  short_description: "Turn a conversation into a spec"
+  short_description: "Concise acceptance criteria from settled decisions"
 policy:
   allow_implicit_invocation: false
