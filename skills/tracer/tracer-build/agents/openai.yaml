@@ -1,0 +1,5 @@
+interface:
+  display_name: "Tracer Build"
+  short_description: "Quick plan, implement here, prove the goal"
+policy:
+  allow_implicit_invocation: false

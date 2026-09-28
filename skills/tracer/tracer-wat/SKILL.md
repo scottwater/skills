@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 You don't remember every skill, so ask.
 
-Start at the lightest step that fits. A small, settled request can go directly to `/tracer-implement`; use an interview or spec only when it resolves uncertainty or creates useful durable context. A huge, foggy effort enters through Wayfinder. Entry-point workflows are user-invoked rather than auto-triggered.
+Start at the lightest step that fits. A concrete request can go directly to `/tracer-build`; use an interview or spec only when it resolves uncertainty or creates useful durable context. A huge, foggy effort enters through Wayfinder. Entry-point workflows require explicit invocation.
 
 ## The main flow: idea → ship
 
@@ -18,9 +18,10 @@ Start at the lightest step that fits. A small, settled request can go directly t
 
 3. **Branch — is this a multi-session build?**
    - **Yes** → **`/tracer-to-tickets`**: split the spec into tracer-bullet vertical slices, each declaring its **blocking edges**. Then kick off **`/tracer-implement`** per ticket, clearing context between each one.
-   - **No** → **`/tracer-implement`** right here.
+   - **No** → **`/tracer-build`** right here.
 
 4. Choose how much control to keep:
+   - **[`/tracer-build`](../tracer-build/SKILL.md)**: quick plan in chat, implement in the current workspace with subagents only when necessary, then run Convince Me's proof protocol. Call out `main`/`master` and continue. Finish with evidence and a review recommendation; no automatic review.
    - **`/tracer-implement`**: approve a short approach and focused checks, implement in one context, then review once. Repair accepted defects in one pass and recheck corrections only if code changed. Report evidence and concerns, leaving the branch in place.
    - **`/tracer-autopilot`**: the same proportionate delivery without routine approval checkpoints, followed by your explicit branch-finishing choice. Custom infrastructure or stronger guarantees still require a decision. Review/repair limits survive resumes; unresolved material work is Blocked.
 

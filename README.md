@@ -40,7 +40,7 @@ Use Rigor when the task is already concrete, such as `/rigor figure out why noti
 
 ### Tracer
 
-A user-invoked skill set for proportionate implementation. Small, settled requests go directly to `/tracer-implement`: a short approved plan, one implementation context, focused checks, and one review. Repairs get a correction-only recheck when needed. `/tracer-autopilot` continues through an explicit branch-finishing choice. Use interviews, specs, and tickets when their added structure helps; `/tracer-wayfinder` maps huge, foggy efforts across sessions. See the [Tracer README](skills/tracer/README.md) for the full flow and skill list.
+A skill set for proportionate implementation. [`/tracer-build`](skills/tracer/tracer-build/SKILL.md) handles concrete requests: quick plan, implement in the current workspace with minimal delegation, then Convince Me evidence and a review recommendation. `/tracer-implement` adds plan approval and one review cycle; `/tracer-autopilot` continues through an explicit branch-finishing choice. Use interviews, specs, and tickets when their added structure helps; `/tracer-wayfinder` maps huge, foggy efforts across sessions. See the [Tracer README](skills/tracer/README.md) for the full flow and skill list.
 
 ### DSA Codebase Audit
 

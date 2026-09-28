@@ -6,14 +6,14 @@ I've been using SuperPowers for a while, but I started to find them a bit overbe
 
 > [!IMPORTANT] I cannot state this enough. These skills are 99% built on the hard work of Matt and the SuperPowers team. At this point, I would highly recommend you start there and circle back only if you want to experiment with a more customized workflow.
 
-A lean, user-invoked skill set for spec-driven development. Forked from two parents:
+A lean skill set for spec-driven development. Forked from two parents:
 
 - **[Matt Pocock's skills](https://github.com/mattpocock/skills)** — the shape and philosophy: lightweight, user-invoked only (nothing auto-triggers), seams-first testing, durable prose specs/tickets, the two-axis review.
 - **[superpowers](https://github.com/obra/superpowers)**: the original execution machinery. Tracer retains coherent commits, worktree isolation, and evidence before claims, but now defaults to short plans, one implementation context, focused checks, and one review.
 
-Entry-point workflows never auto-invoke. Supporting and vocabulary skills may load inside a flow you started. Invocation policy is declared in `SKILL.md` frontmatter (Claude Code) and `agents/openai.yaml` (Codex):
+Entry-point workflows require explicit invocation. Supporting and vocabulary skills may load inside a flow you started. Invocation policy is declared in `SKILL.md` frontmatter (Claude Code) and `agents/openai.yaml` (Codex):
 
-- **User-only** (13 skills) — every entry-point workflow, including [`tracer-wayfinder`](tracer-wayfinder/SKILL.md): only you can start it.
+- **User-only** (14 skills) — every entry-point workflow, including [`tracer-build`](tracer-build/SKILL.md) and [`tracer-wayfinder`](tracer-wayfinder/SKILL.md): only you can start them.
 - **Supporting** ([`tracer-tdd`](tracer-tdd/SKILL.md), [`tracer-code-review`](tracer-code-review/SKILL.md), [`tracer-research`](tracer-research/SKILL.md)) — model-invocable references and delegated workflows used beneath a flow you started.
 - **Vocabulary** ([`tracer-domain-modeling`](tracer-domain-modeling/SKILL.md), [`tracer-codebase-design`](tracer-codebase-design/SKILL.md)) — model-invoked references that define language and never run a process.
 
@@ -21,7 +21,7 @@ Not sure which skill fits? **[`/tracer-wat`](tracer-wat/SKILL.md)** is the route
 
 ## The main flow: idea → ship
 
-Start at the lightest useful step. A small, settled request can go directly to `/tracer-implement`; interview, spec, and ticketing are optional structure, not prerequisites for every change.
+Start at the lightest useful step. A concrete request can go directly to [`/tracer-build`](tracer-build/SKILL.md): quick plan, implement here with minimal delegation, then Convince Me evidence and a review recommendation. It calls out `main`/`master` and continues in place. Use `/tracer-implement` when you want plan approval and a review cycle; interview, spec, and ticketing are optional structure.
 
 ```
 ordinary idea      → /tracer-interview-me ─┐
@@ -51,6 +51,7 @@ For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinde
 | [`tracer-interview-me`](tracer-interview-me/SKILL.md) | Frontier-driven interview until shared understanding — docs-aware in a repo, stateless without |
 | [`tracer-to-spec`](tracer-to-spec/SKILL.md) | Conversation → durable spec with pre-agreed test seams |
 | [`tracer-to-tickets`](tracer-to-tickets/SKILL.md) | Spec → tracer-bullet tickets with blocking edges |
+| [`tracer-build`](tracer-build/SKILL.md) | Request → quick plan → implement here → Convince Me → review recommendation |
 | [`tracer-implement`](tracer-implement/SKILL.md) | Request → short approved plan → implement → one review → repair/recheck if needed → report |
 | [`tracer-autopilot`](tracer-autopilot/SKILL.md) | Proportionate delivery without routine checkpoints → explicit branch decision |
 | [`tracer-code-review`](tracer-code-review/SKILL.md) | Two-axis review (Standards + Spec), severity-graded, with a fix → re-review loop |
@@ -68,7 +69,7 @@ For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinde
 ## Conventions
 
 - **Delegation:** Tracer owns workflow stages and review budgets. A delegated pass satisfies one named Tracer step; the runtime supplies execution and isolation rather than additional stages. Helpers return findings to the controller within that budget.
-- **Shared procedures:** Implement and Autopilot share worker/reviewer prompts. Autopilot uses Finish Branch's [finishing procedure](tracer-finish-branch/branch-finishing.md), carrying forward the agreed evidence scope. Convince Me's [proof protocol](tracer-convince-me/proof-protocol.md) is for explicitly requested deeper proof, not an automatic delivery phase.
+- **Shared procedures:** Implement and Autopilot share worker/reviewer prompts. Autopilot uses Finish Branch's [finishing procedure](tracer-finish-branch/branch-finishing.md), carrying forward the agreed evidence scope. Build always runs Convince Me's [proof protocol](tracer-convince-me/proof-protocol.md); other workflows use it only when explicitly requested.
 - **`.tracer/`** (git-ignored) holds everything ephemeral: local specs and tickets (`.tracer/<feature>/`), and `/tracer-implement`'s workspace (`.tracer/implement/` — task plan, briefs, reports, review packages, progress ledger).
 - **Durable vs. ephemeral:** specs and tickets preserve acceptance and explicit decisions. Short ephemeral plans name affected paths and checks; code is written during implementation rather than duplicated in the plan.
 - **Evidence before claims:** report only observed results. Reuse recorded evidence on resume only after verifying the same unchanged HEAD and tracked tree; rerun affected checks after changes.
