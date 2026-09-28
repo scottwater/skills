@@ -18,8 +18,9 @@ shared contract; keep unrelated cleanup outside this pass.
 
 Preserve explicit decisions and accepted invariants. If a fix conflicts with
 one or requires additional custom infrastructure or a stronger safety guarantee,
-record the conflict and smallest decision needed instead of expanding scope.
-Complete only repairs that can safely coexist.
+report the conflict to the controller with its practical impact, recommended
+next action and trade-off, and exact decision or input needed to unblock it.
+Complete only repairs that can safely coexist within the agreed scope.
 
 Run the agreed focused checks and commit coherent corrections using repository
 conventions. Report every accepted finding ID: resolved change and before/after

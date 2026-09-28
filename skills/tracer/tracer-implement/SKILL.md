@@ -16,6 +16,20 @@ Before introducing custom parsing, a generic process runner, a permission evalua
 
 Default to one implementation context for a cohesive change, normally the controller itself. Multiple files or commits do not require multiple agents. Delegate only a named investigation or separable implementation unit whose benefit exceeds the handoff cost. Reuse its context for follow-up work. Helpers return results without spawning more agents.
 
+## Decision questions
+
+Whenever this workflow needs a user decision, make the choice answerable from the message itself:
+
+1. **Issue and impact:** explain what happened, which required behavior is affected, and what remains blocked or unverified. Use plain language; distinguish observed evidence from uncertainty. Include only the technical detail needed to judge the choice.
+2. **Recommendation:** say “I recommend [specific next action] because [reason].” State its scope and material trade-off, including any change to acceptance, safety limits, or the review/repair budget. Recommend investigating a named unknown when evidence is insufficient to choose a fix.
+3. **Question:** end with one direct question naming the proposed action: “Should I [specific action]?” For a real trade-off, offer concise, mutually exclusive choices with the recommendation first and each choice's consequence. Ask for the smallest decision that unblocks work; avoid “How should I proceed?” or an unexplained list of options.
+
+Explain why input is needed: a missing requirement, a conflict with an explicit decision, or the specific authorization boundary. Honor existing answers and authorization; resolve ordinary reversible implementation details yourself. Complete useful independent work while waiting, and resume dependent work only after the answer. A question left unanswered is still pending.
+
+Example at the repair limit: “The repair is complete, but the duplicate-submit check still fails: a retry can create two orders. I recommend one additional repair pass limited to preventing duplicate orders, followed by the focused retry check. This exceeds the agreed one-pass repair budget. Should I make that additional repair and run the retry check?”
+
+Non-blocking concerns need a clear impact and disposition; ask only if a user choice is actually needed. A successful completion with no pending decision needs no follow-up question.
+
 ## 1. Workspace and evidence plan
 
 1. Inspect the branch and working tree. Stay on an existing feature branch. On `main` or `master`, follow `/tracer-worktrees`; ask about detached HEAD or ambiguous ownership. Preserve unrelated changes.
@@ -50,7 +64,7 @@ Write `.tracer/implement/plan.md`, normally a few bullets per coherent behavior:
 
 One task is valid. Group tasks by coherent behavior, not framework layers. Write code during implementation rather than prewriting tests and implementation in the plan. Resolve acceptance-changing ambiguities; ordinary reversible details remain implementation choices.
 
-Show the goal, approach, task order, delegation if any, and checks. Call out custom infrastructure and safety/recovery guarantees explicitly: task names alone are not architectural approval. Explain that there is one review, at most one consolidated repair, and a correction-only recheck if repairs occur. Wait for approval and record it.
+Show the goal, approach, task order, delegation if any, and checks. Call out custom infrastructure and safety/recovery guarantees explicitly: task names alone are not architectural approval. Explain that there is one review, at most one consolidated repair, and a correction-only recheck if repairs occur. Use the Decision questions format to recommend the approach and explicitly ask to implement it with the stated checks. Wait for approval and record it.
 
 **Complete when:** the user has approved the actual approach and verification scope, not merely a task count.
 
@@ -89,4 +103,6 @@ Report goal, commits, review result (and recheck or skipped status), corrections
 - **Implemented with concerns:** required behavior is verified; only non-blocking concerns remain.
 - **Needs attention:** a task, required check, actionable finding, or material scope decision remains blocked or unverified.
 
-Save the outcome in the ledger and end. No additional audit, proof workflow, or branch finishing is implied.
+For **Needs attention**, lead with the unresolved issue and its practical impact, distinguish completed work from missing evidence, and close with the recommendation and explicit question from Decision questions. Summarize the decision in the reply itself; a status label or report path is insufficient. If work depends on user-provided access or information, request the exact missing input and explain what it enables. Reaching the review/repair limit is a reason to ask for a bounded next step, not permission to start it.
+
+Save the outcome and any pending decision in the ledger and end. No additional audit, proof workflow, or branch finishing is implied.

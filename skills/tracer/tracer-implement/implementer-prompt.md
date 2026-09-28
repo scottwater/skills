@@ -29,8 +29,9 @@ scope; identify a concrete reason before proposing broader checks.
 Self-check changed behavior, meaningful assertions, and scope once. Correct
 material defects; report optional polish/hardening without implementing it.
 Commit coherent changes using repository conventions. Do not spawn agents or
-start a review workflow. Escalate a blocker with what you tried and the smallest
-missing decision instead of repeatedly searching or retrying.
+start a review workflow. Escalate a blocker to the controller with what you
+tried, the affected requirement and practical impact, the recommended next
+action and trade-off, and the exact decision or input needed to unblock it.
 
 Write [REPORT_FILE]: behavior and files changed, any approach simplification,
 checks and observed results (including red/green evidence where applicable),
