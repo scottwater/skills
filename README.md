@@ -48,25 +48,9 @@ A skill set for proportionate implementation. [`/tracer-build`](skills/tracer/tr
 
 Adapted from the **DSA Codebase Audit** prompt shared by [Aaron Francis](https://x.com/aarondfrancis/status/2088285625946370352?s=20).
 
-### GPT Image Prompts
-
-`gpt-image-prompts`: Turn a visual idea into a production-ready prompt and API settings for OpenAI GPT Image models (`gpt-image-2`), with capability-specific patterns for photorealism, infographics, ads, logos, UI mockups, edits, and compositing.
-
 ### GitHub Social Preview
 
 `github-social`: Generate a 1280x640 GitHub repository social preview (Open Graph) image and link it at the top of the README.
-
-### Rails Security
-
-`rails-security` is a multi-agent security review of Rails application code, built on the same quorum pattern as `code-quorum`: independent blind lens agents review the resolved scope, and their findings are merged, verified against source, and returned as one prioritized report. It reviews only what can be inspected and run in development. Server, cloud, container, and CI configuration are out of scope.
-
-| Mode | Lenses |
-| --- | --- |
-| `quick` | Access control and injection |
-| `default` | Access control, injection, and dependencies |
-| `full` | Default lenses plus AI/prompt injection |
-
-The AI lens joins any mode automatically when the scope contains LLM or agent code. Request a mode or specific lenses, such as `Run a quick rails-security review of this branch` or `Audit the app with the access-control and ai lenses`.
 
 ### Code Quorum
 
@@ -87,6 +71,10 @@ A requirements reviewer joins any mode when the review has testable requirements
 Use `/herdr-quorum review Review the current diff` or name another profile. The bundled `review` profile is advisory and issues no merge verdict. Add profiles under [skills/herdr-quorum/profiles](skills/herdr-quorum/profiles/); worker panes stay open for inspection and follow-up.
 
 The Python 3 launcher uses the documented CLI mappings without discovery, starts workers concurrently, and dispatches each as soon as it is ready. Failures are recorded without retries or substitutions. Reviewers work directly rather than spawning another review tier; the lead collects and checks reports as they arrive. Compatibility diagnosis is a separate, explicitly requested task.
+
+## Archive
+
+Retired skills live in [archive](archive/): `gpt-image-prompts`, `rails-security`, and `solo`. They are no longer maintained.
 
 ## Credits
 
