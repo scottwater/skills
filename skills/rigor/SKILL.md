@@ -1,81 +1,81 @@
 ---
 name: rigor
-description: Apply a focused, evidence-driven engineering workflow to one concrete task.
+description: Fix a bug, build a feature, refactor, or improve performance with a focused, evidence-driven workflow.
 disable-model-invocation: true
 ---
 
 # Rigor
 
-Take one concrete engineering task from request to evidence.
+Take one concrete code change from request to evidence.
 
-**Boundary.** Rigor starts with a concrete investigation, change, experiment, or review. Open-ended product discovery belongs to `/interview-me`; recommend that entry point and end Rigor when the decisions needed to define the task are still unknown.
+**Boundary.** Rigor changes code, or diagnoses a defect or slowdown on the way to changing it. Open product questions belong to `/interview-me`; recommend it and stop when the decisions that define the task are still unknown.
 
-## 1. Frame
+## 1. Frame and route
 
-Resolve four things from the request and repository context:
+Resolve from the request and repository:
 
-- **Outcome:** the answer, diagnosis, behavior, structural change, measurement, or verdict requested.
-- **Finish line:** the observable condition that completes this task, including diagnosis-only and read-only limits.
+- **Finish line:** the observable condition that ends the task. "Figure out what is wrong" stops at diagnosis; "fix it" continues through implementation and proof. The same split applies to performance diagnosis versus optimization.
 - **Scope:** the affected system and the smallest plausible problem boundary.
-- **Safety:** external effects, irreversible actions, material cost, sensitive data, production access, or unresolved product decisions.
+- **Risk:** security, permissions, money, data loss, migrations, concurrency, external compatibility, production access, or a one-way architectural choice.
 
-**Complete when:** the finish line and authority boundary select one workflow without inventing product intent.
-
-## 2. Scale
-
-Choose the lightest level that protects the result. Every level preserves the finish line, safety boundary, and fresh-evidence requirement.
-
-- **Light:** local, reversible work following an established pattern. Work directly and run the focused proof. Planning, delegation, and independent review are optional.
-- **Standard:** work spanning files or boundaries, an uncertain mechanism, or a meaningful behavior change. State the verifiable unit order, inspect the completed diff against the request and existing contracts, and run focused plus repository-required checks.
-- **High-risk:** security, permissions, money, destructive operations, concurrency, migrations, external compatibility, or a one-way architectural choice. Meet Standard gates, obtain fresh independent review of the named risk, and prove behavior at the strongest practical runtime boundary. Load Authority in step 4, plus Safety when its trigger is present. An unavailable independent review or runtime proof remains an unmet gate, so report the task as incomplete.
-
-Adjacent playbook steps may collapse for Light work when every completion condition remains observable. Added ceremony must correspond to a named uncertainty, risk, or proof need.
-
-**Complete when:** one level is justified by observed risk and every additional gate has a named purpose.
-
-## 3. Route
-
-Load exactly one primary playbook:
+Then load exactly one playbook:
 
 | Request shape | Playbook |
 | --- | --- |
-| Explain behavior, compare approaches, assess a concern, or answer a read-only question | [Investigation](playbooks/investigation.md) |
 | Diagnose or fix incorrect behavior, a failing test, crash, or regression | [Bug fix](playbooks/bug-fix.md) |
 | Add or change product or system behavior | [Feature](playbooks/feature.md) |
 | Change structure while preserving behavior | [Refactoring](playbooks/refactoring.md) |
 | Diagnose or improve measured speed, memory, throughput, or resource use | [Performance](playbooks/performance.md) |
-| Settle an observable design or behavior question with throwaway code | [Prototype](playbooks/prototype.md) |
-| Review a diff, branch, commit, or named files without changing them | [Review](playbooks/review.md) |
 
-The requested finish line controls the route's stopping point. “Figure out what is wrong” selects Bug fix and stops after diagnosis; “fix it” continues through implementation and proof. The same distinction separates performance diagnosis from optimization.
+**Complete when:** the finish line is stated and one playbook matches both the work type and the authorized stopping point. When none fits, name the gap and stop.
 
-Long-running programs, release operations, and product discovery sit outside these playbooks. Name that routing gap rather than approximating one of those workflows.
+## 2. Execute
 
-**Complete when:** the chosen playbook matches both the work type and the authorized stopping point.
+Follow the playbook's steps under the principles below. Scale ceremony to risk: local, reversible work goes straight to the focused proof; every added plan, delegate, or check answers a named uncertainty.
 
-## 4. Load triggered references
+**Complete when:** the playbook's Done criterion is met and the worktree holds only intended changes.
 
-Read only the references whose trigger is present:
+## 3. Hand off
 
-- **Shape:** Feature or Refactoring work that changes state, interfaces, or system boundaries → [Shape the system](references/shape.md).
-- **Burden:** a refactor, abstraction, or expanding diff → [Reduce the burden](references/burden.md).
-- **Evidence:** Bug fix, Performance, Review, or delegation → [Work from evidence](references/evidence.md).
-- **Safety:** retries, migrations, concurrency, parallel writers, or a recurring failure → [Change safely](references/safety.md).
-- **Alternatives:** a consequential open design choice or Prototype → [Explore consequential alternatives](references/alternatives.md).
-- **Authority:** unresolved questions, external effects, high-risk work, parallelism, or subagents → [Autonomy and delegation](references/autonomy-and-delegation.md).
+Report the outcome, the evidence gathered now, and every gap or unverified claim. Then recommend `/convince-me` to build the full end-to-end case, and `/code-quorum` for an independent review when the task touched a named risk.
 
-**Complete when:** every triggered branch has been read and irrelevant branches remain unloaded.
+## Principles
 
-## 5. Execute
+### Evidence
 
-The selected playbook supplies the ordered steps. Hold these invariants throughout:
+- Keep observations, hypotheses, and unknowns distinct.
+- Fix root causes. Establish the symptom, form competing hypotheses, instrument uncertain state, and change the mechanism that produces the failure. A defensive guard is not a root-cause explanation.
+- Prove the real outcome at the strongest practical boundary. Compilation, summaries, and self-report are supporting evidence; inspect delegated artifacts directly.
+- Work in units small enough that a failed check identifies the responsible change.
+- Build a script, codemod, or reproducible command when scale or repetition justifies it; otherwise change directly.
 
-- **Scope:** inspect repository guidance and current work before mutation; preserve unrelated work.
-- **Evidence:** keep observations, hypotheses, and unknowns distinct.
-- **Restraint:** change only what the supported mechanism and finish line require.
-- **Proof:** verify at the strongest practical boundary; compilation and self-report are supporting evidence.
-- **Handoff:** report the outcome, evidence gathered now, and every material gap or unverified claim.
+### Shape
 
-The lead agent owns scope, decisions, synthesis, and final claims.
+For Feature and Refactoring work that changes state, interfaces, or boundaries:
 
-**Complete when:** the playbook's Done criterion is met, the final worktree contains no unintended changes, and every completion claim has fresh evidence or an explicit unverified status.
+- Name the data shape and its invariants before writing branching logic. Reach for a state machine, discriminated model, table, or registry when it removes scattered rules or invalid states; keep local code local.
+- Convert external input into trusted values where it enters.
+- Make illegal states hard to represent, exhaust known variants, and narrow or validate instead of casting.
+- When a requirement invalidates an existing assumption, design as though it had existed from the start. When an established extension point fits, use it.
+- For a consequential open design choice, compare two or three materially different designs against the same criteria.
+
+### Burden
+
+- Subtract first: within the problem boundary, remove dead paths, obsolete adapters, and redundant validation the change replaces.
+- Change only what the mechanism and finish line require. Leave adjacent cleanup outside the task.
+- A wrapper or abstraction earns its place by owning a real invariant, hiding meaningful complexity, or serving genuine callers.
+
+### Safety
+
+- Give state-mutating operations an explicit retry and partial-run contract.
+- Give parallel writers separate files, branches, or worktrees; serialize only around a real shared invariant.
+- For internal API changes, migrate every caller and remove the old path in the same effort unless a real external contract requires staging.
+- When a failure recurs, prefer a test, type, or lint that makes the fix structural.
+
+### Authority
+
+- Facts are your work: search, run safe commands, or build a cheap probe before asking. Test a technical fork instead of asking which behavior occurs.
+- Decisions on product direction, acceptable risk, spend, sensitive data, or external communication belong to the user. Batch them with a recommendation.
+- Inspect repository guidance and current work before mutating; preserve unrelated work.
+- Pause before deployments, releases, unauthorized merges, destructive data operations, force-pushes to shared history, production mutations, or messages to other people.
+- Delegate only when isolation, independence, or bulk reduction materially improves the result. Give each delegate its outcome, scope, write authority, verification criteria, expected report, and stop condition. You own scope, decisions, synthesis, and final claims.

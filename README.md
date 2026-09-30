@@ -34,7 +34,7 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 ### Rigor
 
-`rigor`: Apply one focused, evidence-driven engineering workflow to a concrete investigation, bug, feature, refactor, performance problem, prototype, or review. Rigor chooses the matching playbook, scales its gates to the risk, and verifies the requested outcome without starting a discovery interview.
+`rigor`: Fix a bug, build a feature, refactor, or improve performance with one focused, evidence-driven playbook. Rigor stops where you ask it to (diagnosis or fix), scales its ceremony to the risk, and hands off with a recommendation to run `/convince-me` for the full proof.
 
 Use Rigor when the task is already concrete, such as `/rigor figure out why notifications duplicate after a retry`. Use `/interview-me` instead when the product idea itself still needs to be discovered.
 

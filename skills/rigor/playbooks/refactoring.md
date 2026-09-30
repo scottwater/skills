@@ -4,8 +4,8 @@
    **Complete when:** “behavior preserved” is a checkable claim rather than an intention.
 2. **Name the structural problem and target.** Identify the reader load, duplicated rule, invalid state, misplaced ownership, or unnecessary coupling being removed. State the target module, interface, data shape, or call graph.
    **Complete when:** the refactor has a measurable structural benefit and introduces no new product behavior.
-3. **Burden.** Apply the loaded Burden rules inside the structural problem named in step 2. Leave adjacent cleanup outside the refactor.
-   **Complete when:** the target satisfies the Burden reference and every deletion remains inside the preservation boundary.
+3. **Burden.** Apply the Burden principles inside the structural problem named in step 2. Leave adjacent cleanup outside the refactor.
+   **Complete when:** the target satisfies the Burden principles and every deletion remains inside the preservation boundary.
 4. **Move in verifiable units.** Keep the preservation check green after each unit. For coordinated internal API changes, migrate callers and remove the legacy path in the same bounded effort unless a real compatibility contract requires staging.
    **Complete when:** each unit preserves the pinned contract and leaves no accidental parallel old-and-new path.
 5. **Prove equivalence.** Run the preservation harness and required repository checks. Inspect the diff for accidental behavior changes and speculative cleanup.

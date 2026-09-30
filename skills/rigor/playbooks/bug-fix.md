@@ -2,7 +2,7 @@
 
 1. **Establish the symptom.** Reproduce it on the reported surface when practical. Otherwise capture the strongest available failing artifact, trace, log, test, or state transition and name why direct reproduction is unavailable.
    **Complete when:** there is a stable observation that distinguishes broken from working behavior.
-2. **Root cause.** Apply the loaded Evidence rules while tracing the affected path. Use history when a regression boundary or old constraint matters.
+2. **Root cause.** Apply the Evidence principles while tracing the affected path. Use history when a regression boundary or old constraint matters.
    **Complete when:** one supported mechanism explains the observation and every credible alternative is eliminated or remains explicitly unresolved.
 3. **Stop for diagnosis-only work.** Report the symptom, confirmed or best-supported root cause, evidence, impact, and the smallest fix direction. Keep product code unchanged.
    **Complete when:** the diagnosis distinguishes confirmed evidence from remaining hypotheses and names what would settle every material gap.

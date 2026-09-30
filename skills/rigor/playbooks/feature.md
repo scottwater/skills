@@ -4,9 +4,9 @@
    **Complete when:** implementation can be judged without inventing intent.
 2. **Ground the system.** Trace the existing path, ownership, contracts, analogous behavior, and tests. Identify compatibility and lifecycle constraints.
    **Complete when:** the integration point and affected boundaries are supported by repository evidence.
-3. **Shape.** Apply the loaded Shape rules only to state, interfaces, and boundaries changed by the behavior. Keep local stateless behavior local.
-   **Complete when:** every changed shape satisfies the Shape reference and unchanged shapes remain outside the design.
-4. **Plan verifiable units.** Put blocking foundations first and order dependencies. Apply the loaded Safety ownership rules when work can proceed in parallel.
+3. **Shape.** Apply the Shape principles only to state, interfaces, and boundaries changed by the behavior. Keep local stateless behavior local.
+   **Complete when:** every changed shape satisfies the Shape principles and unchanged shapes remain outside the design.
+4. **Plan verifiable units.** Put blocking foundations first and order dependencies. Apply the Safety principles when work can proceed in parallel.
    **Complete when:** every unit ends in an observable check, dependencies are ordered, and every shared mutable target has either an isolated owner or an explicit serialization boundary.
 5. **Implement narrowly.** Build the smallest complete path through the requested behavior. Keep unrelated cleanup out; subtract obsolete paths that the new behavior directly replaces.
    **Complete when:** the implementation covers the promised path without unrelated changes or speculative extension points.

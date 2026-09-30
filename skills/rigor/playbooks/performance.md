@@ -2,7 +2,7 @@
 
 1. **Fix the workload.** Reproduce the complaint with realistic inputs, state, concurrency, and environment. Select the metric, direction of improvement, correctness gate, and noise-handling method before changing code.
    **Complete when:** a repeatable baseline command or capture distinguishes the target problem from normal behavior.
-2. **Mechanism.** Apply the loaded Evidence rules while tracing or profiling the running path. Test whether the measured work can be eliminated before optimizing it.
+2. **Mechanism.** Apply the Evidence principles while tracing or profiling the running path. Test whether the measured work can be eliminated before optimizing it.
    **Complete when:** measured evidence identifies the work dominating the target metric, or the capture's inability to isolate it is explicit.
 3. **Stop for diagnosis-only work.** Report the workload, baseline, measured mechanism, source attribution, confidence, and the smallest improvement direction. Keep product code unchanged.
    **Complete when:** the diagnosis separates measurement from inference and names what would resolve every material uncertainty.
