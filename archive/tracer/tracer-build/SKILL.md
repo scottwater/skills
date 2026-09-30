@@ -22,7 +22,7 @@ Use focused checks while developing and add regression coverage where it fits. B
 
 ## 3. Convince me
 
-Read and execute Convince Me's [completion evidence protocol](../tracer-convince-me/proof-protocol.md) in the current context against the original request and final changes. Every stated goal needs fresh evidence and a verdict: proven, disproven, or unverified.
+Read and execute Convince Me's [completion evidence protocol](../../../skills/convince-me/SKILL.md) in the current context against the original request and final changes. Every stated goal needs fresh evidence and a verdict: proven, disproven, or unverified.
 
 If proof exposes an in-scope defect, return to implementation, fix it, then rerun affected proof. If progress needs unavailable access, an environment, or a scope decision, report the blocker and affected goals. Never label disproven or unverified goals complete.
 

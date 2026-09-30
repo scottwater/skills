@@ -34,13 +34,17 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 ### Rigor
 
-`rigor`: Apply one focused, evidence-driven engineering workflow to a concrete investigation, bug, feature, refactor, performance problem, prototype, or review. Rigor chooses the matching playbook, scales its gates to the risk, and verifies the requested outcome without starting Tracer's interview, spec, or ticket flow.
+`rigor`: Apply one focused, evidence-driven engineering workflow to a concrete investigation, bug, feature, refactor, performance problem, prototype, or review. Rigor chooses the matching playbook, scales its gates to the risk, and verifies the requested outcome without starting a discovery interview.
 
-Use Rigor when the task is already concrete, such as `/rigor figure out why notifications duplicate after a retry`. Use `/tracer-interview-me` instead when the product idea itself still needs to be discovered.
+Use Rigor when the task is already concrete, such as `/rigor figure out why notifications duplicate after a retry`. Use `/interview-me` instead when the product idea itself still needs to be discovered.
 
-### Tracer
+### Interview Me
 
-A skill set for proportionate implementation. [`/tracer-build`](skills/tracer/tracer-build/SKILL.md) handles concrete requests: quick plan, implement in the current workspace with minimal delegation, then Convince Me evidence and a review recommendation. `/tracer-implement` adds plan approval and one review cycle; `/tracer-autopilot` continues through an explicit branch-finishing choice. Use interviews, specs, and tickets when their added structure helps; `/tracer-wayfinder` maps huge, foggy efforts across sessions. See the [Tracer README](skills/tracer/README.md) for the full flow and skill list.
+`interview-me`: Interview relentlessly, round by round, until you and the agent share an understanding. Each round asks every question that can be answered now, each with a recommended answer; the agent looks up facts itself and leaves decisions to you. It writes nothing.
+
+### Convince Me
+
+`convince-me`: Build the strongest honest, end-to-end case that completed work meets its original goal. Each claim is reported as proven, disproven, or unverified, and failures are returned without repairs.
 
 ### DSA Codebase Audit
 
@@ -74,7 +78,7 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 ## Archive
 
-Retired skills live in [archive](archive/): `gpt-image-prompts`, `rails-security`, and `solo`. They are no longer maintained.
+Retired skills live in [archive](archive/): `gpt-image-prompts`, `rails-security`, `solo`, and the [Tracer](archive/tracer/README.md) skill set. They are no longer maintained.
 
 ## Credits
 

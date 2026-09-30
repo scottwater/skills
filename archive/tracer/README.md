@@ -13,7 +13,7 @@ A lean skill set for spec-driven development. Forked from two parents:
 
 Entry-point workflows require explicit invocation. Supporting and vocabulary skills may load inside a flow you started. Invocation policy is declared in `SKILL.md` frontmatter (Claude Code) and `agents/openai.yaml` (Codex):
 
-- **User-only** (14 skills) — every entry-point workflow, including [`tracer-build`](tracer-build/SKILL.md) and [`tracer-wayfinder`](tracer-wayfinder/SKILL.md): only you can start them.
+- **User-only** (12 skills) — every entry-point workflow, including [`tracer-build`](tracer-build/SKILL.md) and [`tracer-wayfinder`](tracer-wayfinder/SKILL.md): only you can start them.
 - **Supporting** ([`tracer-tdd`](tracer-tdd/SKILL.md), [`tracer-code-review`](tracer-code-review/SKILL.md), [`tracer-research`](tracer-research/SKILL.md)) — model-invocable references and delegated workflows used beneath a flow you started.
 - **Vocabulary** ([`tracer-domain-modeling`](tracer-domain-modeling/SKILL.md), [`tracer-codebase-design`](tracer-codebase-design/SKILL.md)) — model-invoked references that define language and never run a process.
 
@@ -24,7 +24,7 @@ Not sure which skill fits? **[`/tracer-wat`](tracer-wat/SKILL.md)** is the route
 Start at the lightest useful step. A concrete request can go directly to [`/tracer-build`](tracer-build/SKILL.md): quick plan, implement here with minimal delegation, then Convince Me evidence and a review recommendation. It calls out `main`/`master` and continues in place. Use `/tracer-implement` when you want plan approval and a review cycle; interview, spec, and ticketing are optional structure.
 
 ```
-ordinary idea      → /tracer-interview-me ─┐
+ordinary idea      → /interview-me ─┐
 huge, foggy effort → /tracer-wayfinder ────┴→ /tracer-to-spec → /tracer-to-tickets → /tracer-implement (per ticket)
                                                                                               └→ optional review → /tracer-finish-branch
 
@@ -32,7 +32,7 @@ End-to-end alternative: replace `/tracer-implement` plus the explicit review/fin
 ```
 
 0. **[`/tracer-wayfinder`](tracer-wayfinder/SKILL.md)** — the situational on-ramp for an effort too large _and too foggy_ for one session. It charts a shared issue-tracker map of decision tickets, resolves one per session, and hands the cleared map to `/tracer-to-spec`. Skip it when the decision tree fits in one interview.
-1. **[`/tracer-interview-me`](tracer-interview-me/SKILL.md)** — the normal entry point. A relentless interview structured as a design tree: each round asks the entire frontier of answerable questions at once, with recommended answers. Facts get looked up by sub-agents; decisions go to you. Docs-aware in a codebase (existing `CONTEXT.md`/ADRs prune the tree; settled terms and decisions get written back), stateless without one. Done when the frontier is empty and nothing is silently assumed.
+1. **[`/interview-me`](../../skills/interview-me/SKILL.md)** — the normal entry point. A relentless interview structured as a design tree: each round asks the entire frontier of answerable questions at once, with recommended answers. Facts get looked up by sub-agents; decisions go to you. It reads and writes no docs. Done when the frontier is empty and nothing is silently assumed.
 2. **[`/tracer-to-spec`](tracer-to-spec/SKILL.md)**: write concise acceptance criteria, explicit decisions, safety limits, and focused verification from the settled thread or cleared map. No exhaustive story list or new architecture disguised as requirements.
 3. **[`/tracer-to-tickets`](tracer-to-tickets/SKILL.md)** — split the spec into tracer-bullet vertical slices, each declaring its blocking edges. Skip for single-session work and go straight to `/tracer-implement`.
 4. **[`/tracer-implement`](tracer-implement/SKILL.md)**: approve a short approach and verification plan, then implement the cohesive change in one context. Reuse existing facilities; new custom infrastructure needs an explicit decision. Review once, repair accepted defects in one pass, and recheck corrections only if code changed. Report focused evidence and concerns, leaving the branch in place. Full-suite runs need policy, a user request, or an impact-based reason.
@@ -48,14 +48,14 @@ For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinde
 | --- | --- |
 | [`tracer-wat`](tracer-wat/SKILL.md) | The router — which skill or flow fits your situation |
 | [`tracer-wayfinder`](tracer-wayfinder/SKILL.md) | Huge, foggy effort → shared map of decision tickets → cleared route to a spec |
-| [`tracer-interview-me`](tracer-interview-me/SKILL.md) | Frontier-driven interview until shared understanding — docs-aware in a repo, stateless without |
+| [`interview-me`](../../skills/interview-me/SKILL.md) | Frontier-driven interview until shared understanding (standalone skill, shared with Tracer) |
 | [`tracer-to-spec`](tracer-to-spec/SKILL.md) | Conversation → durable spec with pre-agreed test seams |
 | [`tracer-to-tickets`](tracer-to-tickets/SKILL.md) | Spec → tracer-bullet tickets with blocking edges |
 | [`tracer-build`](tracer-build/SKILL.md) | Request → quick plan → implement here → Convince Me → review recommendation |
 | [`tracer-implement`](tracer-implement/SKILL.md) | Request → short approved plan → implement → one review → repair/recheck if needed → report |
 | [`tracer-autopilot`](tracer-autopilot/SKILL.md) | Proportionate delivery without routine checkpoints → explicit branch decision |
 | [`tracer-code-review`](tracer-code-review/SKILL.md) | Two-axis review (Standards + Spec), severity-graded, with a fix → re-review loop |
-| [`tracer-convince-me`](tracer-convince-me/SKILL.md) | Completed work → observable claims → fresh end-to-end evidence → honest verdict |
+| [`convince-me`](../../skills/convince-me/SKILL.md) | Completed work → observable claims → fresh end-to-end evidence → honest verdict (standalone skill, shared with Tracer) |
 | [`tracer-tdd`](tracer-tdd/SKILL.md) | The red → green reference: good tests, seams, anti-patterns |
 | [`tracer-worktrees`](tracer-worktrees/SKILL.md) | Isolated checkout per parallel ticket |
 | [`tracer-setup`](tracer-setup/SKILL.md) | Once per repo: configure the issue tracker and domain-doc layout |
@@ -69,7 +69,7 @@ For the ordinary path, keep steps 1–3 in one unbroken context window. Wayfinde
 ## Conventions
 
 - **Delegation:** Tracer owns workflow stages and review budgets. A delegated pass satisfies one named Tracer step; the runtime supplies execution and isolation rather than additional stages. Helpers return findings to the controller within that budget.
-- **Shared procedures:** Implement and Autopilot share worker/reviewer prompts. Autopilot uses Finish Branch's [finishing procedure](tracer-finish-branch/branch-finishing.md), carrying forward the agreed evidence scope. Build always runs Convince Me's [proof protocol](tracer-convince-me/proof-protocol.md); other workflows use it only when explicitly requested.
+- **Shared procedures:** Implement and Autopilot share worker/reviewer prompts. Autopilot uses Finish Branch's [finishing procedure](tracer-finish-branch/branch-finishing.md), carrying forward the agreed evidence scope. Build always runs Convince Me's [proof protocol](../../skills/convince-me/SKILL.md); other workflows use it only when explicitly requested.
 - **`.tracer/`** (git-ignored) holds everything ephemeral: local specs and tickets (`.tracer/<feature>/`), and `/tracer-implement`'s workspace (`.tracer/implement/` — task plan, briefs, reports, review packages, progress ledger).
 - **Durable vs. ephemeral:** specs and tickets preserve acceptance and explicit decisions. Short ephemeral plans name affected paths and checks; code is written during implementation rather than duplicated in the plan.
 - **Evidence before claims:** report only observed results. Reuse recorded evidence on resume only after verifying the same unchanged HEAD and tracked tree; rerun affected checks after changes.

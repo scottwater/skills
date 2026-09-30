@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Use this for a loose idea that is too large for one agent session and whose route is still unclear. Wayfinding names the **destination**, charts a **map** on the repo's issue tracker, and works its **decision tickets** — questions whose resolution is a decision, not slices of a build to execute — until the route is clear.
 
-This is a situational on-ramp to the tracer flow, not its default entry. A feature whose decisions fit in one session belongs in `/tracer-interview-me` instead.
+This is a situational on-ramp to the tracer flow, not its default entry. A feature whose decisions fit in one session belongs in `/interview-me` instead.
 
 ## Plan, don't do
 
@@ -76,7 +76,7 @@ Every ticket is either **HITL** — worked live with the human, who speaks for t
 
 - **Research** (AFK): answer a question that needs a source-backed note rather than a simple repository lookup. Run one background worker with `/tracer-research`; the worker researches directly and returns one cited note. Link that note from the ticket.
 - **Prototype** (HITL): create a cheap, rough artifact to react to when the question is how something should look or behave. Use a fresh `/tracer-prototype` session, bridged with `/tracer-handoff`, and link the throwaway branch or commit from the ticket. The answer is the decision the prototype exposed, not production code.
-- **Interview** (HITL): the default. Use `/tracer-interview-me`'s discipline, scoped to this one ticket: ask each round's whole answerable frontier with recommended answers, delegate factual lookups, and leave decisions to the human. Do not follow that skill's normal `/tracer-to-spec` handoff while this ticket remains part of a map. Apply `/tracer-domain-modeling` as terms and durable decisions settle.
+- **Interview** (HITL): the default. Use `/interview-me`'s discipline, scoped to this one ticket: ask each round's whole answerable frontier with recommended answers, delegate factual lookups, and leave decisions to the human. Do not move to `/tracer-to-spec` while this ticket remains part of a map. Apply `/tracer-domain-modeling` as terms and durable decisions settle.
 - **Task** (HITL or AFK): manual work required before a decision can be made — provisioning access, signing up for a service, or moving sample data so its shape can be inspected. It earns its place only by unblocking a decision, not by delivering the destination. Resolve it with what was done and the resulting facts later tickets need.
 
 ## Fog of war
@@ -111,7 +111,7 @@ If a worker disappears, its ticket stays claimed. The coordinator may release or
 The user invokes `/tracer-wayfinder` with a loose idea.
 
 1. **Name the destination.** Run a destination-scoped interview using tracer's frontier-round discipline and `/tracer-domain-modeling`: settle what this map is finding its way to before creating tickets. The destination fixes scope.
-2. **Map breadth-first.** Continue across the whole space rather than diving down one thread. Surface precise decisions that can be ticketed now, their blocking relationships, and coarse fog beyond them. Unlike a normal `/tracer-interview-me`, stop at the ticketable questions — do not resolve the whole tree in this session. If no fog appears and the route already fits one session, stop before creating a map and ask whether to continue with `/tracer-interview-me` instead.
+2. **Map breadth-first.** Continue across the whole space rather than diving down one thread. Surface precise decisions that can be ticketed now, their blocking relationships, and coarse fog beyond them. Unlike a normal `/interview-me`, stop at the ticketable questions — do not resolve the whole tree in this session. If no fog appears and the route already fits one session, stop before creating a map and ask whether to continue with `/interview-me` instead.
 3. **Create the map.** Fill Destination and Notes, leave Decisions-so-far empty, and sketch the remaining fog under Not yet specified.
 4. **Create then wire.** Create every decision ticket whose question is precise now as a child of the map. In a second pass, add blocking edges after all tickets have identities. Leave everything still imprecise in Not yet specified.
 5. **Dispatch frontier research.** Query the new frontier and claim each unblocked research ticket before dispatch. Launch one worker per ticket with `/tracer-research`, passing the low-resolution map, full Question, and capture branch explicitly; use isolated worktrees for persisted branch artifacts. Each worker researches directly, writes one cited note on a unique `research/<map-slug>/<ticket-slug>` branch, and returns its answer, context pointer, and `## Map delta` without editing the map. Never run concurrent branch checkouts in one worktree. If background workers or isolation are unavailable, leave the tickets open for fresh AFK sessions.

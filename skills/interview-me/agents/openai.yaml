@@ -1,5 +1,5 @@
 interface:
-  display_name: "Tracer Interview Me"
+  display_name: "Interview Me"
   short_description: "Frontier-round interview to shared understanding"
 policy:
   allow_implicit_invocation: false

@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 This skill produces a spec (you may know this document as a PRD) from one of two settled inputs:
 
-- the current conversation after `/tracer-interview-me`, normally in the same context window; or
+- the current conversation after `/interview-me`, normally in the same context window; or
 - a cleared `/tracer-wayfinder` map passed as a URL, issue number, or local path.
 
 Do NOT restart the interview. The decisions have already been made; synthesize them without silently adding new ones.

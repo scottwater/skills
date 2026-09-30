@@ -12,7 +12,7 @@ Start at the lightest step that fits. A concrete request can go directly to `/tr
 
 ## The main flow: idea → ship
 
-1. **`/tracer-interview-me`** — start here. A relentless interview worked as a design tree: each round asks the **entire frontier** of currently answerable questions at once, numbered, each with a recommended answer. Facts get looked up by sub-agents; decisions are yours. In a codebase it's docs-aware — existing `CONTEXT.md`/ADRs prune the tree before round 1, and settled terms/decisions get written back; with no codebase it runs stateless. If a frontier question needs a *runnable* answer (does this state model feel right, what should this UI look like), detour through **`/tracer-prototype`** — throwaway code that answers the question; keep the answer, delete the code. Done when the frontier is empty and nothing is silently assumed — then it hands off to `/tracer-to-spec`.
+1. **`/interview-me`** — start here. A relentless interview worked as a design tree: each round asks the **entire frontier** of currently answerable questions at once, numbered, each with a recommended answer. Facts get looked up by sub-agents; decisions are yours. It reads and writes no docs; the shared understanding lives in the conversation. If a frontier question needs a *runnable* answer (does this state model feel right, what should this UI look like), detour through **`/tracer-prototype`** — throwaway code that answers the question; keep the answer, delete the code. Done when the frontier is empty and nothing is silently assumed — then run `/tracer-to-spec` in the same context window.
 
 2. **`/tracer-to-spec`**: synthesize settled decisions into concise acceptance criteria, safety limits, and focused verification. Preserve explicit decisions without turning implementation suggestions into requirements. Skip the spec for a small request that is already clear.
 
@@ -31,7 +31,7 @@ Keep steps 1–3 in **one unbroken context window** — don't compact or clear u
 
 Use **`/tracer-wayfinder`** only when the effort is too large for one agent session *and* the route is still unclear — a greenfield project or huge feature where you cannot yet hold every decision needed for a spec. It charts a shared map of **decision tickets**, works one decision per session, and pushes a fog-of-war frontier toward a named destination.
 
-Where `/tracer-interview-me` resolves an idea whose decision tree fits one session, Wayfinder persists a larger tree across sessions. It is slower and more operationally heavy, so do not use it for a well-scoped feature merely because the eventual build will take several sessions.
+Where `/interview-me` resolves an idea whose decision tree fits one session, Wayfinder persists a larger tree across sessions. It is slower and more operationally heavy, so do not use it for a well-scoped feature merely because the eventual build will take several sessions.
 
 When the map clears, it produces decisions rather than deliverables. Hand the map to **`/tracer-to-spec`**, which loads every linked resolution and collapses them into a buildable spec; then continue through `/tracer-to-tickets` and `/tracer-implement`. Do not jump from a multi-session map directly to implementation. Go straight to `/tracer-implement` only if charting proved the effort genuinely fits one session and no map was needed.
 
@@ -45,7 +45,7 @@ Frontier tickets (all blockers done) with no edges between them can run **simult
 ## Standalone
 
 - **`/tracer-code-review`** — two-axis review (Standards + Spec) of any diff against a fixed point, severity-graded with a verdict per axis. Choose it for an independent review; Autopilot uses its own bounded reviewers. Workflow callers own any repair budget.
-- **`/tracer-convince-me`** — prove completed work against its original goal. It turns every expectation into an observable claim, gathers fresh evidence at the strongest practical boundary, and reports what is proven, disproven, or still unverified. Use it when you explicitly want deeper proof than the delivery's focused checks. It is not an automatic Autopilot step. Proof reports failures; it does not authorize repairs.
+- **`/convince-me`** — prove completed work against its original goal. It turns every expectation into an observable claim, gathers fresh evidence at the strongest practical boundary, and reports what is proven, disproven, or still unverified. Use it when you explicitly want deeper proof than the delivery's focused checks. It is not an automatic Autopilot step. Proof reports failures; it does not authorize repairs.
 - **`/tracer-tdd`** — the red → green reference: what a good test is, seams, anti-patterns, rules of the loop. `/tracer-implement` drives it internally; use it alone to build one behaviour test-first without a full spec.
 - **`/tracer-worktrees`** / **`/tracer-finish-branch`** — bookends for any isolated branch work, even outside the main flow.
 - **`/tracer-prototype`** — a small, throwaway program that answers one design question. The detour in step 1, but reach for it any time a design question is hard to settle on paper.
@@ -55,7 +55,7 @@ Frontier tickets (all blockers done) with no edges between them can run **simult
 
 Two model-invoked references that run *beneath* the other skills — each the single source of truth for its vocabulary. They define language, never run a process; reach for them directly when the **words** are the problem, or let the skills above pull them in.
 
-- **`/tracer-domain-modeling`** — the *domain* language: challenge a fuzzy term, resolve an overloaded word, record a hard-to-reverse decision as an ADR. Owns the `CONTEXT.md` and ADR formats that `/tracer-interview-me`'s docs-aware mode writes with.
+- **`/tracer-domain-modeling`** — the *domain* language: challenge a fuzzy term, resolve an overloaded word, record a hard-to-reverse decision as an ADR. Owns the `CONTEXT.md` and ADR formats.
 - **`/tracer-codebase-design`** — the deep-module vocabulary (module, interface, depth, seam, adapter, leverage, locality) for designing a module's *shape*. `/tracer-to-spec`'s seam step, `/tracer-tdd`, and `/tracer-implement`'s Interfaces blocks all speak it.
 
 ## Crossing sessions
@@ -69,4 +69,4 @@ Two model-invoked references that run *beneath* the other skills — each the si
 
 ## What's deliberately not here
 
-No triage on-ramp and no separate brainstorming primitive — `/tracer-interview-me` owns single-session discovery, while `/tracer-wayfinder` owns only the multi-session foggy case. Heavyweight multi-reviewer packs (e.g. `/code-quorum`) compose at milestone boundaries, not per task.
+No triage on-ramp and no separate brainstorming primitive — `/interview-me` owns single-session discovery, while `/tracer-wayfinder` owns only the multi-session foggy case. Heavyweight multi-reviewer packs (e.g. `/code-quorum`) compose at milestone boundaries, not per task.

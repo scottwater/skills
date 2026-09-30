@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Take one concrete engineering task from request to evidence.
 
-**Boundary.** Rigor starts with a concrete investigation, change, experiment, or review. Open-ended product discovery belongs to `/tracer-interview-me`; recommend that entry point and end Rigor when the decisions needed to define the task are still unknown.
+**Boundary.** Rigor starts with a concrete investigation, change, experiment, or review. Open-ended product discovery belongs to `/interview-me`; recommend that entry point and end Rigor when the decisions needed to define the task are still unknown.
 
 ## 1. Frame
 
