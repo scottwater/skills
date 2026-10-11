@@ -11,7 +11,7 @@ When the user asks for a Quorum review, read and follow `~/.agents/skills/code-q
 
 ## Resolve scope
 
-Use the scope the user named. Otherwise take the first that exists: pending changes against `HEAD` (staged, unstaged, and relevant untracked files), the current branch from its merge-base with the default branch, the linked pull request, or the latest commit. Record any requirements source: the issue, PR description, spec, or the task from this conversation.
+Use the scope the user named. Otherwise take the first that contains reviewable changes: pending changes against `HEAD` (staged, unstaged, and relevant untracked files), the current branch from its merge-base with the default branch, the linked pull request, or the latest commit. Record any requirements source: the issue, PR description, spec, or the task from this conversation.
 
 Classify the change as **simple** or **complex**. Simple means a small, local change with one obvious intent. Complex means multiple subsystems, concurrency, security, data migrations, public interfaces, or a diff large enough that you would want a second pass on it yourself. When unsure, choose complex.
 
@@ -35,7 +35,7 @@ Call `delegate_task` with:
 
 - `target`: the resolved `providerInstanceId` and `model`
 - `role`: `"review"`
-- `runtimeMode`: `"inherit"` and `interactionMode`: `"inherit"`, so the reviewer runs with exactly your permissions and sandbox. Never request a broader mode.
+- `runtimeMode`: `"inherit"` and `interactionMode`: `"inherit"`, so the reviewer gets your T3 runtime mode. T3 rejects any broader mode, and each provider enforces the mode with its own sandbox, so the boundary matches in intent rather than mechanism.
 - `mode`: `"async"`
 - `title`: `Review: <short scope>`
 - `clientRequestId`: unique to this round and reused on retries of it
@@ -66,6 +66,8 @@ Finish with anything you could not verify. If you find nothing, say so.
 Retain the returned `taskId`, then end your turn. The child's completion wakes this thread; read the result with `task_status` only if it is needed mid-turn.
 
 ## Verify and fix
+
+Start only from a usable report. When the task status is `failed`, `cancelled`, or `interrupted`, or the summary holds no review, tell the user the review did not complete and offer to retry under a new `clientRequestId`. Never treat a missing report as a clean review.
 
 For every Critical, High, or Medium finding, read the code yourself and decide whether it is real. Confirm it from the source, a test, or a non-mutating reproduction, not from the reviewer's wording.
 
