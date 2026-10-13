@@ -1,0 +1,5 @@
+interface:
+  display_name: "Personas"
+  short_description: "Apply expert lenses to feedback and critique"
+policy:
+  allow_implicit_invocation: false
