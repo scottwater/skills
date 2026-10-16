@@ -25,7 +25,7 @@ Pick by your own model family:
 | --- | --- |
 | Claude (Fable, Opus, Sonnet, Haiku) | Sol 6.1 if simple, Astra 6 if complex |
 | OpenAI (Astra 6, Sol 6.1) | Opus 5.5; Fable 5.1 only when the user asks for it |
-| Any other model | Sol 6.1 |
+| Any other model | Sol 6.1 if simple, Astra 6 if complex |
 
 Call `orchestrator_capabilities` and resolve the reviewer's label to an exact `providerInstanceId` and model `id` from the live catalog. Prefer the provider's native driver (`codex` for OpenAI models, `claudeAgent` for Claude models) over a proxy such as Pi, and pick only an instance with `canRunChildTask: true`. If the reviewer is unavailable, tell the user which model is missing and ask them how to proceed. Never fall back to a same-family reviewer.
 
