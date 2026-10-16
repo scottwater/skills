@@ -7,8 +7,6 @@ description: Review code inside a T3 Code thread by delegating to a cross-family
 
 A **cross-family** review: the reviewer comes from a different model family than you, so it brings different blind spots. The reviewer is report-only. It returns findings, and you verify each one and make every edit.
 
-When the user asks for a Quorum review, read and follow `~/.agents/skills/code-quorum/SKILL.md` instead.
-
 ## Resolve scope
 
 Use the scope the user named. Otherwise take the first that contains reviewable changes: pending changes against `HEAD` (staged, unstaged, and relevant untracked files), the current branch from its merge-base with the default branch, the linked pull request, or the latest commit. Record any requirements source: the issue, PR description, spec, or the task from this conversation.

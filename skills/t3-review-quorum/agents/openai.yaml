@@ -1,0 +1,5 @@
+interface:
+  display_name: "T3 Review Quorum"
+  short_description: "Run Code Quorum through T3 on Astra and Fable"
+policy:
+  allow_implicit_invocation: false
