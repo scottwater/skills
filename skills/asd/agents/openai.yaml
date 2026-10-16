@@ -1,0 +1,5 @@
+interface:
+  display_name: "ASD"
+  short_description: "Explain a topic in Simplified Technical English"
+policy:
+  allow_implicit_invocation: false

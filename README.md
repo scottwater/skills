@@ -16,6 +16,10 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 `eli5`: Explain a topic with a simple HTML artifact that uses big pictures and few words.
 
+### ASD
+
+`asd`: Explain a topic in [ASD-STE100](https://www.asd-ste100.org/) Simplified Technical English, the controlled language written for aerospace maintenance manuals. Ask for `soft` to go about 80% of the way, or ask for a diagram, an interactive HTML page, or a 3Blue1Brown-style narrated video. Each format keeps its text in STE.
+
 ### Simplify
 
 `simplify`: Explicitly invoke a behavior-preserving refinement pass over an implementation to simplify, deduplicate, reorganize, remove low-value tests, and eliminate unnecessary churn.
