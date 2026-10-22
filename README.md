@@ -80,6 +80,10 @@ A requirements reviewer joins any mode when the review has testable requirements
 
 `t3-review-quorum`: Run an explicitly invoked `code-quorum` review inside a T3 Code thread. Each selected reviewer rubric runs as a T3 delegated task on both Astra 6 and Fable 5.1, unless you name other models. It keeps Code Quorum's read-only boundary and report format.
 
+### Orchestrate
+
+`orchestrate`: Turn the current T3 Code session into an orchestrator that writes no code. Pass a prompt or one or more ToVo issues. Each one gets its own T3 worker thread (Opus 5.5 by default) on the current branch. Sol 6.1 reviews each unit, and a run with more than one unit also gets a `t3-review-quorum` review of the combined changes. The orchestrator checks every Medium or higher finding against the code and sends the confirmed ones back to the worker to fix. When the work is done, it marks the ToVo issues completed.
+
 ### Herdr Quorum
 
 `herdr-quorum` is an explicitly invoked quorum that runs fresh CLI agents in visible Herdr panes, then synthesizes their reports. It requires a Herdr-managed session and the configured worker CLIs. Each Markdown profile lists `cli|model|reasoning` workers and supplies the worker and synthesis instructions.

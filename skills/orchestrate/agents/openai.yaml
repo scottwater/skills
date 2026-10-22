@@ -1,0 +1,5 @@
+interface:
+  display_name: "Orchestrate"
+  short_description: "Run work through T3 worker threads and cross-family review"
+policy:
+  allow_implicit_invocation: false
