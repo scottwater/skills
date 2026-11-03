@@ -92,6 +92,34 @@ Use `/herdr-quorum review Review the current diff` or name another profile. The 
 
 The Python 3 launcher uses the documented CLI mappings without discovery, starts workers concurrently, and dispatches each as soon as it is ready. Failures are recorded without retries or substitutions. Reviewers work directly rather than spawning another review tier; the lead collects and checks reports as they arrive. Compatibility diagnosis is a separate, explicitly requested task.
 
+### Full Send
+
+`full-send`: Take a change all the way to a merged PR while you are not watching. It finishes the smallest change that works, proves it with evidence it observed itself, reviews it with `sol-loop`, files it with `file-pr`, babysits it with `babysit-pr`, and merges once the merge gate passes. It asks you only when it cannot prove the change, cannot pass the gate, or needs permission it was not given.
+
+### Full Stop
+
+`full-stop`: Do the same work as `full-send`, but stop with the PR open and ready for you to merge. It never merges, and it turns off auto-merge or merge queues on the PR.
+
+### Modernize
+
+`modernize`: Bring an aging PR up to date, and decide honestly whether it should still exist. It checks what changed on the base branch since the PR diverged, then reports `MODERNIZE`, `REWORK`, or `CLOSE`. Only `MODERNIZE` rebases and pushes, with `--force-with-lease`. It never merges or closes the PR.
+
+### Sol Loop
+
+`sol-loop`: Review a change with GPT Sol in a loop until both agents agree. It runs up to three rounds by default (five for security, data-loss, or concurrency risk), keeps a ledger of findings, and pushes back on scope creep. It runs Sol through T3's `delegate_task` or a native subagent, and stops with the blocker rather than substituting another model. `full-send` uses it for review.
+
+### File PR
+
+`file-pr`: File a short PR that leads with the problem, not an inventory of changes, and ends with the model and harness that made it. `full-send` uses it, and it triggers on requests to file or open a PR.
+
+### Babysit PR
+
+`babysit-pr`: Watch a PR through CI and human review, and fix the real findings. It waits with `watch_pull_request` in T3 Code and with the bundled `pr-wait` script elsewhere. `pr-wait` needs `python3` and an authenticated `gh`.
+
+### Leaving PR Comments
+
+`leaving-pr-comments`: Format comments that an agent posts on GitHub for you, with a note naming the model and the user it speaks for. The PR skills use it for every comment and reply.
+
 ## Archive
 
 Retired skills live in [archive](archive/): `gpt-image-prompts`, `rails-security`, `solo`, and the [Tracer](archive/tracer/README.md) skill set. They are no longer maintained.
@@ -101,6 +129,8 @@ Retired skills live in [archive](archive/): `gpt-image-prompts`, `rails-security
 `slop-monkey` is a modified adaptation of [Stop Slop](https://github.com/hardikpandya/stop-slop) by [Hardik Pandya](https://hvpandya.com), not the upstream skill. This version adds a voice-contract workflow, explicit completion checks, and on-demand diagnostic references. See its [README](skills/slop-monkey/README.md) for details.
 
 `rigor`, `blast-radius`, `bro`, `how`, and `why`, along with the human-voice direction in `slop-monkey`, were influenced by, borrowed from, and shamelessly stolen from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by [Lauren “poteto” Tan](https://x.com/poteto). They have been adapted here to remove Cursor- and model-specific assumptions and to follow this repository's skill-writing conventions.
+
+`full-send`, `full-stop`, `modernize`, `sol-loop`, `file-pr`, `babysit-pr`, and `leaving-pr-comments` are adapted from [tstack](https://github.com/t3dotgg/tstack) by [Theo Browne](https://x.com/theo). These versions do not wait for AI review bots.
 
 `agent-speak` is adapted from Matt Pocock's original [`writing-for-agents`](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-for-agents) skill.
 
