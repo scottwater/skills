@@ -108,6 +108,10 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 `sol-loop`: Review a change with GPT Sol in a loop until both agents agree. It runs up to three rounds by default (five for security, data-loss, or concurrency risk), keeps a ledger of findings, and pushes back on scope creep. It runs Sol through T3's `delegate_task` or a native subagent, and stops with the blocker rather than substituting another model. `full-send` uses it for review.
 
+### Council
+
+`council`: Review work with three models from three providers: Claude Opus 5.5, GPT Sol 6.1, and Muse Wonder Full, each at high reasoning effort unless you ask for another. It runs them only through T3 Code's `delegate_task` and never substitutes a missing member. Each round, the members score the work out of 10; the calling agent checks their findings, fixes the ones it confirms, and runs another round until all three are satisfied. The scores for each round go into the PR description.
+
 ### File PR
 
 `file-pr`: File a short PR that leads with the problem, not an inventory of changes, and ends with the model and harness that made it. `full-send` uses it, and it triggers on requests to file or open a PR.
@@ -130,7 +134,7 @@ Retired skills live in [archive](archive/): `gpt-image-prompts`, `rails-security
 
 `rigor`, `blast-radius`, `bro`, `how`, and `why`, along with the human-voice direction in `slop-monkey`, were influenced by, borrowed from, and shamelessly stolen from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by [Lauren “poteto” Tan](https://x.com/poteto). They have been adapted here to remove Cursor- and model-specific assumptions and to follow this repository's skill-writing conventions.
 
-`full-send`, `full-stop`, `modernize`, `sol-loop`, `file-pr`, `babysit-pr`, and `leaving-pr-comments` are adapted from [tstack](https://github.com/t3dotgg/tstack) by [Theo Browne](https://x.com/theo). These versions do not wait for AI review bots.
+`full-send`, `full-stop`, `modernize`, `sol-loop`, `council`, `file-pr`, `babysit-pr`, and `leaving-pr-comments` are adapted from [tstack](https://github.com/t3dotgg/tstack) by [Theo Browne](https://x.com/theo). These versions do not wait for AI review bots, and `council` seats a fixed T3 council instead of picking each provider's latest flagship.
 
 `agent-speak` is adapted from Matt Pocock's original [`writing-for-agents`](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-for-agents) skill.
 
