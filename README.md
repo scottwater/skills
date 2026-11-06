@@ -74,11 +74,11 @@ A requirements reviewer joins any mode when the review has testable requirements
 
 ### T3 Review
 
-`t3-review`: Review code inside a [T3 Code](https://github.com/pingdotgg/t3code) thread by handing it to a reviewer from another model family through T3's `delegate_task`. Claude models get Sol 6.1 for simple changes and Astra 6 for complex ones. OpenAI models get Opus 5.5. The reviewer only reports. The calling agent checks every Critical, High, and Medium finding against the code, fixes the confirmed ones, and lists the rejected ones with a reason for each. It triggers automatically on requests like `review this code` when T3's MCP tools are available.
+`t3-review`: Review code inside a [T3 Code](https://github.com/pingdotgg/t3code) thread with a reviewer from another model family. Any coding model that is not from OpenAI hands the review to `sol-loop`, so Sol reviews it. OpenAI models get Opus 5.5 at `xhigh` reasoning effort through T3's `delegate_task`. The reviewer only reports. The calling agent checks every Critical, High, and Medium finding against the code, fixes the confirmed ones, and lists the rejected ones with a reason for each. It triggers automatically on requests like `review this code` when T3's MCP tools are available.
 
 ### T3 Review Quorum
 
-`t3-review-quorum`: Run an explicitly invoked `code-quorum` review inside a T3 Code thread. Each selected reviewer rubric runs as a T3 delegated task on both Astra 6 and Fable 5.1, unless you name other models. It keeps Code Quorum's read-only boundary and report format.
+`t3-review-quorum`: Run an explicitly invoked `code-quorum` review inside a T3 Code thread. Each selected reviewer rubric runs as a T3 delegated task on both Sol 6.1 and Opus 5.5, each at `xhigh` reasoning effort, unless you name other models. It keeps Code Quorum's read-only boundary and report format.
 
 ### Orchestrate
 

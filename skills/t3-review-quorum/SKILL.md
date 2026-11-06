@@ -1,6 +1,6 @@
 ---
 name: t3-review-quorum
-description: Run a Code Quorum review inside a T3 Code thread, with reviewers delegated to Astra and Fable.
+description: Run a Code Quorum review inside a T3 Code thread, with reviewers delegated to Sol and Opus.
 disable-model-invocation: true
 ---
 
@@ -14,9 +14,9 @@ This step replaces Code Quorum's **Confirm agents** step.
 
 The worker mechanism is T3's `delegate_task`. Each delegated task is a blind agent: it starts with no conversation history and sees only its task packet.
 
-The reviewer models are **Astra 6** and **Fable 5.1**. When the user names other models, use those instead. Call `orchestrator_capabilities` and resolve each model to an exact `providerInstanceId` and model `id` from the live catalog. Prefer the provider's native driver (`codex` for OpenAI models, `claudeAgent` for Claude models) over a proxy such as Pi, and pick only an instance with `canRunChildTask: true`. When a model is unavailable, tell the user which one is missing and ask how to proceed.
+The reviewer models are **Sol 6.1** and **Opus 5.5**, each at `xhigh` reasoning effort. When the user names other models, use those instead. Call `orchestrator_capabilities` and resolve each model to an exact `providerInstanceId` and model `id` from the live catalog. Prefer the provider's native driver (`codex` for OpenAI models, `claudeAgent` for Claude models) over a proxy such as Pi, and pick only an instance with `canRunChildTask: true`. Set the effort to `xhigh` with the reasoning-effort option id and value the catalog lists for each model. When a model or `xhigh` is unavailable, tell the user what is missing and ask how to proceed.
 
-Complete this step when every reviewer model resolves to a `providerInstanceId` and model `id` that can run a child task.
+Complete this step when every reviewer model resolves to a `providerInstanceId`, a model `id` that can run a child task, and an `xhigh` effort option.
 
 ## Run the quorum
 
@@ -24,7 +24,7 @@ This step replaces how Code Quorum's **Run the quorum** step creates agents; its
 
 Run every selected rubric once on each reviewer model, so each rubric gets a reviewer from both families. For each pair, call `delegate_task` with:
 
-- `target`: the resolved `providerInstanceId` and `model`
+- `target`: the resolved `providerInstanceId`, `model`, and `xhigh` effort option
 - `role`: `"review"`
 - `runtimeMode`: `"inherit"` and `interactionMode`: `"inherit"`
 - `mode`: `"async"`

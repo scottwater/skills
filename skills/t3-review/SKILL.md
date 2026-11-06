@@ -7,31 +7,30 @@ description: Review code inside a T3 Code thread by delegating to a cross-family
 
 A **cross-family** review: the reviewer comes from a different model family than you, so it brings different blind spots. The reviewer is report-only. It returns findings, and you verify each one and make every edit.
 
-## Resolve scope
-
-Use the scope the user named. Otherwise take the first that contains reviewable changes: pending changes against `HEAD` (staged, unstaged, and relevant untracked files), the current branch from its merge-base with the default branch, the linked pull request, or the latest commit. Record any requirements source: the issue, PR description, spec, or the task from this conversation.
-
-Classify the change as **simple** or **complex**. Simple means a small, local change with one obvious intent. Complex means multiple subsystems, concurrency, security, data migrations, public interfaces, or a diff large enough that you would want a second pass on it yourself. When unsure, choose complex.
-
-Done when you can state the exact diff, range, or files; the requirements source or that there is none; and simple or complex.
-
 ## Pick the reviewer
 
 Pick by your own model family:
 
 | You are | Reviewer |
 | --- | --- |
-| Claude (Fable, Opus, Sonnet, Haiku) | Sol 6.1 if simple, Astra 6 if complex |
-| OpenAI (Astra 6, Sol 6.1) | Opus 5.5; Fable 5.1 only when the user asks for it |
-| Any other model | Sol 6.1 if simple, Astra 6 if complex |
+| An OpenAI model | Opus 5.5 at `xhigh` reasoning effort, through the rest of this skill |
+| Any other model, Claude included | Sol, through the `sol-loop` skill |
 
-Call `orchestrator_capabilities` and resolve the reviewer's label to an exact `providerInstanceId` and model `id` from the live catalog. Prefer the provider's native driver (`codex` for OpenAI models, `claudeAgent` for Claude models) over a proxy such as Pi, and pick only an instance with `canRunChildTask: true`. If the reviewer is unavailable, tell the user which model is missing and ask them how to proceed. Never fall back to a same-family reviewer.
+When you are not an OpenAI model, invoke `sol-loop` with the scope the user named and follow it in place of the remaining steps here. Sol is the reviewer; `sol-loop` owns the rounds, verification, and fixes. Finish with this skill's **Report**.
+
+When you are an OpenAI model, call `orchestrator_capabilities` and resolve Opus 5.5 to an exact `providerInstanceId` and model `id` from the live catalog. Prefer the native `claudeAgent` driver over a proxy such as Pi, and pick only an instance with `canRunChildTask: true`. Set the effort to `xhigh` with the reasoning-effort option id and value the catalog lists for that model. If Opus 5.5 or `xhigh` is unavailable, tell the user what is missing and ask them how to proceed. Opus 5.5 is the only reviewer model for this path.
+
+## Resolve scope
+
+Use the scope the user named. Otherwise take the first that contains reviewable changes: pending changes against `HEAD` (staged, unstaged, and relevant untracked files), the current branch from its merge-base with the default branch, the linked pull request, or the latest commit. Record any requirements source: the issue, PR description, spec, or the task from this conversation.
+
+Done when you can state the exact diff, range, or files, and the requirements source or that there is none.
 
 ## Launch the review
 
 Call `delegate_task` with:
 
-- `target`: the resolved `providerInstanceId` and `model`
+- `target`: the resolved `providerInstanceId`, `model`, and `xhigh` effort option
 - `role`: `"review"`
 - `runtimeMode`: `"inherit"` and `interactionMode`: `"inherit"`, so the reviewer gets your T3 runtime mode. T3 rejects any broader mode, and each provider enforces the mode with its own sandbox, so the boundary matches in intent rather than mechanism.
 - `mode`: `"async"`

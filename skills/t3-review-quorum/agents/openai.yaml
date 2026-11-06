@@ -1,5 +1,5 @@
 interface:
   display_name: "T3 Review Quorum"
-  short_description: "Run Code Quorum through T3 on Astra and Fable"
+  short_description: "Run Code Quorum through T3 on Sol and Opus"
 policy:
   allow_implicit_invocation: false
