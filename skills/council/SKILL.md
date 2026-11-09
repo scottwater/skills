@@ -82,7 +82,7 @@ Guard against scope creep: review loops grow a change one cheap-looking fix at a
 
 Keep each member's score for every round. When a member gives no score, write `no score`.
 
-When the work ends in a pull request, add this section to the PR description, just before the model and harness line at the end. Edit the description of an open PR rather than posting a comment. Without a PR, put the table in your final reply.
+When the work ends in a pull request, add this section to the PR description, at the end of the collapsed `<details>` block (or just before the closing model and harness line when there is no block). Edit the description of an open PR rather than posting a comment. Without a PR, put the table in your final reply.
 
 ```markdown
 ## Council review

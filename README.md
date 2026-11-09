@@ -114,7 +114,7 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 ### File PR
 
-`file-pr`: File a short PR that leads with the problem, not an inventory of changes, and ends with the model and harness that made it. `full-send` uses it, and it triggers on requests to file or open a PR.
+`file-pr`: File a PR that opens with a three-to-four-sentence overview of the problem and fix, then folds the rest of the detail into a collapsed `<details>` block labeled with the model and harness that made it, following [Simon Willison's details-summary pattern](https://simonwillison.net/2026/Nov/9/details-summary/). `full-send` uses it, and it triggers on requests to file or open a PR.
 
 ### Babysit PR
 

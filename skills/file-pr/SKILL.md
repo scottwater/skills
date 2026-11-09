@@ -21,9 +21,10 @@ GOOD
 
 > ✅ perf(server): cut websocket frame size by 70%+ with gzipping
 
-Open the description with a simple explanation of the problem based on the
-user's original prompt, then briefly explain the solution. Do not lead with an
-implementation inventory:
+Open the description with a brief overview of three or four sentences at most:
+the shortest text that gets a reviewer up to speed. Explain the problem simply,
+based on the user's original prompt, then give the solution in a sentence. Do
+not lead with an implementation inventory:
 
 BAD
 
@@ -33,10 +34,31 @@ GOOD
 
 > ✅ My "new worktree" default was ignored when starting new threads on existing worktrees. Super unintuitive. Now your preferences always apply.
 
-End the description with the public model name and harness that made the
-changes, for example `Created with <model> in <harness>.` Include subagent
-models that wrote part of the change. Use the model name the harness reports.
-If model identity is unavailable, name the harness without guessing a model.
+If the change is visible, add a screenshot after the overview.
+
+Fold everything else into a collapsed `<details>` block below the overview:
+implementation notes, file-by-file changes, testing, and trade-offs. GitHub
+shows only the `<summary>` line until a reviewer expands it. The summary names
+the public model, effort level, and harness that made the changes, so the
+reviewer knows what is folded away. Include subagent models that wrote part of
+the change. Use the model name the harness reports. If model identity is
+unavailable, name the harness without guessing a model. Leave a blank line
+after `</summary>` and before `</details>` so GitHub renders the Markdown
+inside:
+
+```markdown
+<details>
+<summary>Claude Opus 5.5 (xhigh) in Claude Code</summary>
+
+## Implementation
+
+...
+
+</details>
+```
+
+When the overview already says everything, skip the block and end the
+description with `Created with <model> in <harness>.` instead.
 
 Before submission, check the title, description, quotes, and attachments for
 secrets and private details.
