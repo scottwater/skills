@@ -1,7 +1,6 @@
 ---
 name: convince-me
-description: Build the strongest honest, end-to-end case that completed work satisfies its original goal.
-disable-model-invocation: true
+description: Build the strongest honest, end-to-end case that completed work satisfies its original goal. Use when asked for irrefutable proof, to be convinced, or any other kind of proof. 
 ---
 
 # Convince Me

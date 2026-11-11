@@ -1,7 +1,6 @@
 ---
 name: orchestrate
-description: Run a prompt or ToVo issues through T3 worker threads, cross-family review, and fixes, while this session only orchestrates.
-disable-model-invocation: true
+description: Run a prompt or ToVo issues through T3 worker threads, cross-family review, and fixes, while this session only orchestrates. Use when asked to orchestrate work.
 ---
 
 # Orchestrate

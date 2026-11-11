@@ -1,7 +1,6 @@
 ---
 name: t3-review-quorum
-description: Run a Code Quorum review inside a T3 Code thread, with reviewers delegated to Sol and Opus.
-disable-model-invocation: true
+description: Run a Code Quorum review inside a T3 Code thread, with reviewers delegated to Sol and Opus. Use when asked to do a quorum review. 
 ---
 
 # T3 Review Quorum
