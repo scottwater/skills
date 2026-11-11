@@ -55,7 +55,9 @@ For every Critical, High, and Medium finding, read the code and confirm it from 
 
 When the fixes are more than a few lines, review the fix commits in a new round: a new `clientRequestId` and a brief that carries the original brief, the prior findings, and what the worker changed. After three rounds that still produce verified Medium or higher findings, stop the loop and ask the user.
 
-Done when every Critical, High, and Medium finding is fixed by the worker or rejected with a reason.
+When every Critical, High, and Medium finding is fixed and committed or rejected, settle the worker's thread with `t3_thread_organize` (`action: "settle"`) before starting the next unit.
+
+Done when every Critical, High, and Medium finding is fixed by the worker or rejected with a reason, and the worker's thread is settled.
 
 ## Review the whole run
 
@@ -63,7 +65,7 @@ Skip this section when the run has one unit.
 
 When every unit is done, follow `~/.agents/skills/t3-review-quorum/SKILL.md` with the run's commits from base to `HEAD` as the scope and every unit's prompt or issue as the requirements. Its reviewers and read-only boundary apply as written.
 
-Send each verified Critical, High, or Medium finding from the quorum report to the worker whose unit introduced that code. When a finding spans units, launch a new worker thread in the same checkout with the finding list as its task. Wait for the fixes, then confirm each one against the code.
+Send each verified Critical, High, or Medium finding from the quorum report to the worker whose unit introduced that code, unsettling its thread first (`action: "unsettle"`). When a finding spans units, launch a new worker thread in the same checkout with the finding list as its task. Wait for the fixes, confirm each one against the code, then settle every worker thread again.
 
 Done when every Critical, High, and Medium quorum finding is fixed by a worker or rejected with a reason.
 
