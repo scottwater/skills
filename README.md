@@ -100,6 +100,14 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 `full-stop`: Do the same work as `full-send`, but stop with the PR open and ready for you to merge. It never merges, and it turns off auto-merge or merge queues on the PR.
 
+### Quick Send
+
+`quick-send`: Do the same unattended work as `full-send`, but push straight to origin's default branch (`main`, `master`, or whatever origin names) instead of filing a PR. It proves the change, reviews it with `sol-loop`, commits, rebases, pushes as a fast-forward, and watches CI on the pushed commit, fixing forward if it breaks. It never force-pushes, and it asks you when branch protection rejects direct pushes.
+
+### Quick Stop
+
+`quick-stop`: Do the same work as `quick-send`, but stop with the commits rebased and ready to push. It never pushes, and it hands back the exact push command.
+
 ### Modernize
 
 `modernize`: Bring an aging PR up to date, and decide honestly whether it should still exist. It checks what changed on the base branch since the PR diverged, then reports `MODERNIZE`, `REWORK`, or `CLOSE`. Only `MODERNIZE` rebases and pushes, with `--force-with-lease`. It never merges or closes the PR.

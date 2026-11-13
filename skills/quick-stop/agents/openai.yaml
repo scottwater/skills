@@ -1,0 +1,3 @@
+interface:
+  display_name: "Quick Stop"
+  short_description: "Prove, review, and commit a change ready to push, without pushing"
