@@ -5,7 +5,7 @@ description: Review work with a three-provider council (Opus, Sol, Muse) through
 
 # Council
 
-The **council** is three delegates from three providers, run through T3 Code. Each **round**, every member reviews the same work and scores it. You verify their findings, fix the ones you accept, and run another round until all three are satisfied.
+The **council** is three delegates from three providers, run through T3 Code. Each **round**, every member reviews the same work and scores it. You verify their findings, fix the ones you accept, and run another round until all three are satisfied, for at most seven rounds.
 
 ## 1. Prepare the work
 
@@ -76,7 +76,19 @@ Fix each accepted finding with the smallest change that covers the intended case
 
 Guard against scope creep: review loops grow a change one cheap-looking fix at a time. Decline findings outside the intent in one line each, and list them as follow-ups.
 
-**Complete when:** every member is satisfied with the current change. When a disagreement survives two rounds, stop, show each side in two or three lines, and let the user decide.
+**Complete when:** every member is satisfied with the current change.
+
+### When the council circles
+
+Each round should bring the council closer to consensus. Before starting another round, check whether it is **circling** instead:
+
+- A disagreement between members survives two rounds.
+- A finding you fixed or declined comes back.
+- One member's fix undoes another's, or a fix reverts an earlier one.
+- Scores hold flat or drop across two rounds while new findings keep arriving.
+- Round 10 ends without consensus. Ten rounds is the cap, however close the last one looked.
+
+When the council circles, stop running rounds and ask the user for help. Show where it stalled: each side of the disagreement in two or three lines, what you have tried, and the decision you need from the user. Resume only on their call.
 
 ## 5. Record the scores
 
