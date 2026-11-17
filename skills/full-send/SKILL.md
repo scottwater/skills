@@ -40,11 +40,14 @@ It also does not bypass a harness or system approval prompt if one appears.
    smallest change that works. Fix the case that happened, not every case that
    could. If you are on the default branch, create a branch first.
 2. **Prove it.** Get proof for every change you made. See "Proof".
-3. **Get feedback.** Use the `sol-loop` skill to verify changes. Re-prove any
-   behavior a fix touches.
+3. **Get feedback.** Review a trivial change with the `sol-loop` skill and
+   every other change with the `council` skill. A change is trivial when it is
+   a few lines with one obvious behavior and no security, data, or concurrency
+   risk, such as a typo, a copy edit, or a config value. Re-prove any behavior
+   a fix touches.
 4. **File the PR** with the `file-pr` skill. Rebase onto the latest default
    branch first. Add one short line to the description that says how you proved
-   the change.
+   the change, and the council's score table when the council reviewed it.
 5. **Babysit the PR** with the `babysit-pr` skill. Fix CI failures and real
    human review findings. Get proof for each fix before you push it.
 6. **Merge** when the merge gate passes.
@@ -102,6 +105,7 @@ link, what blocks you, and the options with your recommendation first.
 Ask only when you cannot continue alone:
 
 - You cannot prove the change.
+- The council cannot be seated, or it circles.
 - The merge gate cannot pass, and you cannot fix that yourself.
 - The next step is outside the grant above: deleting data, touching production,
   changing things outside the repo, closing a PR, or force-pushing any other

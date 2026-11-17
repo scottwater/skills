@@ -94,7 +94,7 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 ### Full Send
 
-`full-send`: Take a change all the way to a merged PR while you are not watching. It finishes the smallest change that works, proves it with evidence it observed itself, reviews it with `sol-loop`, files it with `file-pr`, babysits it with `babysit-pr`, and merges once the merge gate passes. It asks you only when it cannot prove the change, cannot pass the gate, or needs permission it was not given.
+`full-send`: Take a change all the way to a merged PR while you are not watching. It finishes the smallest change that works, proves it with evidence it observed itself, reviews it with `council` (or `sol-loop` for a trivial change), files it with `file-pr`, babysits it with `babysit-pr`, and merges once the merge gate passes. It asks you only when it cannot prove the change, cannot pass the gate, or needs permission it was not given.
 
 ### Full Stop
 
@@ -114,7 +114,7 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 ### Sol Loop
 
-`sol-loop`: Review a change with GPT Sol in a loop until both agents agree. It runs up to three rounds by default (five for security, data-loss, or concurrency risk), keeps a ledger of findings, and pushes back on scope creep. It runs Sol through T3's `delegate_task` or a native subagent, and stops with the blocker rather than substituting another model. `full-send` uses it for review.
+`sol-loop`: Review a change with GPT Sol in a loop until both agents agree. It runs up to three rounds by default (five for security, data-loss, or concurrency risk), keeps a ledger of findings, and pushes back on scope creep. It runs Sol through T3's `delegate_task` or a native subagent, and stops with the blocker rather than substituting another model. `direct-send` uses it for review, and `full-send` uses it for trivial changes.
 
 ### Council
 
