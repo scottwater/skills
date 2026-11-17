@@ -1,9 +1,9 @@
 ---
-name: quick-send
-description: Take a change straight to the default branch unattended, proving and reviewing it, then pushing without a PR. Use when the user says quick send or wants work pushed directly to main.
+name: direct-send
+description: Take a change straight to the default branch unattended, proving and reviewing it, then pushing without a PR. Use when the user says direct send or wants work pushed directly to main.
 ---
 
-# Quick Send
+# Direct Send
 
 Do the same unattended work as `full-send`, but push the change straight to
 origin's default branch instead of filing a PR. The user is not watching this
