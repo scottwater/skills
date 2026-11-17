@@ -1,11 +1,11 @@
 ---
 name: orchestrate
-description: Run a prompt or ToVo issues through T3 worker threads, cross-family review, and fixes, while this session only orchestrates. Use when asked to orchestrate work.
+description: Run a prompt or ToVo issues through T3 worker threads, review, and proof to a filed PR, while this session only orchestrates. Use when asked to orchestrate work.
 ---
 
 # Orchestrate
 
-You are the **orchestrator**. Your sole job is to run the process: dispatch work, track it, verify review findings, and report. You do not write or edit code. Every code change comes from a worker thread, and every reviewer only reports. When a worker stalls or fails, send it more direction or launch a new worker.
+You are the **orchestrator**. Your sole job is to run the process: dispatch work, track it, verify review findings, prove the result, file the PR, and report. You do not write or edit code. Every code change comes from a worker thread, and every reviewer only reports. When a worker stalls or fails, send it more direction or launch a new worker.
 
 The roles:
 
@@ -16,7 +16,7 @@ The roles:
 
 Split the user's request into **units**: each ToVo issue the user named is one unit, and a plain prompt is one unit. Follow the `tovo` skill to connect, then claim each issue and read its context. Order the units by their ToVo prerequisites, then by the order the user gave. When an issue depends on an unfinished issue outside the run, ask the user how to proceed.
 
-Resolve the **checkout**: the current branch and worktree unless the user named another. Record its absolute path, branch, and `HEAD` as the run's **base**. When the checkout has uncommitted changes, ask the user whether to commit, stash, or keep them before any worker starts.
+Resolve the **checkout**: the current branch and worktree unless the user named another. The run ends in a pull request, so when the checkout is on the default branch, create a branch named for the run. Record the checkout's absolute path, branch, and `HEAD` as the run's **base**. When the checkout has uncommitted changes, ask the user whether to commit, stash, or keep them before any worker starts.
 
 Call `orchestrator_capabilities` and resolve the worker and reviewer to an exact `providerInstanceId` and model `id`. Prefer the provider's native driver (`claudeAgent` for Claude models, `codex` for OpenAI models), and pick a reviewer instance with `canRunChildTask: true`. When a model is unavailable, tell the user which one and ask how to proceed.
 
@@ -60,21 +60,32 @@ Done when every Critical, High, and Medium finding is fixed by the worker or rej
 
 ## Review the whole run
 
-Skip this section when the run has one unit.
+Skip this section when the run has one unit; its unit review already covered the whole run.
 
-When every unit is done, follow `~/.agents/skills/t3-review-quorum/SKILL.md` with the run's commits from base to `HEAD` as the scope and every unit's prompt or issue as the requirements. Its reviewers and read-only boundary apply as written.
+When every unit is done, follow the `council` skill with the run's commits from base to `HEAD` as the scope and every unit's prompt or issue as the intent. Its members, rounds, and circling rules apply as written, except that workers make every fix. Send each accepted finding to the worker whose unit introduced that code, unsettling its thread first (`action: "unsettle"`). When a finding spans units, launch a new worker thread in the same checkout with the finding list as its task. Wait for the fixes and confirm each one against the code before the next round. Keep each round's scores for the PR.
 
-Send each verified Critical, High, or Medium finding from the quorum report to the worker whose unit introduced that code, unsettling its thread first (`action: "unsettle"`). When a finding spans units, launch a new worker thread in the same checkout with the finding list as its task. Wait for the fixes, confirm each one against the code, then settle every worker thread again.
+When every member is satisfied, settle every worker thread again.
 
-Done when every Critical, High, and Medium quorum finding is fixed by a worker or rejected with a reason.
+Done when every council member is satisfied with the run's latest commits and every worker thread is settled.
 
-## Close out
+## Prove the run
 
-Mark each ToVo issue `completed` with `issue_set_status`, giving a reason that names its commits. When ToVo refuses the status, move the issue to `in_review` with the same reason and tell the user.
+Follow the `convince-me` skill with every unit's prompt or issue as the original goal and the run's commits from base to `HEAD` as the completed work. Keep its harnesses and fixtures outside the repository or in ignored files.
+
+Send each disproven claim to the worker whose unit owns that behavior, the same way as review findings, then run the proof for that claim again. When a fix is more than a few lines, review it before proving it again: a council round for a run with several units, a unit review round otherwise. Ask the user about every claim that stays unverified.
+
+Done when every claim is proven, or the user has accepted each remaining gap.
+
+## File the PR
+
+Push the run's branch to origin, then file the PR with the `file-pr` skill. Put the proof's claim, evidence, and verdict table in the collapsed details, and the council's score table at its end when the council ran.
+
+Move each ToVo issue to `in_review` with `issue_set_status`, giving a reason that names its commits and links the PR.
 
 Report to the user:
 
+- The PR link
 - Each unit with its worker thread linked as `[title](t3-thread://v1/<threadId>)`, its commits, and its ToVo status
 - The reviewer models, and the findings fixed, rejected with reasons, and left as Low
-- The quorum verdict when one ran
-- The branch and `HEAD`, ready to ship as one unit unless the user asked otherwise
+- The council's verdict and final scores when it ran
+- The proof verdicts, and every gap the user accepted

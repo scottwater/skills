@@ -82,7 +82,7 @@ A requirements reviewer joins any mode when the review has testable requirements
 
 ### Orchestrate
 
-`orchestrate`: Turn the current T3 Code session into an orchestrator that writes no code. Pass a prompt or one or more ToVo issues. Each one gets its own T3 worker thread (Opus 5.5 by default) on the current branch. Sol 6.1 reviews each unit, and a run with more than one unit also gets a `t3-review-quorum` review of the combined changes. The orchestrator checks every Medium or higher finding against the code and sends the confirmed ones back to the worker to fix. When the work is done, it marks the ToVo issues completed.
+`orchestrate`: Turn the current T3 Code session into an orchestrator that writes no code. Pass a prompt or one or more ToVo issues. Each one gets its own T3 worker thread (Opus 5.5 by default) on the current branch. Sol 6.1 reviews each unit, and a run with more than one unit also gets a `council` review of the combined changes. The orchestrator checks every finding against the code and sends the confirmed ones back to the worker to fix. It then proves the run with `convince-me`, files a PR with `file-pr`, and moves the ToVo issues to review.
 
 ### Herdr Quorum
 
@@ -118,7 +118,7 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 ### Council
 
-`council`: Review work with three models from three providers: Claude Opus 5.5, GPT Sol 6.1, and Muse Wonder Full, each at high reasoning effort unless you ask for another. It runs them only through T3 Code's `delegate_task` and never substitutes a missing member. Each round, the members score the work out of 10; the calling agent checks their findings, fixes the ones it confirms, and runs another round until all three are satisfied. The scores for each round go into the PR description.
+`council`: Review work with three models from three providers: Claude Opus 5.5, GPT Sol 6.1, and Muse Wonder Full, each at high reasoning effort unless you ask for another. It runs them only through T3 Code's `delegate_task` and never substitutes a missing member. Each round, the members score the work out of 10; the calling agent checks their findings, fixes the ones it confirms, and runs another round until all three are satisfied. The scores for each round go into the PR description. `full-send` and `orchestrate` use it for non-trivial review.
 
 ### File PR
 
