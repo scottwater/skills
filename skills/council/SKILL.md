@@ -86,7 +86,7 @@ Each round should bring the council closer to consensus. Before starting another
 - A finding you fixed or declined comes back.
 - One member's fix undoes another's, or a fix reverts an earlier one.
 - Scores hold flat or drop across two rounds while new findings keep arriving.
-- Round 10 ends without consensus. Ten rounds is the cap, however close the last one looked.
+- Round 7 ends without consensus. Seven rounds is the cap, however close the last one looked.
 
 When the council circles, stop running rounds and ask the user for help. Show where it stalled: each side of the disagreement in two or three lines, what you have tried, and the decision you need from the user. Resume only on their call.
 
