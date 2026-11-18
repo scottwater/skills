@@ -14,7 +14,7 @@ The roles:
 
 ## Plan the run
 
-Split the user's request into **units**: each ToVo issue the user named is one unit, and a plain prompt is one unit. Follow the `tovo` skill to connect, then claim each issue and read its context. Order the units by their ToVo prerequisites, then by the order the user gave. When an issue depends on an unfinished issue outside the run, ask the user how to proceed.
+Split the user's request into **units**: each ToVo issue the user named is one unit, and a plain prompt is one unit. Follow the `tovo` skill to connect, then claim each issue and read its context. Order the units by their ToVo prerequisites, then by the order the user gave. When an issue depends on an unfinished issue outside the run, ask the user how to proceed. When an issue also asks for work that needs the change on the default branch, such as a deploy or a check in production, that part falls outside the run: do the rest, and list the remainder in the final report.
 
 Resolve the **checkout**: the current branch and worktree unless the user named another. The run ends in a pull request, so when the checkout is on the default branch, create a branch named for the run. Record the checkout's absolute path, branch, and `HEAD` as the run's **base**. When the checkout has uncommitted changes, ask the user whether to commit, stash, or keep them before any worker starts.
 
@@ -80,11 +80,14 @@ Done when every claim is proven, or the user has accepted each remaining gap.
 
 Push the run's branch to origin, then file the PR with the `file-pr` skill. Put the proof's claim, evidence, and verdict table in the collapsed details, and the council's score table at its end when the council ran.
 
-Move each ToVo issue to `in_review` with `issue_set_status`, giving a reason that names its commits and links the PR.
+The open PR is where the run ends; the user merges it. Leave it open and unmerged, and leave the default branch and every deployed environment as they were. A permission the user grants mid-run covers the step it was asked about, not the merge or a deploy. Merge or deploy only when the user asks for that by name, and only after the PR is filed.
+
+Move each ToVo issue to `in_review` with `issue_set_status`, giving a reason that names its commits and links the PR. Leave an issue with post-merge work `in_progress`, and name that work in the reason.
 
 Report to the user:
 
-- The PR link
+- The PR link, open and unmerged
+- The post-merge work left for each issue
 - Each unit with its worker thread linked as `[title](t3-thread://v1/<threadId>)`, its commits, and its ToVo status
 - The reviewer models, and the findings fixed, rejected with reasons, and left as Low
 - The council's verdict and final scores when it ran
