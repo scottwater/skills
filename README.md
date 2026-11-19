@@ -36,12 +36,6 @@ See the [skills CLI](https://github.com/vercel-labs/skills) for more options and
 
 [`slop-monkey`](skills/slop-monkey/README.md): Rewrite prose to sound direct, readable, and distinctly human. A modified adaptation of Hardik Pandya's [Stop Slop](https://github.com/hardikpandya/stop-slop), renamed to distinguish it from the original skill.
 
-### Rigor
-
-`rigor`: Fix a bug, build a feature, refactor, or improve performance with one focused, evidence-driven playbook. Rigor stops where you ask it to (diagnosis or fix), scales its ceremony to the risk, and hands off with a recommendation to run `/convince-me` for the full proof.
-
-Use Rigor when the task is already concrete, such as `/rigor figure out why notifications duplicate after a retry`. Use `/interview-me` instead when the product idea itself still needs to be discovered.
-
 ### Interview Me
 
 `interview-me`: Interview relentlessly, round by round, until you and the agent share an understanding. Each round asks every question that can be answered now, each with a recommended answer; the agent looks up facts itself and leaves decisions to you. It writes nothing.
@@ -59,26 +53,6 @@ Adapted from the **DSA Codebase Audit** prompt shared by [Aaron Francis](https:/
 ### GitHub Social Preview
 
 `github-social`: Generate a 1280x640 GitHub repository social preview (Open Graph) image and link it at the top of the README.
-
-### Code Quorum
-
-`code-quorum` is an explicitly invoked, read-only review that runs independent reviewer agents, verifies material findings, and returns one prioritized report. It reports medium-and-higher issues by default; explicitly ask for all recommendations to include low-severity items. It runs reviewers on the runtime's native subagent mechanism, reviews pending changes by default, and accepts a PR, branch, revision range, commit, file set, diff, or supplied artifact.
-
-| Mode | Reviewers |
-| --- | --- |
-| `quick` | Correctness reviewer and silent-failure hunter |
-| `default` | Quick reviewers plus failure-mode and test-behavior reviewers |
-| `full` | Default reviewers plus simplification reviewer |
-
-A requirements reviewer joins any mode when the review has testable requirements. Request a mode or named combination, such as `Run a quick code quorum` or `Use the failure-mode reviewer and silent-failure hunter from code-quorum`.
-
-### T3 Review
-
-`t3-review`: Review code inside a [T3 Code](https://github.com/pingdotgg/t3code) thread with a reviewer from another model family. Any coding model that is not from OpenAI hands the review to `review-loop`, so Sol reviews it. OpenAI models get Opus 5.5 at `xhigh` reasoning effort through T3's `delegate_task`. The reviewer only reports. The calling agent checks every Critical, High, and Medium finding against the code, fixes the confirmed ones, and lists the rejected ones with a reason for each. It triggers automatically on requests like `review this code` when T3's MCP tools are available.
-
-### T3 Review Quorum
-
-`t3-review-quorum`: Run an explicitly invoked `code-quorum` review inside a T3 Code thread. Each selected reviewer rubric runs as a T3 delegated task on both Sol 6.1 and Opus 5.5, each at `xhigh` reasoning effort, unless you name other models. It keeps Code Quorum's read-only boundary and report format.
 
 ### Orchestrate
 
@@ -138,7 +112,7 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 ## Archive
 
-Retired skills live in [archive](archive/): `gpt-image-prompts`, `rails-security`, `solo`, and the [Tracer](archive/tracer/README.md) skill set. They are no longer maintained.
+Retired skills live in [archive](archive/): `code-quorum`, `gpt-image-prompts`, `rails-security`, `rigor`, `solo`, `t3-review`, `t3-review-quorum`, and the [Tracer](archive/tracer/README.md) skill set. They are no longer maintained.
 
 ## Credits
 
