@@ -82,7 +82,7 @@ A requirements reviewer joins any mode when the review has testable requirements
 
 ### Orchestrate
 
-`orchestrate`: Turn the current T3 Code session into an orchestrator that writes no code. Pass a prompt or one or more ToVo issues. Each one gets its own T3 worker thread (Opus 5.5 by default) on the current branch. Sol 6.1 reviews each unit, and a run with more than one unit also gets a `council` review of the combined changes. The orchestrator checks every finding against the code and sends the confirmed ones back to the worker to fix. It then proves the run with `convince-me`, files a PR with `file-pr`, and moves the ToVo issues to review.
+`orchestrate`: Turn the current T3 Code session into an orchestrator that writes no code. Pass two or more prompts or ToVo issues (one works too). Each task is built in its own T3 worker thread with `implement`, then reviewed with `review-loop`; the orchestrator checks every finding against the code and sends the confirmed ones back to that worker to fix. Once every task is done, it proves the whole run with `convince-me`, gives it a final `council` review, files a PR with `file-pr`, marks the finished ToVo issues `completed`, and settles every thread it used, its own included.
 
 ### Herdr Quorum
 
