@@ -74,7 +74,7 @@ A requirements reviewer joins any mode when the review has testable requirements
 
 ### T3 Review
 
-`t3-review`: Review code inside a [T3 Code](https://github.com/pingdotgg/t3code) thread with a reviewer from another model family. Any coding model that is not from OpenAI hands the review to `sol-loop`, so Sol reviews it. OpenAI models get Opus 5.5 at `xhigh` reasoning effort through T3's `delegate_task`. The reviewer only reports. The calling agent checks every Critical, High, and Medium finding against the code, fixes the confirmed ones, and lists the rejected ones with a reason for each. It triggers automatically on requests like `review this code` when T3's MCP tools are available.
+`t3-review`: Review code inside a [T3 Code](https://github.com/pingdotgg/t3code) thread with a reviewer from another model family. Any coding model that is not from OpenAI hands the review to `review-loop`, so Sol reviews it. OpenAI models get Opus 5.5 at `xhigh` reasoning effort through T3's `delegate_task`. The reviewer only reports. The calling agent checks every Critical, High, and Medium finding against the code, fixes the confirmed ones, and lists the rejected ones with a reason for each. It triggers automatically on requests like `review this code` when T3's MCP tools are available.
 
 ### T3 Review Quorum
 
@@ -94,7 +94,7 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 ### Full Send
 
-`full-send`: Take a change all the way to a merged PR while you are not watching. It finishes the smallest change that works, proves it with evidence it observed itself, reviews it with `council` (or `sol-loop` for a trivial change), files it with `file-pr`, babysits it with `babysit-pr`, and merges once the merge gate passes. It asks you only when it cannot prove the change, cannot pass the gate, or needs permission it was not given.
+`full-send`: Take a change all the way to a merged PR while you are not watching. It finishes the smallest change that works, proves it with evidence it observed itself, reviews it with `council` (or `review-loop` for a trivial change), files it with `file-pr`, babysits it with `babysit-pr`, and merges once the merge gate passes. It asks you only when it cannot prove the change, cannot pass the gate, or needs permission it was not given.
 
 ### Full Stop
 
@@ -102,7 +102,7 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 ### Direct Send
 
-`direct-send`: Do the same unattended work as `full-send`, but push straight to origin's default branch (`main`, `master`, or whatever origin names) instead of filing a PR. It proves the change, reviews it with `sol-loop`, commits, rebases, pushes as a fast-forward, and watches CI on the pushed commit, fixing forward if it breaks. It never force-pushes, and it asks you when branch protection rejects direct pushes.
+`direct-send`: Do the same unattended work as `full-send`, but push straight to origin's default branch (`main`, `master`, or whatever origin names) instead of filing a PR. It proves the change, reviews it with `review-loop`, commits, rebases, pushes as a fast-forward, and watches CI on the pushed commit, fixing forward if it breaks. It never force-pushes, and it asks you when branch protection rejects direct pushes.
 
 ### Direct Stop
 
@@ -116,9 +116,9 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 `implement`: Hand a task to a T3 worker thread that implements it, runs the project's checks, and commits, without pushing. The worker runs Opus 5.5 at `high` reasoning effort unless you or the calling skill name another model or effort. The calling agent answers the worker's questions, sends it follow-up fixes, and settles its thread when the work is done. `orchestrate` uses it for every task.
 
-### Sol Loop
+### Review Loop
 
-`sol-loop`: Review a change with GPT Sol in a loop until both agents agree. It runs up to three rounds by default (five for security, data-loss, or concurrency risk), keeps a ledger of findings, and pushes back on scope creep. It runs Sol through T3's `delegate_task` or a native subagent, and stops with the blocker rather than substituting another model. `direct-send` uses it for review, and `full-send` uses it for trivial changes.
+`review-loop`: Review a change in a loop until the reviewer and the calling agent agree. The reviewer is GPT Sol 6.2 at `high` reasoning effort unless you or the calling skill name another model or effort. It runs up to three rounds by default (five for security, data-loss, or concurrency risk), keeps a ledger of findings, and pushes back on scope creep. It runs the reviewer through T3's `delegate_task` or a native subagent, and stops with the blocker rather than substituting another model. The calling agent fixes verified findings itself, or sends them to an `implement` thread when one owns the code. `direct-send` and `orchestrate` use it for review, and `full-send` uses it for trivial changes.
 
 ### Council
 
@@ -146,7 +146,7 @@ Retired skills live in [archive](archive/): `gpt-image-prompts`, `rails-security
 
 `rigor`, `blast-radius`, `bro`, `how`, and `why`, along with the human-voice direction in `slop-monkey`, were influenced by, borrowed from, and shamelessly stolen from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by [Lauren “poteto” Tan](https://x.com/poteto). They have been adapted here to remove Cursor- and model-specific assumptions and to follow this repository's skill-writing conventions.
 
-`full-send`, `full-stop`, `modernize`, `sol-loop`, `council`, `file-pr`, `babysit-pr`, and `leaving-pr-comments` are adapted from [tstack](https://github.com/t3dotgg/tstack) by [Theo Browne](https://x.com/theo). These versions do not wait for AI review bots, and `council` seats a fixed T3 council instead of picking each provider's latest flagship.
+`full-send`, `full-stop`, `modernize`, `review-loop`, `council`, `file-pr`, `babysit-pr`, and `leaving-pr-comments` are adapted from [tstack](https://github.com/t3dotgg/tstack) by [Theo Browne](https://x.com/theo). These versions do not wait for AI review bots, and `council` seats a fixed T3 council instead of picking each provider's latest flagship.
 
 `agent-speak` is adapted from Matt Pocock's original [`writing-for-agents`](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-for-agents) skill.
 

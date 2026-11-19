@@ -40,7 +40,7 @@ It also does not bypass a harness or system approval prompt if one appears.
    smallest change that works. Fix the case that happened, not every case that
    could. If you are on the default branch, create a branch first.
 2. **Prove it.** Get proof for every change you made. See "Proof".
-3. **Get feedback.** Review a trivial change with the `sol-loop` skill and
+3. **Get feedback.** Review a trivial change with the `review-loop` skill and
    every other change with the `council` skill. A change is trivial when it is
    a few lines with one obvious behavior and no security, data, or concurrency
    risk, such as a typo, a copy edit, or a config value. Re-prove any behavior

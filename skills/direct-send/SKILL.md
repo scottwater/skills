@@ -29,7 +29,7 @@ The user grants you permission to:
    when the checkout holds unrelated work, you are in a worktree, or a branch
    keeps things cleaner.
 3. **Prove it.** Get proof for every change you made.
-4. **Get feedback.** Use the `sol-loop` skill to verify changes. Re-prove any
+4. **Get feedback.** Use the `review-loop` skill to verify changes. Re-prove any
    behavior a fix touches.
 5. **Commit** with the `committing-with-guidelines` skill. Commit only this
    task's changes; leave unrelated uncommitted work where you found it.
@@ -52,7 +52,7 @@ the work, because nobody will prompt you again.
 Push only when all of these are true on the rebased commit:
 
 - Your proof covers every change in `git diff origin/<default>..HEAD`.
-- `sol-loop` ended in agreement.
+- `review-loop` ended in agreement.
 - The repo's CI checks pass locally.
 - The commits hold only this task's changes.
 - The push is a fast-forward of `origin/<default>`.

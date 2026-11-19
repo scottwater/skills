@@ -1,16 +1,25 @@
 ---
-name: sol-loop
-description: Review a change with GPT Sol in a loop until both agents agree. Use when the user says sol loop, or when another skill asks for a Sol review.
+name: review-loop
+description: Review a change in a loop with a report-only reviewer, Sol 6.2 on high by default, until both agents agree. Use when asked to review code, a diff, branch, or PR, or when another skill asks for a review loop.
 ---
 
-# sol-loop
+# review-loop
 
-This is a workflow for making your code changes more correct before (or
-sometimes after) filing a pull request. tl;dr - use OpenAI's GPT Sol to review
-your code in a loop.
+This is a workflow for making code changes more correct before (or sometimes
+after) filing a pull request: a second model reviews the change in a loop until
+you both agree.
 
-Make the most minimal possible changes to appease the Sol reviewers. Be careful
-of scope creep and don't be scared to push back.
+Make the most minimal possible changes to appease the reviewer. Be careful of
+scope creep and don't be scared to push back.
+
+## Roles
+
+- **Reviewer**: Sol 6.2 at `high` reasoning effort. Use the model and effort
+  the user or calling skill names instead. The reviewer only reports.
+- **Fixer**: you, by default. When the calling skill names an `implement`
+  thread as the fixer, you still verify every finding, but the thread makes
+  each fix: send it your verified findings as the `implement` skill's
+  **Send follow-up work** section describes, and wait for its commits.
 
 ## Budget
 
@@ -21,12 +30,13 @@ of scope creep and don't be scared to push back.
   the user asks.
 - Stop early if a round returns only nits. Declined nits and comment,
   doc, or format-only fixes need no new round.
-- One reviewer only. Sol must not start subagents or reviewers.
+- One reviewer only. The reviewer must not start subagents or reviewers.
 - Keep a ledger: id, severity, outcome, usage if returned. Never guess it.
 
 ## 1. Scope
 
-Run `git status --short`. Do not stash, discard, or include unrelated
+Use the scope the calling skill names, such as a commit range. Otherwise run
+`git status --short`. Do not stash, discard, or include unrelated
 changes. Limit review to the change paths if they separate cleanly.
 Otherwise stop and ask.
 
@@ -43,19 +53,21 @@ Use one diff command all rounds. State intent and out-of-scope in 1-2
 sentences. Run covering checks. Do not send code this change breaks. Note
 missing or pre-failing checks in the brief.
 
-## 2. Start Sol
+## 2. Start the reviewer
 
-In T3, call `orchestrator_capabilities`. Pick the latest Sol unless the user
-named a version. Do not hardcode an ID. Record provider, model, and effort
-only if exposed. Use `delegate_task` every round (`role: "review"`,
-`mode: "async"`). Save `taskId`. New `clientRequestId` per round.
-`childThreadId` is storage, not the next target. Do not use
-`t3_thread_send`, `create_threads`, or `t3_thread_launch` for review.
+In T3, call `orchestrator_capabilities` and resolve the reviewer to an exact
+`providerInstanceId`, model `id`, and the reasoning-effort option the catalog
+lists for it. Prefer the provider's native driver (`codex` for OpenAI models,
+`claudeAgent` for Claude models) and an instance with `canRunChildTask: true`.
+Use `delegate_task` every round (`role: "review"`, `mode: "async"`). Save
+`taskId`. New `clientRequestId` per round. `childThreadId` is storage, not the
+next target. Do not use `t3_thread_send`, `create_threads`, or
+`t3_thread_launch` for review.
 
 If T3 tools are not listed, try one direct capability call. Outside T3, use
-a native Sol subagent and keep its ID. In Claude Code, use a custom subagent
-only if it is set up to run Sol. If no route runs Sol, report the blocker. Do
-not substitute a model.
+a native subagent that runs the reviewer model and keep its ID. If no route
+runs the reviewer model at its effort, report the blocker. Do not substitute
+a model.
 
 Do not edit scoped files while review runs. Wait for the notice. Do not
 poll or start a second reviewer. Timeout, error, or no reply is not
@@ -79,14 +91,19 @@ S1 [blocker|should|nit] <file>:<line> <claim>. Fix: <suggestion> (stable ids)
 
 ## 3. Answer findings
 
-Check each finding and severity yourself. Another path, rare case, or
-small cost is a nit, whatever label it came with.
+Check each finding and severity yourself against the code, a test, or a
+non-mutating reproduction. Another path, rare case, or small cost is a nit,
+whatever label it came with.
 
 - Agree: smallest fix. Prefer delete or narrow over new lock, cache,
   helper, or option. Fix the case that happened. Add one focused test
   that fails without the fix, if intent needs it.
 - Disagree: say why, with evidence (file:line, test, output).
 - Out of scope or nit: decline in one line. List as follow-up.
+
+When the fixer is an `implement` thread, send it the agreed findings, each
+with its location, failure scenario, and suggested fix, and confirm each fix
+against the code once it commits.
 
 Update the ledger. Re-run checks and `git diff --shortstat <base>`. If
 review grew the diff, cut first. Do not agree just to end the loop.
@@ -97,8 +114,8 @@ Start one only if budget remains and a blocker or should is open, behavior code
 changed, or approval does not cover the current behavior diff. Use a fresh
 `delegate_task` in T3, or follow up the saved native ID. Send the round 1 brief,
 the ledger (`fixed:` / `disagree:` / `declined:` + evidence), the same base
-diff, and the change since last round. Tell Sol: open ids and changed code only.
-Mark each old id `resolved` or `still open: <reason>`.
+diff, and the change since last round. Tell the reviewer: open ids and changed
+code only. Mark each old id `resolved` or `still open: <reason>`.
 
 ## 5. Stop and ship
 
@@ -111,9 +128,10 @@ Do not push during the loop. Push after agreement only if the user asked
 to push, ship, or update the PR. If you push to a PR, add above the model
 blurb:
 
-`Reviewed with sol-loop: <N> rounds with <model>. Sol verdict: approved`.
+`Reviewed with review-loop: <N> rounds with <model> on <effort>. Verdict: approved`.
 
-Add `on <effort>` only if verified.
+Drop `on <effort>` unless verified.
 
-Report: rounds, model, what Sol changed, diff size before/after, fixed and
-declined findings with reasons, usage if exposed (else say not), pushed or not.
+Report: rounds, reviewer model and effort, what the review changed, diff size
+before/after, fixed and declined findings with reasons, usage if exposed (else
+say not), pushed or not.
