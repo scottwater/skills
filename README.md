@@ -112,6 +112,10 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 `modernize`: Bring an aging PR up to date, and decide honestly whether it should still exist. It checks what changed on the base branch since the PR diverged, then reports `MODERNIZE`, `REWORK`, or `CLOSE`. Only `MODERNIZE` rebases and pushes, with `--force-with-lease`. It never merges or closes the PR.
 
+### Implement
+
+`implement`: Hand a task to a T3 worker thread that implements it, runs the project's checks, and commits, without pushing. The worker runs Opus 5.5 at `high` reasoning effort unless you or the calling skill name another model or effort. The calling agent answers the worker's questions, sends it follow-up fixes, and settles its thread when the work is done. `orchestrate` uses it for every task.
+
 ### Sol Loop
 
 `sol-loop`: Review a change with GPT Sol in a loop until both agents agree. It runs up to three rounds by default (five for security, data-loss, or concurrency risk), keeps a ledger of findings, and pushes back on scope creep. It runs Sol through T3's `delegate_task` or a native subagent, and stops with the blocker rather than substituting another model. `direct-send` uses it for review, and `full-send` uses it for trivial changes.
