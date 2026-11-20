@@ -96,7 +96,7 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 ### Council
 
-`council`: Review work with four models from four providers: Claude Opus 5.5, GPT Sol 6.1, Muse Wonder Full, and Gemini 4 Neon, each at high reasoning effort unless you ask for another. It runs them only through T3 Code's `delegate_task` and never substitutes a missing member. It carries on when at least three members are available, and stops for you below that unless you override the quorum. Each round, the members score the work out of 10; the calling agent checks their findings, fixes the ones it confirms, and runs another round until every present member is satisfied. The scores for each round go into the PR description. `full-send` and `orchestrate` use it for non-trivial review.
+`council`: Review work with four models from four providers: Claude Opus 5.5, GPT Sol 6.2, Muse Wonder Full, and Gemini 4 Neon, each at high reasoning effort unless you ask for another. It runs them only through T3 Code's `delegate_task` and never substitutes a missing member. It carries on when at least three members are available, and stops for you below that unless you override the quorum. Each round, the members score the work out of 10; the calling agent checks their findings, fixes the ones it confirms, and runs another round until every present member is satisfied. The scores for each round go into the PR description. `full-send` and `orchestrate` use it for non-trivial review.
 
 ### File PR
 

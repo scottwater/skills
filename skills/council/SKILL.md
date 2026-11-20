@@ -18,7 +18,7 @@ Address outstanding PR comments, fix known issues, and run the relevant checks b
 | Member | Native driver |
 | --- | --- |
 | Claude Opus 5.5 | `claudeAgent` |
-| GPT Sol 6.1 | `codex` |
+| GPT Sol 6.2 | `codex` |
 | Muse Wonder Full | `muse` |
 | Gemini 4 Neon | `antigravity` |
 
@@ -109,7 +109,7 @@ Rounds: 2
 | Member | Round 1 | Round 2 |
 | --- | --- | --- |
 | Claude Opus 5.5 | 7/10 | 9/10 |
-| GPT Sol 6.1 | 8/10 | 10/10 |
+| GPT Sol 6.2 | 8/10 | 10/10 |
 | Muse Wonder Full | 7/10 | 9/10 |
 | Gemini 4 Neon | absent | 9/10 |
 ```
