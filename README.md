@@ -68,7 +68,7 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 ### Full Send
 
-`full-send`: Take a change all the way to a merged PR while you are not watching. It finishes the smallest change that works, proves it with evidence it observed itself, reviews it with `council` (or `review-loop` for a trivial change), files it with `file-pr`, babysits it with `babysit-pr`, and merges once the merge gate passes. It asks you only when it cannot prove the change, cannot pass the gate, or needs permission it was not given.
+`full-send`: Take a change all the way to a merged PR while you are not watching. It finishes the smallest change that works, proves it with evidence it observed itself, reviews it with `council` for features and higher-risk changes or `review-loop` for smaller, self-contained changes (or whichever you name), files it with `file-pr`, babysits it with `babysit-pr`, and merges once the merge gate passes. It asks you only when it cannot prove the change, cannot pass the gate, or needs permission it was not given.
 
 ### Full Stop
 
@@ -92,11 +92,11 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 ### Review Loop
 
-`review-loop`: Review a change in a loop until the reviewer and the calling agent agree. The reviewer is GPT Sol 6.2 at `high` reasoning effort unless you or the calling skill name another model or effort. It runs up to three rounds by default (five for security, data-loss, or concurrency risk), keeps a ledger of findings, and pushes back on scope creep. It runs the reviewer through T3's `delegate_task` or a native subagent, and stops with the blocker rather than substituting another model. The calling agent fixes verified findings itself, or sends them to an `implement` thread when one owns the code. `direct-send` and `orchestrate` use it for review, and `full-send` uses it for trivial changes.
+`review-loop`: Review a change in a loop until the reviewer and the calling agent agree. The reviewer is GPT Sol 6.2 at `high` reasoning effort unless you or the calling skill name another model or effort. It runs up to three rounds by default (five for security, data-loss, or concurrency risk), keeps a ledger of findings, and pushes back on scope creep. It runs the reviewer through T3's `delegate_task` or a native subagent, and stops with the blocker rather than substituting another model. The calling agent fixes verified findings itself, or sends them to an `implement` thread when one owns the code. `direct-send` and `orchestrate` use it for review, and `full-send` uses it for smaller, self-contained changes (or when requested).
 
 ### Council
 
-`council`: Review work with four models from four providers: Claude Opus 5.5, GPT Sol 6.2, Muse Wonder Full, and Gemini 4 Neon, each at high reasoning effort unless you ask for another. It runs them only through T3 Code's `delegate_task` and never substitutes a missing member. It carries on when at least three members are available, and stops for you below that unless you override the quorum. Each round, the members score the work out of 10; the calling agent checks their findings, fixes the ones it confirms, and runs another round until every present member is satisfied. The scores for each round go into the PR description. `full-send` and `orchestrate` use it for non-trivial review.
+`council`: Review work with four models from four providers: Claude Opus 5.5, GPT Sol 6.2, Muse Wonder Full, and Gemini 4 Neon, each at high reasoning effort unless you ask for another. It runs them only through T3 Code's `delegate_task` and never substitutes a missing member. It carries on when at least three members are available, and stops for you below that unless you override the quorum. Each round, the members score the work out of 10; the calling agent checks their findings, fixes the ones it confirms, and runs another round until every present member is satisfied. The scores for each round go into the PR description. `full-send` (for features and higher-risk changes, or when requested) and `orchestrate` use it for review.
 
 ### File PR
 

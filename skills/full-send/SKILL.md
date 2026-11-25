@@ -40,11 +40,15 @@ It also does not bypass a harness or system approval prompt if one appears.
    smallest change that works. Fix the case that happened, not every case that
    could. If you are on the default branch, create a branch first.
 2. **Prove it.** Get proof for every change you made. See "Proof".
-3. **Get feedback.** Review a trivial change with the `review-loop` skill and
-   every other change with the `council` skill. A change is trivial when it is
-   a few lines with one obvious behavior and no security, data, or concurrency
-   risk, such as a typo, a copy edit, or a config value. Re-prove any behavior
-   a fix touches.
+3. **Get feedback.** If the user named `review-loop` or `council`, use that
+   skill. Otherwise, choose based on scope and risk:
+   - Use the `council` skill for new features, public API, schema, or contract
+     changes, multi-subsystem edits, or anything touching security, auth,
+     permissions, data integrity, or concurrency.
+   - Use the `review-loop` skill for smaller, self-contained changes (localized
+     bug fixes, UI, copy, or config tweaks, minor refactors, tests). Escalate
+     to `council` if the diff grows wider or riskier than expected.
+   Re-prove any behavior a fix touches.
 4. **File the PR** with the `file-pr` skill. Rebase onto the latest default
    branch first. Add one short line to the description that says how you proved
    the change, and the council's score table when the council reviewed it.
@@ -105,7 +109,7 @@ link, what blocks you, and the options with your recommendation first.
 Ask only when you cannot continue alone:
 
 - You cannot prove the change.
-- The council cannot be seated, or it circles.
+- Review cannot finish: the council cannot be seated or circles, or `review-loop` ends stuck.
 - The merge gate cannot pass, and you cannot fix that yourself.
 - The next step is outside the grant above: deleting data, touching production,
   changing things outside the repo, closing a PR, or force-pushing any other
