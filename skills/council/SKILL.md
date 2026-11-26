@@ -81,6 +81,8 @@ Fix each accepted finding with the smallest change that covers the intended case
 
 Guard against scope creep: review loops grow a change one cheap-looking fix at a time. Decline findings outside the intent in one line each, and list them as follow-ups.
 
+**Lone dissent:** when one member has objected for two rounds while the rest of the council is satisfied, note its objection in the round summary and carry on without it. The others' agreement counts as consensus, and a lone dissenter never sets the council circling.
+
 **Complete when:** every present member is satisfied with the current change.
 
 ### When the council circles
