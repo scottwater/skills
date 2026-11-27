@@ -16,7 +16,7 @@ A run usually has two or more **tasks**, and each moves through the same stages:
 The models:
 
 - **Worker**: `implement`'s default, Opus 5.5 at `high`, unless the user names another model or effort.
-- **Reviewer**: `review-loop`'s default, Sol 6.2 at `high`, unless the user names another model or effort.
+- **Reviewer**: `review-loop`'s pick, the first family in its order that did not write the task, at `high`, unless the user names another model or effort.
 - **Council**: the members the `council` skill seats.
 
 ## Plan the run

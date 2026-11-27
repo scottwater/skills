@@ -1,6 +1,6 @@
 ---
 name: review-loop
-description: Review a change in a loop with a report-only reviewer, Sol 6.2 on high by default, until both agents agree. Use when asked to review code, a diff, branch, or PR, or when another skill asks for a review loop.
+description: Review a change in a loop with a report-only reviewer from a model family that did not write it, Neon first, until both agents agree. Use when asked to review code, a diff, branch, or PR, or when another skill asks for a review loop.
 ---
 
 # review-loop
@@ -14,8 +14,8 @@ scope creep and don't be scared to push back.
 
 ## Roles
 
-- **Reviewer**: Sol 6.2 at `high` reasoning effort. Use the model and effort
-  the user or calling skill names instead. The reviewer only reports.
+- **Reviewer**: the first model family in step 2's order that did not write
+  the change, at `high` reasoning effort. The reviewer only reports.
 - **Fixer**: you, by default. When the calling skill names an `implement`
   thread as the fixer, you still verify every finding, but the thread makes
   each fix: send it your verified findings as the `implement` skill's
@@ -60,19 +60,50 @@ review. Note missing checks or verification limits in the brief.
 
 ## 2. Start the reviewer
 
+### Pick the reviewer
+
+The **authors** are every model family that wrote part of the change: you
+when you edited it, an `implement` worker, any subagent that wrote code. The
+fixer counts too, since its fixes join the change. For work you did not see
+written, such as a PR or an earlier session, read the commits'
+`Co-Authored-By` trailers and the PR body.
+
+No family reviews its own code, whatever the version: Opus 5.4 does not
+review Opus 5.5's work. The reviewer is the first family in this order that
+is not an author and resolves at `high`:
+
+| Order | Family | Native driver |
+| --- | --- | --- |
+| 1 | Gemini Neon | `antigravity` |
+| 2 | Claude Opus | `claudeAgent` |
+| 3 | Muse Wonder Full | `muse` |
+| 4 | GPT Sol | `codex` |
+
+Use the newest version of that family the live catalog lists, at `high`.
+When a family has no runnable instance at `high`, take the next one and note
+the skip for the report. When every family is an author or unavailable, tell
+the user and stop.
+
+The user can override any of this at any time: name the reviewer, version,
+or effort, reorder the list, or let an author review. A calling skill passes
+the user's choice through. A reviewer the user names is exact: when it is
+unavailable, report the blocker instead of taking the next family.
+
+Keep the same reviewer for every round.
+
+### Delegate the review
+
 In T3, call `orchestrator_capabilities` and resolve the reviewer to an exact
 `providerInstanceId`, model `id`, and the reasoning-effort option the catalog
-lists for it. Prefer the provider's native driver (`codex` for OpenAI models,
-`claudeAgent` for Claude models) and an instance with `canRunChildTask: true`.
-Use `delegate_task` every round (`role: "review"`, `mode: "async"`). Save
-`taskId`. New `clientRequestId` per round. `childThreadId` is storage, not the
-next target. Do not use `t3_thread_send`, `create_threads`, or
-`t3_thread_launch` for review.
+lists for it. Prefer the family's native driver over a proxy such as Pi, and
+an instance with `canRunChildTask: true`. Use `delegate_task` every round
+(`role: "review"`, `mode: "async"`). Save `taskId`. New `clientRequestId`
+per round. `childThreadId` is storage, not the next target. Do not use
+`t3_thread_send`, `create_threads`, or `t3_thread_launch` for review.
 
 If T3 tools are not listed, try one direct capability call. Outside T3, use
-a native subagent that runs the reviewer model and keep its ID. If no route
-runs the reviewer model at its effort, report the blocker. Do not substitute
-a model.
+a native subagent and keep its ID; it reaches only your own provider's
+models, so apply the same order to those.
 
 Do not edit scoped files while review runs. Wait for the notice. Do not
 poll or start a second reviewer. Timeout, error, or no reply is not
@@ -138,6 +169,6 @@ blurb:
 
 Drop `on <effort>` unless verified.
 
-Report: rounds, reviewer model and effort, what the review changed, diff size
-before/after, fixed and declined findings with reasons, usage if exposed (else
-say not), pushed or not.
+Report: rounds, reviewer model and effort, families skipped and why, what the
+review changed, diff size before/after, fixed and declined findings with
+reasons, usage if exposed (else say not), pushed or not.
