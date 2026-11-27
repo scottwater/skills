@@ -1,3 +1,0 @@
-interface:
-  display_name: "Full Send"
-  short_description: "Prove, review, file, babysit, and merge a PR unattended"

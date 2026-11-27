@@ -56,7 +56,7 @@ Adapted from the **DSA Codebase Audit** prompt shared by [Aaron Francis](https:/
 
 ### Orchestrate
 
-`orchestrate`: Turn the current T3 Code session into an orchestrator that writes no code. Pass two or more prompts or ToVo issues (one works too). Each task is built in its own T3 worker thread with `implement`, then reviewed with `review-loop`; the orchestrator checks every finding against the code and sends the confirmed ones back to that worker to fix. Once every task is done, it proves the whole run with `convince-me`, gives it a final `council` review, files a PR with `file-pr`, marks the finished ToVo issues `completed`, and settles every thread it used, its own included.
+`orchestrate`: Turn the current T3 Code session into an orchestrator that writes no code. Pass two or more prompts or ToVo issues (one works too). Each task is built and verified on its real path in its own T3 worker thread with `implement`, then reviewed with `review-loop`; the orchestrator checks every finding against the code and sends confirmed ones back to that worker to fix. Once every task is done, it gives the run a final `council` review using the collected proofs, files a PR with `file-pr`, marks the finished ToVo issues `completed`, and settles every thread it used, its own included.
 
 ### Herdr Quorum
 
@@ -66,21 +66,13 @@ Use `/herdr-quorum review Review the current diff` or name another profile. The 
 
 The Python 3 launcher uses the documented CLI mappings without discovery, starts workers concurrently, and dispatches each as soon as it is ready. Failures are recorded without retries or substitutions. Reviewers work directly rather than spawning another review tier; the lead collects and checks reports as they arrive. Compatibility diagnosis is a separate, explicitly requested task.
 
-### Full Send
+### Ship PR
 
-`full-send`: Take a change all the way to a merged PR while you are not watching. It finishes the smallest change that works, proves it with evidence it observed itself, reviews it with `council` for features and higher-risk changes or `review-loop` for smaller, self-contained changes (or whichever you name), files it with `file-pr`, babysits it with `babysit-pr`, and merges once the merge gate passes. It asks you only when it cannot prove the change, cannot pass the gate, or needs permission it was not given.
+`ship-pr`: Take a change unattended through observed proof, review (`council` for features and higher-risk changes, `review-loop` for smaller, self-contained changes, or whichever you name), PR filing with `file-pr`, and babysitting with `babysit-pr`. Stops with the PR open and merge-ready by default (disabling auto-merge or merge queues); pass `merge` to merge once the merge gate passes. Asks you only when it cannot prove the change, cannot pass the gate, or needs permission it was not given.
 
-### Full Stop
+### Ship Main
 
-`full-stop`: Do the same work as `full-send`, but stop with the PR open and ready for you to merge. It never merges, and it turns off auto-merge or merge queues on the PR.
-
-### Direct Send
-
-`direct-send`: Do the same unattended work as `full-send`, but push straight to origin's default branch (`main`, `master`, or whatever origin names) instead of filing a PR. It proves the change, reviews it with `review-loop`, commits, rebases, pushes as a fast-forward, and watches CI on the pushed commit, fixing forward if it breaks. It never force-pushes, and it asks you when branch protection rejects direct pushes.
-
-### Direct Stop
-
-`direct-stop`: Do the same work as `direct-send`, but stop with the commits rebased and ready to push. It never pushes, and it hands back the exact push command.
+`ship-main`: Take a change unattended straight to origin's default branch (`main`, `master`, or whatever origin names) without a PR. Proves the change by exercising the real path, reviews it with `review-loop` (or `council` if requested), commits with `committing-with-guidelines`, rebases, pushes as a fast-forward, and watches CI on the pushed commit, fixing forward if it breaks. Pass `hold` to stop with commits rebased and ready locally without pushing. Never force-pushes, and offers `ship-pr` when branch protection rejects direct pushes.
 
 ### Modernize
 
@@ -88,19 +80,19 @@ The Python 3 launcher uses the documented CLI mappings without discovery, starts
 
 ### Implement
 
-`implement`: Hand a task to a T3 worker thread that implements it, runs the project's checks, and commits, without pushing. The worker runs Opus 5.5 at `high` reasoning effort unless you or the calling skill name another model or effort. The calling agent answers the worker's questions, sends it follow-up fixes, and settles its thread when the work is done. `orchestrate` uses it for every task.
+`implement`: Hand a task to a T3 worker thread that implements it, runs the project's checks, exercises what it built on its real path to report observed proof, and commits without pushing. The worker runs Opus 5.5 at `high` reasoning effort unless you or the calling skill name another model or effort. The calling agent answers the worker's questions, sends it follow-up fixes, and settles its thread when the work is done. `orchestrate` uses it for every task.
 
 ### Review Loop
 
-`review-loop`: Review a change in a loop until the reviewer and the calling agent agree. The reviewer is GPT Sol 6.2 at `high` reasoning effort unless you or the calling skill name another model or effort. It runs up to three rounds by default (five for security, data-loss, or concurrency risk), keeps a ledger of findings, and pushes back on scope creep. It runs the reviewer through T3's `delegate_task` or a native subagent, and stops with the blocker rather than substituting another model. The calling agent fixes verified findings itself, or sends them to an `implement` thread when one owns the code. `direct-send` and `orchestrate` use it for review, and `full-send` uses it for smaller, self-contained changes (or when requested).
+`review-loop`: Review a change in a loop until the reviewer and the calling agent agree, requiring observed proof that the change works on its real path before Round 1 (reusing proof already captured by an `implement` worker or earlier in the session). The reviewer is GPT Sol 6.2 at `high` reasoning effort unless you or the calling skill name another model or effort. It runs up to three rounds by default (five for security, data-loss, or concurrency risk), keeps a ledger of findings, and pushes back on scope creep. It runs the reviewer through T3's `delegate_task` or a native subagent, and stops with the blocker rather than substituting another model. The calling agent fixes verified findings itself, or sends them to an `implement` thread when one owns the code. `ship-main` and `orchestrate` use it for review, and `ship-pr` uses it for smaller, self-contained changes (or when requested).
 
 ### Council
 
-`council`: Review work with four models from four providers: Claude Opus 5.5, GPT Sol 6.2, Muse Wonder Full, and Gemini 4 Neon, each at high reasoning effort unless you ask for another. It runs them only through T3 Code's `delegate_task` and never substitutes a missing member. It carries on when at least three members are available, and stops for you below that unless you override the quorum. Each round, the members score the work out of 10; the calling agent checks their findings, fixes the ones it confirms, and runs another round until every present member is satisfied. The scores for each round go into the PR description. `full-send` (for features and higher-risk changes, or when requested) and `orchestrate` use it for review.
+`council`: Review work with four models from four providers: Claude Opus 5.5, GPT Sol 6.2, Muse Wonder Full, and Gemini 4 Neon, each at high reasoning effort unless you ask for another. Requires observed proof that the implementation works on its real path before Round 1 (reusing proof from an `implement` worker or earlier in the session). Runs only through T3 Code's `delegate_task` and never substitutes a missing member; carries on when at least three members are available, and stops below that unless you override the quorum. Each round, members score the work out of 10; the calling agent checks findings, fixes confirmed ones, and runs another round until every present member is satisfied. Round scores go into the PR description. `ship-pr` (for features and higher-risk changes, or when requested) and `orchestrate` use it for review.
 
 ### File PR
 
-`file-pr`: File a PR that opens with a three-to-four-sentence overview of the problem and fix, then folds the rest of the detail into a collapsed `<details>` block labeled with the model and harness that made it, following [Simon Willison's details-summary pattern](https://simonwillison.net/2026/Nov/9/details-summary/). `full-send` uses it, and it triggers on requests to file or open a PR.
+`file-pr`: File a PR that opens with a three-to-four-sentence overview of the problem and fix, then folds the rest of the detail into a collapsed `<details>` block labeled with the model and harness that made it, following [Simon Willison's details-summary pattern](https://simonwillison.net/2026/Nov/9/details-summary/). `ship-pr` and `orchestrate` use it, and it triggers on requests to file or open a PR.
 
 ### Babysit PR
 
@@ -120,7 +112,7 @@ Retired skills live in [archive](archive/): `code-quorum`, `gpt-image-prompts`, 
 
 `rigor`, `blast-radius`, `bro`, `how`, and `why`, along with the human-voice direction in `slop-monkey`, were influenced by, borrowed from, and shamelessly stolen from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by [Lauren “poteto” Tan](https://x.com/poteto). They have been adapted here to remove Cursor- and model-specific assumptions and to follow this repository's skill-writing conventions.
 
-`full-send`, `full-stop`, `modernize`, `review-loop`, `council`, `file-pr`, `babysit-pr`, and `leaving-pr-comments` are adapted from [tstack](https://github.com/t3dotgg/tstack) by [Theo Browne](https://x.com/theo). These versions do not wait for AI review bots, and `council` seats a fixed T3 council instead of picking each provider's latest flagship.
+`ship-pr`, `modernize`, `review-loop`, `council`, `file-pr`, `babysit-pr`, and `leaving-pr-comments` are adapted from [tstack](https://github.com/t3dotgg/tstack) by [Theo Browne](https://x.com/theo). These versions do not wait for AI review bots, and `council` seats a fixed T3 council instead of picking each provider's latest flagship.
 
 `agent-speak` is adapted from Matt Pocock's original [`writing-for-agents`](https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-for-agents) skill.
 

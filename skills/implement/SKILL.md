@@ -30,21 +30,21 @@ Repository: <absolute path>
 Branch: <branch>
 Task: <the prompt, or "ToVo issue <ID>: read its context with the tovo skill">
 
-Implement the task and run the project's checks. Commit your work on this branch with atomic, descriptive commits. Do not push or open a pull request. For a ToVo issue, comment on friction as you go and leave the issue's status to whoever launched you; they also run the code review.
+Implement the task, run the project's checks, and actually exercise what you built on its real path (run the reproduction, CLI, endpoint, or app/UI and observe the result — not just static checks or mocked tests). Commit your work on this branch with atomic, descriptive commits. Do not push or open a pull request. For a ToVo issue, comment on friction as you go and leave the issue's status to whoever launched you; they also run the code review.
 
-When done, reply with a summary of the change, the commit SHAs, and the checks you ran with their results.
+When done, reply with a summary of the change, the commit SHAs, the checks you ran with their results, and the observed proof showing the change works (what you ran and saw, or what prevented direct verification).
 ```
 
 Retain the `threadId` and wait with `t3_thread_wait`, reading each reply with `t3_thread_read`. When the worker asks a question, answer it from the request and the task's context, or ask the user when only they can decide.
 
-Done when the worker has replied with its commits and its checks pass, or the user has decided how to handle a failure.
+Done when the worker has replied with its commits, passing checks, and observed proof, or the user has decided how to handle a failure or verification gap.
 
 ## Send follow-up work
 
-Review findings, disproven proof claims, and other fixes go back to the same worker. When its thread is settled, unsettle it first with `t3_thread_organize` (`action: "unsettle"`). Send the items with `t3_thread_send`, each with its location, failure scenario, and suggested fix, and ask the worker to fix and commit them. Wait for its reply as above, then confirm each fix against the code.
+Review findings and other fixes go back to the same worker. When its thread is settled, unsettle it first with `t3_thread_organize` (`action: "unsettle"`). Send the items with `t3_thread_send`, each with its location, failure scenario, and suggested fix, and ask the worker to fix, re-verify any behavior the fix touches, and commit them. Wait for its reply as above, then confirm each fix against the code.
 
 ## Settle and report
 
 Settle the worker's thread with `t3_thread_organize` (`action: "settle"`) when no more work will go to it: right after your report when you run this skill on its own, or when the calling skill says so.
 
-Report the worker's thread linked as `[title](t3-thread://v1/<threadId>)`, its model and effort, its commits, and its checks with their results.
+Report the worker's thread linked as `[title](t3-thread://v1/<threadId>)`, its model and effort, its commits, its checks with their results, and its observed proof.

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Ship Main"
+  short_description: "Prove, review, and push a change straight to the default branch (pass hold to keep local)"

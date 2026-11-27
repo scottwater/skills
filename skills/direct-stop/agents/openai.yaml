@@ -1,3 +1,0 @@
-interface:
-  display_name: "Direct Stop"
-  short_description: "Prove, review, and commit a change ready to push, without pushing"

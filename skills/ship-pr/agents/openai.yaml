@@ -1,0 +1,3 @@
+interface:
+  display_name: "Ship PR"
+  short_description: "Prove, review, file, and babysit a PR unattended (pass merge to land it)"

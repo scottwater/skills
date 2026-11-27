@@ -9,9 +9,9 @@ The **council** is four delegates from four providers, run through T3 Code. Each
 
 ## 1. Prepare the work
 
-Address outstanding PR comments, fix known issues, and run the relevant checks before the first round. The council reviews the implementation you would ship, not one with fixes still pending. When the user wants to discard the implementation and explore new ideas, skip fixes to code being replaced.
+Address outstanding PR comments, fix known issues, and run the relevant checks before the first round. Confirm you have **observed proof** that the implementation actually works on its real path (running the reproduction, CLI, endpoint, or app/UI — not just static checks or mocked tests). When observed proof already covers the current diff (from an `implement` worker or earlier in this session), reuse it instead of re-running; otherwise exercise the change first. The council reviews a working implementation you would ship, not unverified code or one with fixes still pending. When the user wants to discard the implementation and explore new ideas, skip fixes and verification for code being replaced.
 
-**Complete when:** no known issue is waiting on the review, and you can state the scope, the intent, and the check results.
+**Complete when:** no known issue is waiting on the review, observed proof covers the current behavior diff (or any verification limit is explicit), and you can state the scope, intent, check results, and proof.
 
 ## 2. Seat the council
 
@@ -56,6 +56,7 @@ Scope: <exact diff command, range, PR, or file list>
 Intent: <what the change should do, in one or two sentences>
 Out of scope: <what this change deliberately leaves alone>
 Checks: <commands run and their results>
+Proof: <what was run and observed on the real path>
 
 Read the surrounding code. Find bugs, broken callers, and gaps against the intent.
 Skip style unless it hides a bug.
@@ -77,7 +78,7 @@ Retain each `taskId` with its member, then end your turn. Each completion wakes 
 
 Check every finding against the code yourself. Accept it only when the source, a test, or a reproduction confirms it. Summarize the accepted findings, where members disagree, and the next steps.
 
-Fix each accepted finding with the smallest change that covers the intended case, re-run the checks, and start the next round.
+Fix each accepted finding with the smallest change that covers the intended case, re-run the checks, re-verify any behavior the fix touched, and start the next round.
 
 Guard against scope creep: review loops grow a change one cheap-looking fix at a time. Decline findings outside the intent in one line each, and list them as follow-ups.
 

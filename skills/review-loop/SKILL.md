@@ -50,8 +50,13 @@ Find the base after `git fetch origin`:
 
 The change is base to working tree in those paths, with untracked files.
 Use one diff command all rounds. State intent and out-of-scope in 1-2
-sentences. Run covering checks. Do not send code this change breaks. Note
-missing or pre-failing checks in the brief.
+sentences. Run covering checks and ensure you have **observed proof** that the
+change actually works on its real path (run the reproduction, CLI, endpoint, or
+app/UI — not just static checks or mocked tests). If observed proof already
+covers the current behavior diff (from an `implement` worker or earlier in this
+session), reuse it instead of re-running; otherwise exercise the change before
+starting Round 1. Do not send code this change breaks or unverified behavior to
+review. Note missing checks or verification limits in the brief.
 
 ## 2. Start the reviewer
 
@@ -77,7 +82,7 @@ Round 1 brief (T3 children get no history):
 
 ```
 Review only. Do not edit, commit, push, comment on PRs, or start subagents.
-Repo: <abs path> Base: <sha> Intent: <intent> Out of scope: <scope> Checks: <results>
+Repo: <abs path> Base: <sha> Intent: <intent> Out of scope: <scope> Checks: <results> Proof: <what was run and observed>
 See: git diff <base> [-- <paths>]; git status --short (read untracked).
 Read surrounding code. Find bugs, broken callers, mismatch with intent.
 Skip style unless it hides a bug. Hold to the smallest change. Flag code,
@@ -105,8 +110,9 @@ When the fixer is an `implement` thread, send it the agreed findings, each
 with its location, failure scenario, and suggested fix, and confirm each fix
 against the code once it commits.
 
-Update the ledger. Re-run checks and `git diff --shortstat <base>`. If
-review grew the diff, cut first. Do not agree just to end the loop.
+Update the ledger. Re-run checks, re-verify any behavior a fix touched, and run
+`git diff --shortstat <base>`. If review grew the diff, cut first. Do not agree
+just to end the loop.
 
 ## 4. Next round
 
